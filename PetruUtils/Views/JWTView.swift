@@ -39,10 +39,9 @@ struct JWTView: View {
             .pickerStyle(.menu)
 
             if vm.algorithm == .hs256 {
-                TextField("HS256 secret…", text: $vm.hsSecret, prompt: Text("Enter shared secret"))
+                FocusableTextField(text: $vm.hsSecret, placeholder: "Enter shared secret")
                     .textFieldStyle(.roundedBorder)
-                    .frame(minWidth: 260)
-                    .disableAutocorrection(true)
+                    .frame(minWidth: 260, idealHeight: 22)
             }
 
             Spacer()
@@ -63,9 +62,7 @@ struct JWTView: View {
     private var leftPane: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("JWT").font(.headline)
-            TextEditor(text: $vm.inputToken)
-                .font(.system(.body, design: .monospaced))
-                .lineSpacing(2)
+            FocusableTextEditor(text: $vm.inputToken)
                 .padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
                 .background(.background)
@@ -85,9 +82,15 @@ struct JWTView: View {
             VStack(alignment: .leading, spacing: 16) {
                 statusView
 
-                groupBox(title: "Header") { CodeBlock(text: vm.headerPretty) }
-                groupBox(title: "Payload") { CodeBlock(text: vm.payloadPretty) }
-                groupBox(title: "Signature (raw, base64url)") { CodeBlock(text: vm.signatureRaw) }
+                groupBox(title: "Header") {
+                    SyntaxHighlightedCodeBlock(text: vm.headerPretty, language: .json)
+                }
+                groupBox(title: "Payload") {
+                    SyntaxHighlightedCodeBlock(text: vm.payloadPretty, language: .json)
+                }
+                groupBox(title: "Signature (raw, base64url)") {
+                    CodeBlock(text: vm.signatureRaw)
+                }
             }
             .padding()
         }
@@ -117,22 +120,6 @@ struct JWTView: View {
     }
 }
 
-private struct CodeBlock: View {
-    let text: String
-    var body: some View {
-        ScrollView(.vertical) {
-            Text(text.isEmpty ? "—" : text)
-                .font(.system(.callout, design: .monospaced))
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(8)
-                .background(.background) // neutral, avoids NSColor-only init
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                .cornerRadius(8)
-        }
-        .frame(minHeight: 100)
-    }
-}
 
 @MainActor
 final class JWTViewModel: ObservableObject {
@@ -243,3 +230,4 @@ enum SignatureStatus {
         }
     }
 }
+

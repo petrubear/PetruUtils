@@ -12,7 +12,7 @@ enum Tool: String, CaseIterable, Identifiable {
     // Sidebar title
     var title: String {
         switch self {
-        case .jwt: return "JWT"
+        case .jwt: return "JWT Debugger"
         case .base64: return "Base64"
         case .qr: return "QR Code"
         }
