@@ -15,7 +15,7 @@ import AppKit
 /// - All standard text selection and editing shortcuts
 struct FocusableTextEditor: NSViewRepresentable {
     @Binding var text: String
-    var font: NSFont = .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+    var font: NSFont = .code
     
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSTextView.scrollableTextView()
@@ -65,7 +65,7 @@ struct FocusableTextEditor: NSViewRepresentable {
 struct FocusableTextField: NSViewRepresentable {
     @Binding var text: String
     var placeholder: String = ""
-    var font: NSFont = .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+    var font: NSFont = .code
     
     func makeNSView(context: Context) -> NSTextField {
         let textField = NSTextField()

@@ -7,9 +7,9 @@ struct SyntaxHighlightedText: View {
     
     var body: some View {
         Text(highlightedText())
-            .font(.system(.callout, design: .monospaced))
+            .font(.code)
             .textSelection(.enabled)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     
     private func highlightedText() -> AttributedString {

@@ -22,7 +22,7 @@ struct ContentView: View {
             case .jwt:
                 JWTView()
             case .base64:
-                PlaceholderView(toolName: "Base64 Encoder/Decoder")
+                Base64View()
             case .qr:
                 PlaceholderView(toolName: "QR Code Generator")
             case .none:

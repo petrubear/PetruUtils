@@ -1,23 +1,41 @@
 import SwiftUI
+import AppKit
 
 /// A simple code block view for displaying plain text
 struct CodeBlock: View {
     let text: String
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView([.horizontal, .vertical]) {
-                Text(text.isEmpty ? "—" : text)
-                    .font(.system(.callout, design: .monospaced))
-                    .textSelection(.enabled)
-                    .frame(minWidth: geometry.size.width, alignment: .topLeading)
-                    .padding(8)
-            }
-        }
-        .frame(minHeight: 100)
-        .background(.background)
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-        .cornerRadius(8)
+        CodeTextView(text: text)
+            .frame(minHeight: 100)
+            .background(.background)
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+            .cornerRadius(8)
+    }
+}
+
+/// NSTextView-based code display that guarantees top-left alignment
+struct CodeTextView: NSViewRepresentable {
+    let text: String
+    
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSTextView.scrollableTextView()
+        let textView = scrollView.documentView as! NSTextView
+        
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.font = .code
+        textView.backgroundColor = .clear
+        textView.textContainerInset = NSSize(width: 8, height: 8)
+        textView.autoresizingMask = [.width]
+        
+        return scrollView
+    }
+    
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        let textView = scrollView.documentView as! NSTextView
+        textView.string = text.isEmpty ? "—" : text
+        textView.font = .code
     }
 }
 
@@ -27,25 +45,19 @@ struct SyntaxHighlightedCodeBlock: View {
     let language: SyntaxLanguage
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView([.horizontal, .vertical]) {
-                if text.isEmpty {
-                    Text("—")
-                        .font(.system(.callout, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .frame(minWidth: geometry.size.width, alignment: .topLeading)
-                        .padding(8)
-                } else {
-                    SyntaxHighlightedText(text: text, language: language)
-                        .frame(minWidth: geometry.size.width, alignment: .topLeading)
-                        .padding(8)
-                }
-            }
+        if text.isEmpty {
+            CodeTextView(text: "—")
+                .frame(minHeight: 100)
+                .background(.background)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                .cornerRadius(8)
+        } else {
+            CodeTextView(text: text)
+                .frame(minHeight: 100)
+                .background(.background)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                .cornerRadius(8)
         }
-        .frame(minHeight: 100)
-        .background(.background)
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-        .cornerRadius(8)
     }
 }
 

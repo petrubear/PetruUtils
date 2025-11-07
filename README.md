@@ -9,6 +9,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 ### Implemented Tools
 
 - ✅ **JWT Debugger** - Full HS256 support with decode, verify, and generate capabilities
+- ✅ **Base64 Encoder/Decoder** - Encode/decode text with Standard and URL-safe variants
 
 ### Planned Tools (40+)
 
@@ -165,7 +166,7 @@ Executed 40+ tests, with 0 failures
 - [x] Documentation
 
 ### Phase 2: Core Tools (In Progress)
-- [ ] Base64 Encoder/Decoder
+- [x] Base64 Encoder/Decoder
 - [ ] URL Encoder/Decoder
 - [ ] Hash Generator
 - [ ] UUID/ULID Generator
