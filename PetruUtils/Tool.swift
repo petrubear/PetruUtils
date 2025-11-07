@@ -4,6 +4,7 @@ import Foundation
 enum Tool: String, CaseIterable, Identifiable {
     case jwt
     case base64
+    case urlEncoder
     case qr
 
     // For use in SwiftUI List / ForEach
@@ -14,6 +15,7 @@ enum Tool: String, CaseIterable, Identifiable {
         switch self {
         case .jwt: return "JWT Debugger"
         case .base64: return "Base64"
+        case .urlEncoder: return "URL Encoder"
         case .qr: return "QR Code"
         }
     }
@@ -23,6 +25,7 @@ enum Tool: String, CaseIterable, Identifiable {
         switch self {
         case .jwt: return "lock.shield"
         case .base64: return "textformat.123"
+        case .urlEncoder: return "link"
         case .qr: return "qrcode"
         }
     }
