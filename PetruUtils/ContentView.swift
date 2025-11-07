@@ -8,15 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+    @State private var selection: Tool? = .jwt
+        var body: some View {
+            NavigationSplitView {
+                List(Tool.allCases, selection: $selection) { Text($0.title) }
+                    .navigationTitle("Tools")
+            } detail: {
+                switch selection {
+                case .jwt: JWTView()
+                //case .base64: Base64View()
+                //case .qr: QRView()
+                default: Text("Select a tool")
+                }
+            }
         }
-        .padding()
-    }
 }
 
 #Preview {
