@@ -27,6 +27,8 @@ struct ContentView: View {
                 URLView()
             case .hash:
                 HashView()
+            case .uuid:
+                UUIDView()
             case .qr:
                 PlaceholderView(toolName: "QR Code Generator")
             case .none:

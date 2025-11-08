@@ -12,6 +12,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **Base64 Encoder/Decoder** - Encode/decode text with Standard and URL-safe variants
 - ✅ **URL Encoder/Decoder** - Full URL encoding/decoding with multiple component types
 - ✅ **Hash Generator** - MD5, SHA-1, SHA-256, SHA-384, SHA-512 with HMAC support
+- ✅ **UUID/ULID Generator** - UUID v1, v4, v5 and ULID generation with bulk support
 
 ### Planned Tools (40+)
 
@@ -90,7 +91,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 100+ tests passing (all service tests)
+**Test Status**: ✅ 140+ tests passing (all service tests)
 
 ## 📚 Documentation
 
@@ -171,9 +172,9 @@ Executed 40+ tests, with 0 failures
 - [x] Base64 Encoder/Decoder
 - [x] URL Encoder/Decoder
 - [x] Hash Generator
-- [ ] UUID/ULID Generator
+- [x] UUID/ULID Generator
 - [ ] QR Code Generator
-- [ ] Smart Clipboard Detection
+- [x] Smart Clipboard Detection (service layer complete, UI integration pending)
 
 ### Phase 3: Converters
 - [ ] Number Base Converter
