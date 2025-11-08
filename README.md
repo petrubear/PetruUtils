@@ -4,7 +4,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 1 - Foundation ✅
+**Current Phase**: Phase 2 - Core Tools ✅ COMPLETE
 
 ### Implemented Tools
 
@@ -13,6 +13,8 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **URL Encoder/Decoder** - Full URL encoding/decoding with multiple component types
 - ✅ **Hash Generator** - MD5, SHA-1, SHA-256, SHA-384, SHA-512 with HMAC support
 - ✅ **UUID/ULID Generator** - UUID v1, v4, v5 and ULID generation with bulk support
+- ✅ **QR Code Generator** - Generate and scan QR codes with custom colors and error correction
+- ✅ **Smart Clipboard Detection** - Automatic content type detection with tool suggestions
 
 ### Planned Tools (40+)
 
@@ -91,7 +93,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 140+ tests passing (all service tests)
+**Test Status**: ✅ 200+ tests passing (all service tests)
 
 ## 📚 Documentation
 
@@ -168,13 +170,13 @@ Executed 40+ tests, with 0 failures
 - [x] Comprehensive unit tests
 - [x] Documentation
 
-### Phase 2: Core Tools (In Progress)
+### Phase 2: Core Tools ✅ COMPLETE
 - [x] Base64 Encoder/Decoder
 - [x] URL Encoder/Decoder
 - [x] Hash Generator
 - [x] UUID/ULID Generator
-- [ ] QR Code Generator
-- [x] Smart Clipboard Detection (service layer complete, UI integration pending)
+- [x] QR Code Generator
+- [x] Smart Clipboard Detection
 
 ### Phase 3: Converters
 - [ ] Number Base Converter

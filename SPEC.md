@@ -742,19 +742,19 @@ PetruUtils/
 - ✅ Common UI components (CodeBlock, ToolContainer)
 - ✅ JWT Debugger (already implemented)
 
-### Phase 2: Core Tools (Weeks 3-6)
+### Phase 2: Core Tools ✅ COMPLETE (Weeks 3-6)
 - ✅ Base64 Encoder/Decoder
 - ✅ URL Encoder/Decoder
-- Hash Generator
-- UUID/ULID Generator
-- QR Code Generator
-- Smart Clipboard Detection Service
-  - Background clipboard monitoring
-  - Pattern detection (JSON, Base64, JWT, URLs, etc.)
-  - Auto-suggestion in sidebar
-  - Privacy-respecting implementation
-- JSON Formatter (enhance existing)
-- Text Diff
+- ✅ Hash Generator (MD5, SHA1, SHA256, SHA384, SHA512, HMAC)
+- ✅ UUID/ULID Generator (v1, v4, v5, ULID with bulk generation)
+- ✅ QR Code Generator (with scanning, custom colors, error correction)
+- ✅ Smart Clipboard Detection Service
+  - ✅ Background clipboard monitoring
+  - ✅ Pattern detection (JSON, Base64, JWT, URLs, UUID, ULID, Hash, XML)
+  - ✅ Auto-suggestion in sidebar
+  - ✅ Privacy-respecting implementation
+- ⬜ JSON Formatter (enhance existing) - moved to Phase 4
+- ⬜ Text Diff - moved to Phase 4
 
 ### Phase 3: Converters (Weeks 7-9)
 - Number Base Converter

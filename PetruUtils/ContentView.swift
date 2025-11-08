@@ -8,15 +8,55 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var clipboardMonitor = ClipboardMonitor()
     @State private var selection: Tool? = .jwt
+    @State private var showClipboardBanner: Bool = false
     
     var body: some View {
         NavigationSplitView {
-            List(Tool.allCases, selection: $selection) { tool in
-                Label(tool.title, systemImage: tool.iconName)
+            VStack(spacing: 0) {
+                // Clipboard detection banner
+                if let suggestedTool = clipboardMonitor.suggestedTool,
+                   let detectedType = clipboardMonitor.lastDetectedType,
+                   showClipboardBanner {
+                    clipboardBanner(detectedType: detectedType, suggestedTool: suggestedTool)
+                }
+                
+                List(Tool.allCases, selection: $selection) { tool in
+                    HStack {
+                        Label(tool.title, systemImage: tool.iconName)
+                        
+                        Spacer()
+                        
+                        // Show indicator if this is the suggested tool
+                        if clipboardMonitor.suggestedTool == tool {
+                            Image(systemName: "clipboard.fill")
+                                .foregroundStyle(.blue)
+                                .font(.caption)
+                        }
+                    }
                     .tag(tool)
+                }
+                .navigationTitle("Tools")
+                
+                // Clipboard monitoring toggle
+                Divider()
+                Toggle("Monitor Clipboard", isOn: $clipboardMonitor.isMonitoring)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .onChange(of: clipboardMonitor.isMonitoring) { _, isOn in
+                        if isOn {
+                            clipboardMonitor.startMonitoring()
+                        } else {
+                            clipboardMonitor.stopMonitoring()
+                        }
+                    }
             }
-            .navigationTitle("Tools")
+            .onChange(of: clipboardMonitor.suggestedTool) { _, newTool in
+                if newTool != nil {
+                    showClipboardBanner = true
+                }
+            }
         } detail: {
             switch selection {
             case .jwt:
@@ -30,12 +70,54 @@ struct ContentView: View {
             case .uuid:
                 UUIDView()
             case .qr:
-                PlaceholderView(toolName: "QR Code Generator")
+                QRCodeView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)
             }
         }
+        .onAppear {
+            // Optionally start monitoring on launch
+            // clipboardMonitor.startMonitoring()
+        }
+    }
+    
+    @ViewBuilder
+    private func clipboardBanner(detectedType: ClipboardMonitor.DetectedContentType, suggestedTool: Tool) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "clipboard")
+                .font(.title3)
+                .foregroundStyle(.blue)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(detectedType.displayName) Detected")
+                    .font(.subheadline.weight(.semibold))
+                Text("Suggested: \(suggestedTool.title)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+            
+            Button("Open") {
+                selection = suggestedTool
+                showClipboardBanner = false
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button(action: {
+                showClipboardBanner = false
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding()
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(8)
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
 }
 
