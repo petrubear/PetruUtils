@@ -99,6 +99,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 
 - **[SPEC.md](SPEC.md)** - Complete application specification with all planned tools
 - **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Current implementation details
+- **[PHASE5_PREFERENCES_PLAN.md](PHASE5_PREFERENCES_PLAN.md)** - Detailed Phase 5 preferences & polish plan
 - **[README_JWT.md](PetruUtils/Views/README_JWT.md)** - JWT Debugger documentation
 
 ## 🏗 Architecture

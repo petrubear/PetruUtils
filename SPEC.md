@@ -681,14 +681,46 @@ PetruUtils/
 ## Data Persistence
 
 ### User Preferences
+
+#### Appearance
+- Theme preference (Light, Dark, Auto)
+- Code block font family
+- Code block font size
+- Syntax highlighting color scheme
+- Sidebar icon size
+
+#### Behavior
 - Last used tool
-- Favorite tools
+- Default tool on launch
 - Window size and position
 - Pane split ratios
-- Theme preference
-- Default encodings/formats
+- Auto-clear input on tool switch
+- Confirm before clearing large inputs
+
+#### Clipboard
 - Smart detection enabled/disabled
+- Show banner notifications
+- Auto-switch to suggested tool
+- Clipboard check interval
+
+#### Formats & Defaults
+- Default Base64 variant
+- Default hash algorithm
+- Default UUID version
+- Default QR error correction level
+- Line break style preference
+
+#### History
+- Favorite/pinned tools
+- Recent tools list
+- History enabled/disabled
 - History retention period
+- Max history items per tool
+
+#### Advanced
+- Max file size for processing
+- Debug logging enabled
+- Performance settings
 
 ### Storage
 - **UserDefaults**: For preferences and settings
@@ -775,12 +807,71 @@ PetruUtils/
 - Certificate Inspector
 
 ### Phase 5: Polish & Smart Features (Weeks 13-14)
-- Smart clipboard detection
+- ✅ Smart clipboard detection (COMPLETE)
 - History and favorites
+  - Recent tools list
+  - Favorite/pin tools to top of sidebar
+  - Recent conversions per tool
+  - Clear history option
 - Export/import functionality
-- Preferences panel
+  - Export tool outputs to files
+  - Bulk export options
+  - Import from files
+- **Preferences Panel** (⌘,)
+  - **Appearance**
+    - Theme selection (Light, Dark, Auto)
+    - Code block font family selection
+      - SF Mono (default)
+      - Menlo
+      - Monaco
+      - Fira Code
+      - JetBrains Mono
+      - Custom system font
+    - Code block font size (10-24pt)
+    - Color scheme for syntax highlighting
+    - Sidebar icon size
+  - **Behavior**
+    - Default tool on launch
+    - Auto-clear input on tool switch (toggle)
+    - Confirm before clearing large inputs (toggle)
+    - Remember window size and position (toggle)
+    - Remember split pane ratios (toggle)
+  - **Clipboard**
+    - Enable/disable clipboard monitoring
+    - Show banner notifications (toggle)
+    - Auto-switch to suggested tool (toggle)
+    - Clipboard check interval (0.5s - 5s)
+  - **Formats & Defaults**
+    - Default Base64 variant (Standard/URL-safe)
+    - Default hash algorithm (MD5/SHA256/etc.)
+    - Default UUID version (v1/v4/v5)
+    - Default error correction level for QR codes
+    - Line break style (LF, CRLF, CR)
+  - **History**
+    - Enable/disable history (toggle)
+    - History retention period (1 day - Forever)
+    - Max history items per tool (10-100)
+    - Clear all history button
+  - **Advanced**
+    - Max file size for processing (1MB-100MB)
+    - Enable debug logging (toggle)
+    - Reset all preferences button
+- **App Icon & Branding**
+  - Design custom app icon
+    - Modern, developer-focused design
+    - Multiple sizes for macOS (16x16 to 1024x1024)
+    - Retina-ready (@2x, @3x variants)
+  - Create icon set in Assets.xcassets
+  - Design launch screen (optional)
+  - Update app name display if needed
 - Performance optimization
+  - Lazy loading of tool views
+  - Optimize large text handling
+  - Memory profiling and leak detection
 - Bug fixes and refinement
+  - Fix clipboard detection edge cases
+  - Improve QR code custom color support
+  - UI polish and consistency checks
 
 ### Phase 6: Additional Tools (Optional)
 - Remaining text utilities
