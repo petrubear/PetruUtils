@@ -25,6 +25,8 @@ struct ContentView: View {
                 Base64View()
             case .urlEncoder:
                 URLView()
+            case .hash:
+                HashView()
             case .qr:
                 PlaceholderView(toolName: "QR Code Generator")
             case .none:

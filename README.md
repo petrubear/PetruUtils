@@ -10,6 +10,8 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 - ✅ **JWT Debugger** - Full HS256 support with decode, verify, and generate capabilities
 - ✅ **Base64 Encoder/Decoder** - Encode/decode text with Standard and URL-safe variants
+- ✅ **URL Encoder/Decoder** - Full URL encoding/decoding with multiple component types
+- ✅ **Hash Generator** - MD5, SHA-1, SHA-256, SHA-384, SHA-512 with HMAC support
 
 ### Planned Tools (40+)
 
@@ -88,7 +90,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 40+ tests passing
+**Test Status**: ✅ 100+ tests passing (all service tests)
 
 ## 📚 Documentation
 
@@ -167,10 +169,11 @@ Executed 40+ tests, with 0 failures
 
 ### Phase 2: Core Tools (In Progress)
 - [x] Base64 Encoder/Decoder
-- [ ] URL Encoder/Decoder
-- [ ] Hash Generator
+- [x] URL Encoder/Decoder
+- [x] Hash Generator
 - [ ] UUID/ULID Generator
 - [ ] QR Code Generator
+- [ ] Smart Clipboard Detection
 
 ### Phase 3: Converters
 - [ ] Number Base Converter

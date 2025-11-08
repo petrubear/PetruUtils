@@ -743,12 +743,17 @@ PetruUtils/
 - ✅ JWT Debugger (already implemented)
 
 ### Phase 2: Core Tools (Weeks 3-6)
-- JSON Formatter (enhance existing)
-- Base64 Encoder/Decoder
-- URL Encoder/Decoder
+- ✅ Base64 Encoder/Decoder
+- ✅ URL Encoder/Decoder
 - Hash Generator
 - UUID/ULID Generator
 - QR Code Generator
+- Smart Clipboard Detection Service
+  - Background clipboard monitoring
+  - Pattern detection (JSON, Base64, JWT, URLs, etc.)
+  - Auto-suggestion in sidebar
+  - Privacy-respecting implementation
+- JSON Formatter (enhance existing)
 - Text Diff
 
 ### Phase 3: Converters (Weeks 7-9)

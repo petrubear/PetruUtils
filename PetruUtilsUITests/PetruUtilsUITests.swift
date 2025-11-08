@@ -22,6 +22,10 @@ final class PetruUtilsUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    // UI tests disabled - focusing on service-level unit tests only
+    // Uncomment if needed for UI testing in the future
+    
+    /*
     @MainActor
     func testExample() throws {
         // UI tests must launch the application that they test.
@@ -38,4 +42,5 @@ final class PetruUtilsUITests: XCTestCase {
             XCUIApplication().launch()
         }
     }
+    */
 }

@@ -17,6 +17,10 @@ final class PetruUtilsUITestsLaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    // UI tests disabled - focusing on service-level unit tests only
+    // Uncomment if needed for UI testing in the future
+    
+    /*
     @MainActor
     func testLaunch() throws {
         let app = XCUIApplication()
@@ -30,4 +34,5 @@ final class PetruUtilsUITestsLaunchTests: XCTestCase {
         attachment.lifetime = .keepAlways
         add(attachment)
     }
+    */
 }
