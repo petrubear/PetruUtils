@@ -4,10 +4,11 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 2 - Core Tools ✅ COMPLETE
+**Current Phase**: Phase 3 - Converters (In Progress)
 
 ### Implemented Tools
 
+**Phase 2 - Core Tools** ✅
 - ✅ **JWT Debugger** - Full HS256 support with decode, verify, and generate capabilities
 - ✅ **Base64 Encoder/Decoder** - Encode/decode text with Standard and URL-safe variants
 - ✅ **URL Encoder/Decoder** - Full URL encoding/decoding with multiple component types
@@ -15,6 +16,9 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **UUID/ULID Generator** - UUID v1, v4, v5 and ULID generation with bulk support
 - ✅ **QR Code Generator** - Generate and scan QR codes with custom colors and error correction
 - ✅ **Smart Clipboard Detection** - Automatic content type detection with tool suggestions
+
+**Phase 3 - Converters**
+- ✅ **Number Base Converter** - Convert between Binary, Octal, Decimal, and Hexadecimal with bit/byte representation
 
 ### Planned Tools (40+)
 
@@ -93,7 +97,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 200+ tests passing (all service tests)
+**Test Status**: ✅ 257+ tests passing (all service tests)
 
 ## 📚 Documentation
 
@@ -179,13 +183,14 @@ Executed 40+ tests, with 0 failures
 - [x] QR Code Generator
 - [x] Smart Clipboard Detection
 
-### Phase 3: Converters
-- [ ] Number Base Converter
-- [ ] Color Converter
+### Phase 3: Converters (1/7 complete)
+- [x] Number Base Converter
 - [ ] Unix Timestamp Converter
 - [ ] Case Converter
+- [ ] Color Converter
 - [ ] JSON ↔ YAML
 - [ ] JSON ↔ CSV
+- [ ] Markdown ↔ HTML
 
 ### Phase 4: Advanced Tools
 - [ ] RegExp Tester

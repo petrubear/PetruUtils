@@ -8,6 +8,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case hash
     case uuid
     case qr
+    case numberBase
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -21,6 +22,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .hash: return "Hash Generator"
         case .uuid: return "UUID/ULID Generator"
         case .qr: return "QR Code"
+        case .numberBase: return "Number Base Converter"
         }
     }
 
@@ -33,6 +35,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .hash: return "number.square"
         case .uuid: return "key.fill"
         case .qr: return "qrcode"
+        case .numberBase: return "function"
         }
     }
 }

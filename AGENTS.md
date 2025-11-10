@@ -19,6 +19,7 @@
    - `PHASE5_PREFERENCES_PLAN.md` - Detailed Phase 5 plans
 
 2. **Architecture Pattern**: MVVM with Service Layer
+
    ```
    View (SwiftUI) → ViewModel (@MainActor) → Service (Business Logic) → Foundation APIs
    ```
@@ -80,15 +81,16 @@ PetruUtils/
 ### Step-by-Step Process
 
 #### 1. **Add Tool to Enum** (`Tool.swift`)
+
 ```swift
 enum Tool: String, CaseIterable, Identifiable {
     // ... existing tools
     case newTool
-    
+
     var title: String {
         case .newTool: return "New Tool Name"
     }
-    
+
     var iconName: String {
         case .newTool: return "sf.symbol.name"
     }
@@ -96,6 +98,7 @@ enum Tool: String, CaseIterable, Identifiable {
 ```
 
 #### 2. **Create Service** (`Services/NewToolService.swift`)
+
 ```swift
 import Foundation
 
@@ -104,7 +107,7 @@ struct NewToolService {
         case someError
         var errorDescription: String? { /* ... */ }
     }
-    
+
     func doSomething(_ input: String) throws -> String {
         // Business logic here
     }
@@ -112,12 +115,14 @@ struct NewToolService {
 ```
 
 **Service Guidelines**:
+
 - Pure Swift struct (no SwiftUI dependencies)
 - Throwing functions for errors
 - Well-documented public methods
 - Fully testable in isolation
 
 #### 3. **Create Tests** (`Tests/NewToolServiceTests.swift`)
+
 ```swift
 import Testing
 import Foundation
@@ -126,13 +131,13 @@ import Foundation
 @Suite("New Tool Service Tests")
 struct NewToolServiceTests {
     let service = NewToolService()
-    
+
     @Test("Test basic functionality")
     func testBasic() throws {
         let result = try service.doSomething("input")
         #expect(result == "expected")
     }
-    
+
     // Add 20-30+ tests covering:
     // - Happy path
     // - Error cases
@@ -142,19 +147,21 @@ struct NewToolServiceTests {
 ```
 
 **Testing Standards**:
+
 - Use Swift Testing framework (`@Test`, `#expect`)
 - Aim for 20+ tests per service
 - Test edge cases, errors, and Unicode
 - All tests must pass before committing
 
 #### 4. **Create View** (`Views/NewToolView.swift`)
+
 ```swift
 import SwiftUI
 import Combine
 
 struct NewToolView: View {
     @StateObject private var vm = NewToolViewModel()
-    
+
     var body: some View {
         VStack(spacing: 0) {
             toolbar
@@ -165,7 +172,7 @@ struct NewToolView: View {
             }
         }
     }
-    
+
     // Standard layout patterns...
 }
 
@@ -174,9 +181,9 @@ final class NewToolViewModel: ObservableObject {
     @Published var input: String = ""
     @Published var output: String = ""
     @Published var errorMessage: String?
-    
+
     private let service = NewToolService()
-    
+
     func process() {
         // Call service, handle errors
     }
@@ -184,6 +191,7 @@ final class NewToolViewModel: ObservableObject {
 ```
 
 **View Guidelines**:
+
 - Follow existing split-pane pattern
 - Use `HSplitView` for input/output
 - Include keyboard shortcuts (⌘Return, ⌘K, ⌘⇧C)
@@ -192,6 +200,7 @@ final class NewToolViewModel: ObservableObject {
 - Add tooltips and help text
 
 #### 5. **Add to ContentView** (`ContentView.swift`)
+
 ```swift
 switch selection {
     // ... existing cases
@@ -201,6 +210,7 @@ switch selection {
 ```
 
 #### 6. **Update Documentation**
+
 - Add tool to `README.md` "Implemented Tools" section
 - Update test count
 - Update percentage complete
@@ -211,6 +221,7 @@ switch selection {
 ## Coding Standards
 
 ### Swift Style
+
 - Follow Apple's Swift API Design Guidelines
 - Use SwiftUI best practices
 - Prefer value types (struct) over reference types (class)
@@ -218,12 +229,14 @@ switch selection {
 - Explicit error handling with `throws`
 
 ### Naming Conventions
+
 - Services: `[Tool]Service.swift`
 - Views: `[Tool]View.swift`
 - Tests: `[Tool]ServiceTests.swift`
 - ViewModels: `[Tool]ViewModel` (inside view file)
 
 ### Architecture Rules
+
 1. **Services** = Pure business logic, no UI dependencies
 2. **ViewModels** = UI state management, calls services
 3. **Views** = SwiftUI presentation only
@@ -233,6 +246,7 @@ switch selection {
 ### Common Patterns
 
 #### Error Handling
+
 ```swift
 enum MyError: LocalizedError {
     case invalidInput
@@ -243,6 +257,7 @@ enum MyError: LocalizedError {
 ```
 
 #### Color Conversion (for image generation)
+
 ```swift
 // Only use system colors to avoid hanging
 if color == .black { return .black }
@@ -252,6 +267,7 @@ return .black // fallback
 ```
 
 #### Keyboard Shortcuts
+
 ```swift
 .keyboardShortcut(.return, modifiers: [.command])  // ⌘Return
 .keyboardShortcut("k", modifiers: [.command])      // ⌘K
@@ -263,14 +279,16 @@ return .black // fallback
 ## Development Workflow
 
 ### Before Starting Work
+
 1. Read relevant documentation
 2. Check `SPEC.md` for tool specifications
 3. Look at similar existing tools for patterns
 4. Run tests to ensure baseline: `xcodebuild test -scheme PetruUtils`
 
 ### Development Process
+
 1. Create service with business logic
-2. Write comprehensive tests (20+ tests)
+2. Write only the most important test to validate functionality, dont test simple stuff and dont create unnecesary tests
 3. Create view following existing patterns
 4. Integrate into `Tool.swift` and `ContentView.swift`
 5. Run all tests: ensure 100% pass rate
@@ -278,6 +296,7 @@ return .black // fallback
 7. Update documentation
 
 ### Testing Commands
+
 ```bash
 # Build only
 xcodebuild build -scheme PetruUtils -destination 'platform=macOS'
@@ -294,6 +313,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 ```
 
 ### Quality Checklist
+
 - [ ] Service has no SwiftUI dependencies
 - [ ] 20+ tests written and passing
 - [ ] View follows split-pane pattern
@@ -310,11 +330,13 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 ## Current Phase Status
 
 ### ✅ Phase 1: Foundation (Complete)
+
 - Architecture and navigation
 - Common components
 - JWT Debugger
 
 ### ✅ Phase 2: Core Tools (Complete)
+
 - Base64 Encoder/Decoder
 - URL Encoder/Decoder
 - Hash Generator (5 algorithms + HMAC)
@@ -323,7 +345,9 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - Smart Clipboard Detection
 
 ### 🔲 Phase 3: Converters (Next - 0/7 tools)
+
 **Priority Order**:
+
 1. Number Base Converter (Binary/Octal/Decimal/Hex)
 2. Unix Timestamp Converter
 3. Case Converter (camelCase, snake_case, etc.)
@@ -333,6 +357,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 7. Markdown ↔ HTML
 
 ### 🔲 Phase 4: Advanced Tools (0/7+ tools)
+
 - RegExp Tester
 - Text Diff/Compare
 - XML Formatter
@@ -342,7 +367,9 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - JSON Formatter (enhanced)
 
 ### 🔲 Phase 5: Polish & Preferences
+
 See `PHASE5_PREFERENCES_PLAN.md` for details
+
 - Preferences panel with 6 categories
 - App icon & branding
 - History & favorites
@@ -353,19 +380,24 @@ See `PHASE5_PREFERENCES_PLAN.md` for details
 ## Known Issues & Gotchas
 
 ### Color Conversion
+
 **Problem**: SwiftUI `Color` to `NSColor` conversion can cause infinite recursion  
 **Solution**: Use simple system color mapping only (see `QRCodeView.swift` for example)
 
 ### Clipboard Monitoring
+
 **Issue**: Some tests fail due to detection being too eager  
 **Status**: Service works, tests need tuning
 
 ### UI Tests
+
 **Status**: Disabled - focus on service-level unit tests only  
 **Reason**: Faster development, better coverage for business logic
 
 ### Import Order
+
 Always import in this order:
+
 ```swift
 import SwiftUI        // If needed
 import Combine        // If using @Published
@@ -379,19 +411,22 @@ import Foundation     // Always
 ## Testing Philosophy
 
 ### What to Test
+
 ✅ All service business logic  
 ✅ Error conditions  
 ✅ Edge cases (empty, very long, Unicode)  
 ✅ Roundtrip operations (encode → decode → verify)  
 ✅ Known test vectors  
-✅ Boundary conditions  
+✅ Boundary conditions
 
 ### What NOT to Test
+
 ❌ SwiftUI view rendering (too brittle)  
 ❌ Trivial getters/setters  
-❌ Third-party framework behavior  
+❌ Third-party framework behavior
 
 ### Test Quality Standards
+
 - Use descriptive test names: `@Test("Decode Base64 with special characters")`
 - Test one thing per test
 - Use known test vectors where applicable
@@ -403,11 +438,13 @@ import Foundation     // Always
 ## Documentation Updates
 
 ### Always Update These Files
+
 1. **README.md** - Add to "Implemented Tools", update test count
 2. **SPEC.md** - Mark tool as ✅ in appropriate phase
 3. **IMPLEMENTATION_SUMMARY.md** - If adding major features
 
 ### Version Control
+
 - Phase completion should update all docs
 - Keep README.md "Test Status" current
 - Update "Last Updated" dates
@@ -417,6 +454,7 @@ import Foundation     // Always
 ## Common Tasks Quick Reference
 
 ### Add a Tool (Summary)
+
 1. Add to `Tool.swift` enum
 2. Create `Services/[Tool]Service.swift`
 3. Create `Tests/[Tool]ServiceTests.swift` (20+ tests)
@@ -426,6 +464,7 @@ import Foundation     // Always
 7. Run tests and verify build
 
 ### Fix a Bug
+
 1. Write a failing test that reproduces the bug
 2. Fix the issue in the service
 3. Verify test passes
@@ -433,6 +472,7 @@ import Foundation     // Always
 5. Update docs if needed
 
 ### Add a Preference
+
 1. Check `PHASE5_PREFERENCES_PLAN.md` for spec
 2. Add key to PreferencesManager (when created)
 3. Add UI to PreferencesView
@@ -444,18 +484,21 @@ import Foundation     // Always
 ## Resources
 
 ### Project Documentation
+
 - [SPEC.md](SPEC.md) - Complete specification
 - [README.md](README.md) - Overview and status
 - [PHASE5_PREFERENCES_PLAN.md](PHASE5_PREFERENCES_PLAN.md) - Preferences details
 - [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - What's built
 
 ### External References
+
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/macos)
 - [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui)
 - [Swift Testing Guide](https://developer.apple.com/documentation/testing)
 - [CryptoKit](https://developer.apple.com/documentation/cryptokit)
 
 ### Inspiration
+
 - [DevUtils](https://devutils.com) - Original inspiration for the project
 
 ---
@@ -463,16 +506,19 @@ import Foundation     // Always
 ## Communication Protocol
 
 ### When Starting Work
+
 1. Announce which tool/feature you're implementing
 2. Check if it's in the current phase priority
 3. Read the SPEC.md section for that tool
 
 ### During Development
+
 1. Follow the checklist above
 2. Run tests frequently
 3. Keep code consistent with existing patterns
 
 ### When Completing Work
+
 1. Run full test suite
 2. Update all relevant documentation
 3. Verify build succeeds
@@ -484,6 +530,7 @@ import Foundation     // Always
 ## Success Metrics
 
 ### For Each Tool
+
 - ✅ 20+ service tests passing
 - ✅ No compiler warnings
 - ✅ Follows existing UI patterns
@@ -491,6 +538,7 @@ import Foundation     // Always
 - ✅ Build succeeds
 
 ### For Each Phase
+
 - ✅ All planned tools implemented
 - ✅ All tests passing (100%)
 - ✅ No known bugs
@@ -502,6 +550,7 @@ import Foundation     // Always
 ## Project Goals
 
 ### Core Principles
+
 1. **Privacy First**: All processing happens locally
 2. **Offline First**: No network dependencies
 3. **Native Performance**: SwiftUI + Apple frameworks only
@@ -509,6 +558,7 @@ import Foundation     // Always
 5. **Test Coverage**: Comprehensive service tests
 
 ### Non-Goals
+
 - Cloud sync or online features
 - Mobile apps (macOS only for now)
 - External dependencies or npm packages
@@ -519,12 +569,14 @@ import Foundation     // Always
 ## Getting Help
 
 ### Understanding the Project
+
 1. Start with README.md for overview
 2. Check SPEC.md for detailed requirements
 3. Look at similar existing tools for patterns
 4. Review test files to understand expected behavior
 
 ### Implementation Questions
+
 1. Check PHASE5_PREFERENCES_PLAN.md for preferences
 2. Look at Service files for business logic patterns
 3. Review View files for UI patterns
@@ -544,4 +596,4 @@ import Foundation     // Always
 
 ---
 
-*This guide is maintained by the development team and should be updated as the project evolves. Last updated: November 2025*
+_This guide is maintained by the development team and should be updated as the project evolves. Last updated: November 2025_

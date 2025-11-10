@@ -71,6 +71,8 @@ struct ContentView: View {
                 UUIDView()
             case .qr:
                 QRCodeView()
+            case .numberBase:
+                NumberBaseView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)
