@@ -73,6 +73,10 @@ struct ContentView: View {
                 QRCodeView()
             case .numberBase:
                 NumberBaseView()
+            case .unixTimestamp:
+                UnixTimestampView()
+            case .caseConverter:
+                CaseConverterView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)

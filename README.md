@@ -19,6 +19,8 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 **Phase 3 - Converters**
 - ✅ **Number Base Converter** - Convert between Binary, Octal, Decimal, and Hexadecimal with bit/byte representation
+- ✅ **Unix Timestamp Converter** - Convert timestamps to/from human-readable dates with timezone support
+- ✅ **Case Converter** - Convert between camelCase, snake_case, kebab-case, PascalCase, and more
 
 ### Planned Tools (40+)
 
@@ -97,7 +99,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 257+ tests passing (all service tests)
+**Test Status**: ✅ 318+ tests passing (all service tests)
 
 ## 📚 Documentation
 
@@ -183,10 +185,10 @@ Executed 40+ tests, with 0 failures
 - [x] QR Code Generator
 - [x] Smart Clipboard Detection
 
-### Phase 3: Converters (1/7 complete)
+### Phase 3: Converters (3/7 complete)
 - [x] Number Base Converter
-- [ ] Unix Timestamp Converter
-- [ ] Case Converter
+- [x] Unix Timestamp Converter
+- [x] Case Converter
 - [ ] Color Converter
 - [ ] JSON ↔ YAML
 - [ ] JSON ↔ CSV

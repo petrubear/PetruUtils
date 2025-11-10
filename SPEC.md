@@ -342,18 +342,21 @@ PetruUtils/
 ---
 
 #### 3.16 Unix Timestamp Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - Unix timestamp (seconds) ↔ Human-readable date
-- Millisecond timestamp support
+- Millisecond timestamp support (auto-detects)
 - Current timestamp button
-- Timezone selection
-- Multiple date format outputs (ISO 8601, RFC 2822, custom)
-- Relative time display ("2 hours ago")
+- Timezone selection (10 common timezones)
+- Multiple date format outputs (ISO 8601, RFC 2822, Full, Long, Medium, Short, Custom)
+- Relative time display ("2 hours ago", "in 3 days")
+- Keyboard shortcuts (⌘K clear)
 
 ---
 
 #### 3.17 Case Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - Convert between cases:
@@ -365,7 +368,10 @@ PetruUtils/
   - lower case
   - Title Case
   - Sentence case
-- Bulk text support
+  - CONSTANT_CASE (SCREAMING_SNAKE_CASE)
+- Displays all variants simultaneously
+- Copy individual cases or all at once
+- Keyboard shortcuts (⌘K clear, ⌘⇧C copy all)
 
 ---
 
@@ -792,10 +798,10 @@ PetruUtils/
 - ⬜ JSON Formatter (enhance existing) - moved to Phase 4
 - ⬜ Text Diff - moved to Phase 4
 
-### Phase 3: Converters (Weeks 7-9) - 1/7 COMPLETE
+### Phase 3: Converters (Weeks 7-9) - 3/7 COMPLETE
 - ✅ Number Base Converter (Binary, Octal, Decimal, Hex with 64-bit support)
-- ⏸ Unix Timestamp Converter
-- ⏸ Case Converter
+- ✅ Unix Timestamp Converter (seconds/milliseconds, multiple formats, timezones)
+- ✅ Case Converter (9 case types with live preview)
 - ⏸ Color Converter
 - ⏸ JSON ↔ YAML
 - ⏸ JSON ↔ CSV
