@@ -41,7 +41,7 @@ struct XMLFormatterService {
             throw XMLError.emptyInput
         }
         
-        // Try to parse XML to validate it
+        // Validate XML first
         guard let data = xml.data(using: .utf8) else {
             throw XMLError.invalidXML("Could not encode XML string")
         }
@@ -58,8 +58,8 @@ struct XMLFormatterService {
             }
         }
         
-        // Format the XML
-        return formatXMLString(xml, indentStyle: indentStyle)
+        // Format the XML using proper algorithm
+        return formatXMLProperly(xml, indentStyle: indentStyle)
     }
     
     // MARK: - Minify XML
@@ -72,7 +72,7 @@ struct XMLFormatterService {
         // Validate first
         _ = try format(xml)
         
-        // Remove all whitespace between tags
+        // Remove whitespace between tags while preserving text content
         var result = xml
         result = result.replacingOccurrences(of: "\\s*\\n\\s*", with: "", options: .regularExpression)
         result = result.replacingOccurrences(of: ">\\s+<", with: "><", options: .regularExpression)
@@ -109,103 +109,62 @@ struct XMLFormatterService {
     
     // MARK: - Private Helpers
     
-    private func formatXMLString(_ xml: String, indentStyle: IndentStyle) -> String {
+    private func formatXMLProperly(_ xml: String, indentStyle: IndentStyle) -> String {
         let indent = indentStyle.string
-        var formatted = ""
-        var indentLevel = 0
-        var inTag = false
-        var tagContent = ""
+        var result: [String] = []
+        var level = 0
         
-        var i = xml.startIndex
-        while i < xml.endIndex {
-            let char = xml[i]
+        // Tokenize by tags while preserving text
+        let regex = try? NSRegularExpression(pattern: "(<[^>]+>)", options: [])
+        let ns = xml as NSString
+        let parts = regex?.splitByMatches(in: xml) ?? [xml]
+        
+        for part in parts {
+            let trimmed = part.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { continue }
             
-            if char == "<" {
-                // Handle closing tags
-                if !tagContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    formatted += tagContent.trimmingCharacters(in: .whitespacesAndNewlines)
-                    tagContent = ""
-                }
-                
-                inTag = true
-                
-                // Check if it's a closing tag
-                let nextIndex = xml.index(after: i)
-                if nextIndex < xml.endIndex && xml[nextIndex] == "/" {
-                    indentLevel = max(0, indentLevel - 1)
-                    formatted += "\n" + String(repeating: indent, count: indentLevel)
-                } else {
-                    // Opening tag
-                    if !formatted.isEmpty && formatted.last != "\n" {
-                        formatted += "\n" + String(repeating: indent, count: indentLevel)
-                    } else if formatted.isEmpty {
-                        // First tag
-                    } else {
-                        formatted += String(repeating: indent, count: indentLevel)
-                    }
-                }
-                
-                formatted.append(char)
-            } else if char == ">" {
-                formatted.append(char)
-                inTag = false
-                
-                // Check for self-closing tag or XML declaration
-                let prevIndex = xml.index(before: i)
-                if prevIndex >= xml.startIndex {
-                    let prevChar = xml[prevIndex]
-                    if prevChar == "/" || prevChar == "?" {
-                        // Self-closing or declaration, don't increase indent
-                    } else {
-                        // Check if next char is not a closing tag
-                        let nextIndex = xml.index(after: i)
-                        if nextIndex < xml.endIndex {
-                            let ahead = xml[nextIndex]
-                            if ahead != "<" {
-                                // There's content between tags
-                            } else {
-                                // Check if it's a closing tag
-                                let afterNext = xml.index(after: nextIndex)
-                                if afterNext < xml.endIndex && xml[afterNext] != "/" {
-                                    indentLevel += 1
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Increase indent for opening tags
-                    if prevChar != "/" && prevChar != "?" {
-                        let nextIndex = xml.index(after: i)
-                        if nextIndex < xml.endIndex && xml[nextIndex] == "<" {
-                            let afterNext = xml.index(after: nextIndex)
-                            if afterNext < xml.endIndex && xml[afterNext] != "/" {
-                                indentLevel += 1
-                            }
-                        } else if nextIndex < xml.endIndex && xml[nextIndex] != "<" {
-                            // Content after tag
-                            indentLevel += 1
-                        }
-                    }
-                }
-            } else if inTag {
-                formatted.append(char)
+            if trimmed.hasPrefix("</") {
+                // Closing tag
+                level = max(0, level - 1)
+                result.append(String(repeating: indent, count: level) + trimmed)
+            } else if trimmed.hasPrefix("<?") || trimmed.hasPrefix("<!") || trimmed.hasSuffix("/>") {
+                // Declaration, comment, or self-closing
+                result.append(String(repeating: indent, count: level) + trimmed)
+            } else if trimmed.hasPrefix("<") {
+                // Opening tag
+                result.append(String(repeating: indent, count: level) + trimmed)
+                level += 1
             } else {
-                // Content between tags
-                if !char.isWhitespace || !tagContent.isEmpty {
-                    tagContent.append(char)
-                }
+                // Text node
+                result.append(String(repeating: indent, count: level) + trimmed)
             }
-            
-            i = xml.index(after: i)
         }
         
-        return formatted.trimmingCharacters(in: .whitespacesAndNewlines)
+        return result.joined(separator: "\n")
+    }
+}
+
+private extension NSRegularExpression {
+    func splitByMatches(in string: String) -> [String] {
+        let ns = string as NSString
+        var lastIndex = 0
+        var parts: [String] = []
+        let matches = self.matches(in: string, range: NSRange(location: 0, length: ns.length))
+        for match in matches {
+            let range = match.range
+            if range.location > lastIndex {
+                parts.append(ns.substring(with: NSRange(location: lastIndex, length: range.location - lastIndex)))
+            }
+            parts.append(ns.substring(with: range))
+            lastIndex = range.location + range.length
+        }
+        if lastIndex < ns.length {
+            parts.append(ns.substring(with: NSRange(location: lastIndex, length: ns.length - lastIndex)))
+        }
+        return parts
     }
 }
 
 // MARK: - XML Parser Delegate
 
-private class XMLValidationDelegate: NSObject, XMLParserDelegate {
-    // Simple validation delegate that doesn't do anything special
-    // Just used to validate XML structure
-}
+private class XMLValidationDelegate: NSObject, XMLParserDelegate {}

@@ -82,10 +82,8 @@ struct HTMLFormatterView: View {
                 .cornerRadius(8)
             } else {
                 ScrollView {
-                    Text(vm.output)
-                        .font(.system(.body, design: .monospaced))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    SyntaxHighlightedText(text: vm.output, language: .html)
+                        .padding(8)
                 }
                 .padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))

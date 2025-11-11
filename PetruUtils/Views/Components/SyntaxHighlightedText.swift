@@ -16,6 +16,12 @@ struct SyntaxHighlightedText: View {
         switch language {
         case .json:
             return highlightJSON(text)
+        case .xml:
+            return highlightXML(text)
+        case .html:
+            return highlightHTML(text)
+        case .css:
+            return highlightCSS(text)
         case .plain:
             return AttributedString(text)
         }
@@ -24,25 +30,17 @@ struct SyntaxHighlightedText: View {
     private func highlightJSON(_ json: String) -> AttributedString {
         var attributed = AttributedString(json)
         
-        // Define colors for different JSON elements (VS Code-like theme)
-        let keyColor = Color(red: 0.6, green: 0.8, blue: 1.0) // Light blue for keys
-        let stringColor = Color(red: 0.8, green: 0.9, blue: 0.7) // Light green for strings
-        let numberColor = Color(red: 0.7, green: 0.9, blue: 0.7) // Mint green for numbers
-        let booleanColor = Color(red: 0.8, green: 0.6, blue: 1.0) // Purple for booleans
-        let nullColor = Color(red: 1.0, green: 0.6, blue: 0.6) // Pink for null
-        let punctuationColor = Color.secondary
+        let keyColor = Color(red: 0.6, green: 0.8, blue: 1.0)
+        let stringColor = Color(red: 0.8, green: 0.9, blue: 0.7)
+        let numberColor = Color(red: 0.7, green: 0.9, blue: 0.7)
+        let booleanColor = Color(red: 0.8, green: 0.6, blue: 1.0)
+        let nullColor = Color(red: 1.0, green: 0.6, blue: 0.6)
         
-        // Pattern matching for JSON elements
         let patterns: [(regex: String, color: Color)] = [
-            // Keys (strings before colons)
             (#"\"[^\"]*\"\s*:"#, keyColor),
-            // String values (strings not followed by colons)
             (#":\s*\"[^\"]*\""#, stringColor),
-            // Numbers
             (#"-?\d+\.?\d*([eE][+-]?\d+)?"#, numberColor),
-            // Booleans
             (#"\b(true|false)\b"#, booleanColor),
-            // Null
             (#"\bnull\b"#, nullColor),
         ]
         
@@ -52,10 +50,108 @@ struct SyntaxHighlightedText: View {
                 let matches = regex.matches(in: json, range: NSRange(location: 0, length: nsString.length))
                 
                 for match in matches {
-                    if let range = Range(match.range, in: json) {
-                        let attributedRange = AttributedString.Index(range.lowerBound, within: attributed)!
-                            ..< AttributedString.Index(range.upperBound, within: attributed)!
-                        attributed[attributedRange].foregroundColor = color
+                    if let range = Range(match.range, in: json),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
+                    }
+                }
+            }
+        }
+        
+        return attributed
+    }
+    
+    private func highlightXML(_ xml: String) -> AttributedString {
+        var attributed = AttributedString(xml)
+        
+        let tagColor = Color(red: 0.33, green: 0.67, blue: 0.95)
+        let attributeNameColor = Color(red: 0.6, green: 0.8, blue: 1.0)
+        let attributeValueColor = Color(red: 0.8, green: 0.9, blue: 0.7)
+        let commentColor = Color(red: 0.6, green: 0.6, blue: 0.6)
+        
+        let patterns: [(regex: String, color: Color)] = [
+            (#"<!--[\s\S]*?-->"#, commentColor),
+            (#"</?[a-zA-Z][a-zA-Z0-9-]*"#, tagColor),
+            (#"\s[a-zA-Z][a-zA-Z0-9-]*="#, attributeNameColor),
+            (#"\"[^\"]*\""#, attributeValueColor),
+        ]
+        
+        for (pattern, color) in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let nsString = xml as NSString
+                let matches = regex.matches(in: xml, range: NSRange(location: 0, length: nsString.length))
+                
+                for match in matches {
+                    if let range = Range(match.range, in: xml),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
+                    }
+                }
+            }
+        }
+        
+        return attributed
+    }
+    
+    private func highlightHTML(_ html: String) -> AttributedString {
+        var attributed = AttributedString(html)
+        
+        let tagColor = Color(red: 0.33, green: 0.67, blue: 0.95)
+        let attributeNameColor = Color(red: 0.6, green: 0.8, blue: 1.0)
+        let attributeValueColor = Color(red: 0.8, green: 0.9, blue: 0.7)
+        let commentColor = Color(red: 0.6, green: 0.6, blue: 0.6)
+        
+        let patterns: [(regex: String, color: Color)] = [
+            (#"<!--[\s\S]*?-->"#, commentColor),
+            (#"</?[a-zA-Z][a-zA-Z0-9-]*"#, tagColor),
+            (#"\s[a-zA-Z][a-zA-Z0-9-]*="#, attributeNameColor),
+            (#"\"[^\"]*\""#, attributeValueColor),
+        ]
+        
+        for (pattern, color) in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let nsString = html as NSString
+                let matches = regex.matches(in: html, range: NSRange(location: 0, length: nsString.length))
+                
+                for match in matches {
+                    if let range = Range(match.range, in: html),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
+                    }
+                }
+            }
+        }
+        
+        return attributed
+    }
+    
+    private func highlightCSS(_ css: String) -> AttributedString {
+        var attributed = AttributedString(css)
+        
+        let selectorColor = Color(red: 0.8, green: 0.9, blue: 0.7)
+        let propertyColor = Color(red: 0.6, green: 0.8, blue: 1.0)
+        let valueColor = Color(red: 0.9, green: 0.8, blue: 0.6)
+        let commentColor = Color(red: 0.6, green: 0.6, blue: 0.6)
+        
+        let patterns: [(regex: String, color: Color)] = [
+            (#"/\*[\s\S]*?\*/"#, commentColor),
+            (#"[a-zA-Z-]+\s*:"#, propertyColor),
+            (#":\s*[^;{}]+"#, valueColor),
+        ]
+        
+        for (pattern, color) in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let nsString = css as NSString
+                let matches = regex.matches(in: css, range: NSRange(location: 0, length: nsString.length))
+                
+                for match in matches {
+                    if let range = Range(match.range, in: css),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
                     }
                 }
             }
@@ -67,23 +163,10 @@ struct SyntaxHighlightedText: View {
 
 enum SyntaxLanguage {
     case json
+    case xml
+    case html
+    case css
     case plain
-}
-
-// Alternative: Simple text view with better JSON display
-struct JSONTextView: View {
-    let jsonString: String
-    
-    var body: some View {
-        ScrollView([.horizontal, .vertical]) {
-            Text(jsonString)
-                .font(.system(.callout, design: .monospaced))
-                .foregroundStyle(.primary)
-                .textSelection(.enabled)
-                .padding(8)
-        }
-        .frame(minHeight: 100)
-    }
 }
 
 #Preview {
@@ -92,10 +175,7 @@ struct JSONTextView: View {
             text: """
             {
               "alg": "HS256",
-              "typ": "JWT",
-              "number": 123,
-              "boolean": true,
-              "null": null
+              "typ": "JWT"
             }
             """,
             language: .json
