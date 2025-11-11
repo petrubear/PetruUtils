@@ -97,6 +97,8 @@ struct ContentView: View {
                 HTMLFormatterView()
             case .cssFormatter:
                 CSSFormatterView()
+            case .sqlFormatter:
+                SQLFormatterView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)

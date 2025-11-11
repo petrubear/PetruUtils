@@ -814,16 +814,19 @@ PetruUtils/
 - ✅ JSON ↔ CSV (array conversion with custom delimiters)
 - ✅ Markdown ↔ HTML (bidirectional with formatting support)
 
-### Phase 4: Advanced Tools (Weeks 10-12) 🔨 IN PROGRESS
+### Phase 4: Advanced Tools (Weeks 10-12) ✅ COMPLETE
 - ✅ JSON Formatter (format, minify, validate with indentation options)
 - ✅ RegExp Tester (match highlighting, capture groups, common patterns)
 - ✅ Text Diff (side-by-side comparison with line-by-line highlighting)
 - ✅ XML Formatter (format, minify, validate with XML parser)
 - ✅ HTML Formatter (format, minify with intelligent tag handling)
 - ✅ CSS Formatter (format, minify, validate with property sorting)
-- ⬜ SQL Formatter
-- ⬜ cURL to Code
+- ✅ SQL Formatter (format, minify, validate with keyword uppercasing)
+
+**Additional Phase 4 Tools (Future)**:
+- ⬜ cURL to Code Converter
 - ⬜ Certificate Inspector
+- ⬜ JWT Debugger Enhancement
 
 ### Phase 5: Polish & Smart Features (Weeks 13-14)
 - ✅ Smart clipboard detection (COMPLETE)

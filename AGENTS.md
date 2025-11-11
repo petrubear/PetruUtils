@@ -203,6 +203,7 @@ final class NewToolViewModel: ObservableObject {
   - XML → `.xml`
   - HTML → `.html`
   - CSS → `.css`
+  - SQL → `.sql`
   - Plain text → `.plain`
   - NEVER use plain `Text()` or `CodeBlock()` for code output
 
@@ -286,7 +287,7 @@ return .black // fallback
 ```swift
 // ALWAYS use SyntaxHighlightedText for code output
 ScrollView {
-    SyntaxHighlightedText(text: vm.output, language: .json)  // or .xml, .html, .css, .plain
+    SyntaxHighlightedText(text: vm.output, language: .json)  // or .xml, .html, .css, .sql, .plain
         .padding(8)
 }
 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))

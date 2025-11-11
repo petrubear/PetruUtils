@@ -21,6 +21,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case xmlFormatter
     case htmlFormatter
     case cssFormatter
+    case sqlFormatter
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -47,6 +48,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .xmlFormatter: return "XML Formatter"
         case .htmlFormatter: return "HTML Formatter"
         case .cssFormatter: return "CSS Formatter"
+        case .sqlFormatter: return "SQL Formatter"
         }
     }
 
@@ -72,6 +74,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .xmlFormatter: return "chevron.left.forwardslash.chevron.right"
         case .htmlFormatter: return "doc.text"
         case .cssFormatter: return "paintbrush"
+        case .sqlFormatter: return "cylinder"
         }
     }
 }

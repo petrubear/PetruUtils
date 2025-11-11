@@ -22,6 +22,8 @@ struct SyntaxHighlightedText: View {
             return highlightHTML(text)
         case .css:
             return highlightCSS(text)
+        case .sql:
+            return highlightSQL(text)
         case .plain:
             return AttributedString(text)
         }
@@ -159,6 +161,41 @@ struct SyntaxHighlightedText: View {
         
         return attributed
     }
+    
+    private func highlightSQL(_ sql: String) -> AttributedString {
+        var attributed = AttributedString(sql)
+        
+        let keywordColor = Color(red: 0.33, green: 0.67, blue: 0.95)
+        let stringColor = Color(red: 0.8, green: 0.9, blue: 0.7)
+        let numberColor = Color(red: 0.9, green: 0.8, blue: 0.6)
+        let commentColor = Color(red: 0.6, green: 0.6, blue: 0.6)
+        
+        let patterns: [(regex: String, color: Color)] = [
+            (#"--[^\n]*"#, commentColor),
+            (#"/\*[\s\S]*?\*/"#, commentColor),
+            (#"'[^']*'"#, stringColor),
+            (#"\"[^\"]*\""#, stringColor),
+            (#"\b\d+\.?\d*\b"#, numberColor),
+            (#"\b(SELECT|FROM|WHERE|AND|OR|NOT|IN|LIKE|BETWEEN|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP|BY|HAVING|ORDER|ASC|DESC|LIMIT|OFFSET|AS|NULL|IS|DISTINCT|UNION|ALL|CASE|WHEN|THEN|ELSE|END)\b"#, keywordColor),
+        ]
+        
+        for (pattern, color) in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let nsString = sql as NSString
+                let matches = regex.matches(in: sql, range: NSRange(location: 0, length: nsString.length))
+                
+                for match in matches {
+                    if let range = Range(match.range, in: sql),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
+                    }
+                }
+            }
+        }
+        
+        return attributed
+    }
 }
 
 enum SyntaxLanguage {
@@ -166,6 +203,7 @@ enum SyntaxLanguage {
     case xml
     case html
     case css
+    case sql
     case plain
 }
 
