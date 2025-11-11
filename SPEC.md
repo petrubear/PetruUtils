@@ -818,9 +818,9 @@ PetruUtils/
 - ✅ JSON Formatter (format, minify, validate with indentation options)
 - ✅ RegExp Tester (match highlighting, capture groups, common patterns)
 - ✅ Text Diff (side-by-side comparison with line-by-line highlighting)
-- ⬜ XML Formatter
-- ⬜ HTML Formatter
-- ⬜ CSS Formatter
+- ✅ XML Formatter (format, minify, validate with XML parser)
+- ✅ HTML Formatter (format, minify with intelligent tag handling)
+- ✅ CSS Formatter (format, minify, validate with property sorting)
 - ⬜ SQL Formatter
 - ⬜ cURL to Code
 - ⬜ Certificate Inspector

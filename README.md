@@ -4,7 +4,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 4 - Advanced Tools 🔨 IN PROGRESS (3/7+ tools)
+**Current Phase**: Phase 4 - Advanced Tools 🔨 IN PROGRESS (6/7+ tools)
 
 ### Implemented Tools
 
@@ -30,6 +30,9 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **JSON Formatter** - Format, minify, and validate JSON with indentation options and key sorting
 - ✅ **RegExp Tester** - Test regular expressions with match highlighting and capture groups
 - ✅ **Text Diff** - Side-by-side text comparison with line-by-line diff highlighting
+- ✅ **XML Formatter** - Format, minify, and validate XML with indentation options
+- ✅ **HTML Formatter** - Format and minify HTML with intelligent tag handling
+- ✅ **CSS Formatter** - Format, minify, and validate CSS with property sorting option
 
 ### Planned Tools (40+)
 
@@ -109,7 +112,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ```
 
 **Test Status**: ✅ 318+ tests passing (all service tests)  
-**Tools Completed**: 17 of 40+ (42.5% complete)
+**Tools Completed**: 20 of 40+ (50% complete)
 
 ## 📚 Documentation
 
@@ -204,13 +207,13 @@ Executed 40+ tests, with 0 failures
 - [x] JSON ↔ CSV
 - [x] Markdown ↔ HTML
 
-### Phase 4: Advanced Tools 🔨 IN PROGRESS (3/7+)
+### Phase 4: Advanced Tools 🔨 IN PROGRESS (6/7+)
 - [x] JSON Formatter
 - [x] RegExp Tester
 - [x] Text Diff/Compare
-- [ ] XML Formatter
-- [ ] HTML Formatter
-- [ ] CSS Formatter
+- [x] XML Formatter
+- [x] HTML Formatter
+- [x] CSS Formatter
 - [ ] SQL Formatter
 
 ### Phase 5: Polish & Features

@@ -18,6 +18,9 @@ enum Tool: String, CaseIterable, Identifiable {
     case jsonFormatter
     case regexpTester
     case textDiff
+    case xmlFormatter
+    case htmlFormatter
+    case cssFormatter
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -41,6 +44,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonFormatter: return "JSON Formatter"
         case .regexpTester: return "RegExp Tester"
         case .textDiff: return "Text Diff"
+        case .xmlFormatter: return "XML Formatter"
+        case .htmlFormatter: return "HTML Formatter"
+        case .cssFormatter: return "CSS Formatter"
         }
     }
 
@@ -63,6 +69,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonFormatter: return "curlybraces"
         case .regexpTester: return "asterisk.circle"
         case .textDiff: return "arrow.left.arrow.right.square"
+        case .xmlFormatter: return "chevron.left.forwardslash.chevron.right"
+        case .htmlFormatter: return "doc.text"
+        case .cssFormatter: return "paintbrush"
         }
     }
 }

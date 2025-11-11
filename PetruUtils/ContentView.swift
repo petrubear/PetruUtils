@@ -91,6 +91,12 @@ struct ContentView: View {
                 RegExpTesterView()
             case .textDiff:
                 TextDiffView()
+            case .xmlFormatter:
+                XMLFormatterView()
+            case .htmlFormatter:
+                HTMLFormatterView()
+            case .cssFormatter:
+                CSSFormatterView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)
