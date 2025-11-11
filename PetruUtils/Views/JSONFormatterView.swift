@@ -87,7 +87,11 @@ struct JSONFormatterView: View {
     private var outputPane: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Output").font(.headline)
-            CodeBlock(text: vm.output)
+            ScrollView {
+                SyntaxHighlightedText(text: vm.output, language: .json)
+                    .padding(8)
+            }
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
             
             HStack {
                 if !vm.output.isEmpty {

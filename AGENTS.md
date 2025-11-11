@@ -198,6 +198,13 @@ final class NewToolViewModel: ObservableObject {
 - Show character counts
 - Display errors prominently
 - Add tooltips and help text
+- **CRITICAL**: ALL code output MUST use `SyntaxHighlightedText` with appropriate language
+  - JSON → `.json`
+  - XML → `.xml`
+  - HTML → `.html`
+  - CSS → `.css`
+  - Plain text → `.plain`
+  - NEVER use plain `Text()` or `CodeBlock()` for code output
 
 #### 5. **Add to ContentView** (`ContentView.swift`)
 
@@ -274,6 +281,21 @@ return .black // fallback
 .keyboardShortcut("c", modifiers: [.command, .shift]) // ⌘⇧C
 ```
 
+#### Syntax Highlighting (CRITICAL)
+
+```swift
+// ALWAYS use SyntaxHighlightedText for code output
+ScrollView {
+    SyntaxHighlightedText(text: vm.output, language: .json)  // or .xml, .html, .css, .plain
+        .padding(8)
+}
+.overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+
+// NEVER use:
+// Text(vm.output)  ❌ WRONG
+// CodeBlock(text: vm.output)  ❌ DEPRECATED for formatters
+```
+
 ---
 
 ## Development Workflow
@@ -321,6 +343,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - [ ] Error messages are user-friendly
 - [ ] Character counts shown
 - [ ] Copy functionality works
+- [ ] **Code output uses SyntaxHighlightedText with correct language**
 - [ ] Tool added to enum and ContentView
 - [ ] Documentation updated
 - [ ] No compiler warnings

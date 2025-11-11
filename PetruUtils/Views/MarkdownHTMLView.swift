@@ -25,7 +25,11 @@ struct MarkdownHTMLView: View {
                 }.padding()
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Output").font(.headline)
-                    CodeBlock(text: vm.output)
+                    ScrollView {
+                        SyntaxHighlightedText(text: vm.output, language: vm.mode ? .html : .plain)
+                            .padding(8)
+                    }
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
                 }.padding()
             }
         }
