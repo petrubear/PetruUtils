@@ -486,6 +486,7 @@ PetruUtils/
 ### Category: Inspectors & Debuggers
 
 #### 3.26 RegExp Tester
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Test regular expressions
@@ -499,6 +500,7 @@ PetruUtils/
 ---
 
 #### 3.27 Text Diff/Compare
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Side-by-side diff view
@@ -800,8 +802,8 @@ PetruUtils/
   - ✅ Pattern detection (JSON, Base64, JWT, URLs, UUID, ULID, Hash, XML)
   - ✅ Auto-suggestion in sidebar
   - ✅ Privacy-respecting implementation
-- ⬜ JSON Formatter (enhance existing) - moved to Phase 4
-- ⬜ Text Diff - moved to Phase 4
+- ✅ JSON Formatter (enhance existing) - moved to Phase 4 and COMPLETED
+- ✅ Text Diff - moved to Phase 4 and COMPLETED
 
 ### Phase 3: Converters (Weeks 7-9) ✅ COMPLETE
 - ✅ Number Base Converter (Binary, Octal, Decimal, Hex with 64-bit support)
@@ -812,14 +814,16 @@ PetruUtils/
 - ✅ JSON ↔ CSV (array conversion with custom delimiters)
 - ✅ Markdown ↔ HTML (bidirectional with formatting support)
 
-### Phase 4: Advanced Tools (Weeks 10-12)
-- RegExp Tester
-- XML Formatter
-- HTML Formatter
-- CSS Formatter
-- SQL Formatter
-- cURL to Code
-- Certificate Inspector
+### Phase 4: Advanced Tools (Weeks 10-12) 🔨 IN PROGRESS
+- ✅ JSON Formatter (format, minify, validate with indentation options)
+- ✅ RegExp Tester (match highlighting, capture groups, common patterns)
+- ✅ Text Diff (side-by-side comparison with line-by-line highlighting)
+- ⬜ XML Formatter
+- ⬜ HTML Formatter
+- ⬜ CSS Formatter
+- ⬜ SQL Formatter
+- ⬜ cURL to Code
+- ⬜ Certificate Inspector
 
 ### Phase 5: Polish & Smart Features (Weeks 13-14)
 - ✅ Smart clipboard detection (COMPLETE)

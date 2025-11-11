@@ -85,6 +85,12 @@ struct ContentView: View {
                 JSONCSVView()
             case .markdownHTML:
                 MarkdownHTMLView()
+            case .jsonFormatter:
+                JSONFormatterView()
+            case .regexpTester:
+                RegExpTesterView()
+            case .textDiff:
+                TextDiffView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)

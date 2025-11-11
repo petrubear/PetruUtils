@@ -15,6 +15,9 @@ enum Tool: String, CaseIterable, Identifiable {
     case jsonYAML
     case jsonCSV
     case markdownHTML
+    case jsonFormatter
+    case regexpTester
+    case textDiff
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -35,6 +38,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonYAML: return "JSON ↔ YAML"
         case .jsonCSV: return "JSON ↔ CSV"
         case .markdownHTML: return "Markdown ↔ HTML"
+        case .jsonFormatter: return "JSON Formatter"
+        case .regexpTester: return "RegExp Tester"
+        case .textDiff: return "Text Diff"
         }
     }
 
@@ -54,6 +60,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonYAML: return "arrow.left.arrow.right"
         case .jsonCSV: return "tablecells"
         case .markdownHTML: return "doc.richtext"
+        case .jsonFormatter: return "curlybraces"
+        case .regexpTester: return "asterisk.circle"
+        case .textDiff: return "arrow.left.arrow.right.square"
         }
     }
 }
