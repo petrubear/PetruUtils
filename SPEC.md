@@ -291,23 +291,25 @@ PetruUtils/
 ### Category: Converters
 
 #### 3.12 JSON ↔ YAML Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - Bidirectional conversion
-- Preserve comments (YAML → JSON lossy)
-- Syntax highlighting for both
-- Validation for both formats
+- Syntax validation for both formats
+- Pretty formatting
+- Keyboard shortcuts (⌘Return convert, ⌘K clear)
 
 ---
 
 #### 3.13 JSON ↔ CSV Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - JSON array to CSV table
 - CSV to JSON array
-- Custom delimiter support (comma, tab, semicolon)
-- Header row handling
-- Nested object flattening options
+- Custom delimiter support (comma, semicolon, tab)
+- Automatic header generation from JSON keys
+- Keyboard shortcuts (⌘Return convert, ⌘K clear)
 
 ---
 
@@ -327,6 +329,7 @@ PetruUtils/
 ---
 
 #### 3.15 Color Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - Convert between formats:
@@ -336,8 +339,9 @@ PetruUtils/
   - HSV/HSB
   - CMYK
 - Color picker integration
-- Preview swatch
-- Copy to clipboard in any format
+- Live preview swatch
+- Copy individual formats or all
+- Keyboard shortcuts (⌘K clear)
 
 ---
 
@@ -376,13 +380,14 @@ PetruUtils/
 ---
 
 #### 3.18 Markdown ↔ HTML Converter
+**Status**: ✅ Implemented
 
 **Features**:
 - Markdown to HTML conversion
 - HTML to Markdown conversion
-- Live preview
-- GitHub Flavored Markdown support
-- Syntax highlighting in code blocks
+- Supports headers, bold, italic, code, links
+- Mode toggle for bidirectional conversion
+- Keyboard shortcuts (⌘Return convert, ⌘K clear)
 
 ---
 
@@ -798,14 +803,14 @@ PetruUtils/
 - ⬜ JSON Formatter (enhance existing) - moved to Phase 4
 - ⬜ Text Diff - moved to Phase 4
 
-### Phase 3: Converters (Weeks 7-9) - 3/7 COMPLETE
+### Phase 3: Converters (Weeks 7-9) ✅ COMPLETE
 - ✅ Number Base Converter (Binary, Octal, Decimal, Hex with 64-bit support)
 - ✅ Unix Timestamp Converter (seconds/milliseconds, multiple formats, timezones)
 - ✅ Case Converter (9 case types with live preview)
-- ⏸ Color Converter
-- ⏸ JSON ↔ YAML
-- ⏸ JSON ↔ CSV
-- ⏸ Markdown ↔ HTML
+- ✅ Color Converter (HEX, RGB, HSL, HSV, CMYK with color picker)
+- ✅ JSON ↔ YAML (bidirectional conversion with validation)
+- ✅ JSON ↔ CSV (array conversion with custom delimiters)
+- ✅ Markdown ↔ HTML (bidirectional with formatting support)
 
 ### Phase 4: Advanced Tools (Weeks 10-12)
 - RegExp Tester

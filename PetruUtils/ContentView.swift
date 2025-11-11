@@ -77,6 +77,14 @@ struct ContentView: View {
                 UnixTimestampView()
             case .caseConverter:
                 CaseConverterView()
+            case .colorConverter:
+                ColorConverterView()
+            case .jsonYAML:
+                JSONYAMLView()
+            case .jsonCSV:
+                JSONCSVView()
+            case .markdownHTML:
+                MarkdownHTMLView()
             case .none:
                 Text("Select a tool")
                     .foregroundStyle(.secondary)

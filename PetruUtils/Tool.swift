@@ -11,6 +11,10 @@ enum Tool: String, CaseIterable, Identifiable {
     case numberBase
     case unixTimestamp
     case caseConverter
+    case colorConverter
+    case jsonYAML
+    case jsonCSV
+    case markdownHTML
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -27,6 +31,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .numberBase: return "Number Base Converter"
         case .unixTimestamp: return "Unix Timestamp"
         case .caseConverter: return "Case Converter"
+        case .colorConverter: return "Color Converter"
+        case .jsonYAML: return "JSON ↔ YAML"
+        case .jsonCSV: return "JSON ↔ CSV"
+        case .markdownHTML: return "Markdown ↔ HTML"
         }
     }
 
@@ -42,6 +50,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .numberBase: return "function"
         case .unixTimestamp: return "clock"
         case .caseConverter: return "textformat"
+        case .colorConverter: return "paintpalette"
+        case .jsonYAML: return "arrow.left.arrow.right"
+        case .jsonCSV: return "tablecells"
+        case .markdownHTML: return "doc.richtext"
         }
     }
 }
