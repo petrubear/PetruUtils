@@ -35,6 +35,12 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **CSS Formatter** - Format, minify, and validate CSS with property sorting option
 - ✅ **SQL Formatter** - Format, minify, and validate SQL with keyword uppercasing option
 
+**Phase 6 - Text Utilities** ✅ (4/4 tools)
+- ✅ **Line Sorter** - Sort lines alphabetically with case-sensitive, natural sort, reverse, and shuffle options
+- ✅ **Line Deduplicator** - Remove duplicate lines with options to keep first/last occurrence and sort
+- ✅ **Text Replacer** - Find and replace with regex support, case-sensitive/insensitive, and whole word matching
+- ✅ **String Inspector** - Comprehensive text analysis: character/word/line counts, byte sizes, entropy, Unicode analysis
+
 ### Planned Tools (40+)
 
 See [SPEC.md](SPEC.md) for the complete specification including:
@@ -112,8 +118,8 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 326+ tests passing (all service tests)  
-**Tools Completed**: 21 of 40+ (52.5% complete)  
+**Test Status**: ✅ 355+ tests passing (all service tests)  
+**Tools Completed**: 25 of 40+ (62.5% complete)  
 **Phase 5 Features**: ✅ Preferences, History, Favorites, Export/Import
 
 ## 📚 Documentation

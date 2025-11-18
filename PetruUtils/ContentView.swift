@@ -220,6 +220,14 @@ struct LazyToolView: View {
                 CSSFormatterView()
             case .sqlFormatter:
                 SQLFormatterView()
+            case .lineSorter:
+                LineSorterView()
+            case .lineDeduplicator:
+                LineDeduplicatorView()
+            case .textReplacer:
+                TextReplacerView()
+            case .stringInspector:
+                StringInspectorView()
             }
         }
         .id(tool) // Force view recreation when tool changes

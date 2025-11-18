@@ -514,6 +514,7 @@ PetruUtils/
 ---
 
 #### 3.28 String Inspector
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Analyze string properties:
@@ -572,6 +573,7 @@ PetruUtils/
 ### Category: Text Utilities
 
 #### 3.32 Line Sorter
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Sort lines alphabetically
@@ -584,6 +586,7 @@ PetruUtils/
 ---
 
 #### 3.33 Line Deduplicator
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Remove duplicate lines
@@ -595,6 +598,7 @@ PetruUtils/
 ---
 
 #### 3.34 Text Replacer
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Find and replace
@@ -602,7 +606,7 @@ PetruUtils/
 - Case-sensitive/insensitive
 - Whole word matching
 - Replace all or one at a time
-- Preview changes
+- Live match count preview
 
 ---
 

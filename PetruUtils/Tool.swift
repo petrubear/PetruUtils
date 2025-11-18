@@ -22,6 +22,10 @@ enum Tool: String, CaseIterable, Identifiable {
     case htmlFormatter
     case cssFormatter
     case sqlFormatter
+    case lineSorter
+    case lineDeduplicator
+    case textReplacer
+    case stringInspector
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -49,6 +53,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .htmlFormatter: return "HTML Formatter"
         case .cssFormatter: return "CSS Formatter"
         case .sqlFormatter: return "SQL Formatter"
+        case .lineSorter: return "Line Sorter"
+        case .lineDeduplicator: return "Line Deduplicator"
+        case .textReplacer: return "Text Replacer"
+        case .stringInspector: return "String Inspector"
         }
     }
 
@@ -75,6 +83,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .htmlFormatter: return "doc.text"
         case .cssFormatter: return "paintbrush"
         case .sqlFormatter: return "cylinder"
+        case .lineSorter: return "line.3.horizontal.decrease"
+        case .lineDeduplicator: return "list.bullet.rectangle"
+        case .textReplacer: return "text.magnifyingglass"
+        case .stringInspector: return "info.circle"
         }
     }
 }
