@@ -30,6 +30,10 @@ enum Tool: String, CaseIterable, Identifiable {
     case loremIpsum
     case urlParser
     case randomString
+    case backslashEscape
+    case base32
+    case cronParser
+    case jsonPath
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -65,6 +69,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .loremIpsum: return "Lorem Ipsum"
         case .urlParser: return "URL Parser"
         case .randomString: return "Random String"
+        case .backslashEscape: return "Backslash Escape"
+        case .base32: return "Base32 Encoder/Decoder"
+        case .cronParser: return "Cron Expression Parser"
+        case .jsonPath: return "JSON Path Tester"
         }
     }
 
@@ -99,6 +107,10 @@ enum Tool: String, CaseIterable, Identifiable {
         case .loremIpsum: return "text.alignleft"
         case .urlParser: return "link.circle"
         case .randomString: return "lock.rectangle.stack"
+        case .backslashEscape: return "chevron.left.slash.chevron.right"
+        case .base32: return "textformat.123"
+        case .cronParser: return "clock.arrow.circlepath"
+        case .jsonPath: return "arrow.triangle.branch"
         }
     }
 }

@@ -236,6 +236,14 @@ struct LazyToolView: View {
                 URLParserView()
             case .randomString:
                 RandomStringView()
+            case .backslashEscape:
+                BackslashEscapeView()
+            case .base32:
+                Base32View()
+            case .cronParser:
+                CronParserView()
+            case .jsonPath:
+                JSONPathView()
             }
         }
         .id(tool) // Force view recreation when tool changes

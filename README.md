@@ -45,9 +45,13 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **HTML Entity Encoder/Decoder** - Encode/decode HTML entities (named, decimal, hex formats)
 - ✅ **Lorem Ipsum Generator** - Generate placeholder text (paragraphs, sentences, words)
 
-**Phase 8 - Inspectors & Generators** ✅ (2/2 tools)
+**Phase 8 - Inspectors & Generators** ✅ (7/7 tools)
 - ✅ **URL Parser** - Parse URLs into components (scheme, host, port, path, query params, fragment)
 - ✅ **Random String Generator** - Generate cryptographically secure random strings with customizable character sets
+- ✅ **Backslash Escape/Unescape** - Escape and unescape special characters in strings (quotes, newlines, tabs, etc.)
+- ✅ **Base32 Encoder/Decoder** - Encode/decode Base32 with Standard and Hex variants (RFC 4648)
+- ✅ **Cron Expression Parser** - Parse cron expressions with human-readable descriptions and next 10 execution times
+- ✅ **JSON Path Tester** - Test JSONPath expressions with syntax like $.users[0].name, $..email
 
 ### Planned Tools (40+)
 
@@ -126,8 +130,8 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 370+ tests passing (all service tests)  
-**Tools Completed**: 29 of 40+ (72.5% complete)  
+**Test Status**: ✅ 375+ tests passing (all service tests)  
+**Tools Completed**: 33 of 40+ (82.5% complete)  
 **Phase 5 Features**: ✅ Preferences, History, Favorites, Export/Import
 
 ## 📚 Documentation

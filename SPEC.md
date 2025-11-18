@@ -280,6 +280,7 @@ PetruUtils/
 ---
 
 #### 3.11 Backslash Escape/Unescape
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Escape special characters (`\n`, `\t`, `\"`, etc.)
@@ -535,14 +536,15 @@ PetruUtils/
 ---
 
 #### 3.29 Cron Expression Parser
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Parse cron expressions
 - Human-readable description
 - Next 10 execution times
-- Timezone support
+- Timezone support (10 common timezones)
 - Validate syntax
-- Common cron patterns library
+- Field breakdown display
 
 ---
 
@@ -564,13 +566,14 @@ PetruUtils/
 ---
 
 #### 3.31 JSON Path Tester
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
-- Test JSON Path expressions
-- Syntax highlighting
-- Result preview
-- Support JSONPath syntax
-- Common path examples
+- Test JSONPath expressions
+- Syntax highlighting for results
+- Result preview with match count
+- Support JSONPath syntax ($.property, [index], [*], ..recursive)
+- Live evaluation
 
 ---
 
@@ -640,8 +643,14 @@ PetruUtils/
 - IP validation (IPv4/IPv6)
 
 #### 3.37 Base32 Encoder/Decoder
-- Standard Base32
+**Status**: ✅ IMPLEMENTED
+
+**Features**:
+- Standard Base32 (RFC 4648)
 - Base32 Hex variant
+- Encode/decode text
+- Live conversion
+- Error handling
 
 #### 3.38 ASCII Art Generator
 - Text to ASCII art
