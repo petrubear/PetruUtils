@@ -252,6 +252,7 @@ PetruUtils/
 ---
 
 #### 3.9 HTML Entity Encoder/Decoder
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Encode special characters to HTML entities
@@ -448,10 +449,11 @@ PetruUtils/
 ---
 
 #### 3.23 Lorem Ipsum Generator
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Generate placeholder text
-- Options: paragraphs, sentences, words, bytes
+- Options: paragraphs, sentences, words
 - Quantity selector (1-100)
 - "Lorem ipsum" or random words
 - Copy to clipboard

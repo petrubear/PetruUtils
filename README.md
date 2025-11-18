@@ -41,6 +41,10 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **Text Replacer** - Find and replace with regex support, case-sensitive/insensitive, and whole word matching
 - ✅ **String Inspector** - Comprehensive text analysis: character/word/line counts, byte sizes, entropy, Unicode analysis
 
+**Phase 7 - Encoders & Generators** ✅ (2/2 tools)
+- ✅ **HTML Entity Encoder/Decoder** - Encode/decode HTML entities (named, decimal, hex formats)
+- ✅ **Lorem Ipsum Generator** - Generate placeholder text (paragraphs, sentences, words)
+
 ### Planned Tools (40+)
 
 See [SPEC.md](SPEC.md) for the complete specification including:
@@ -118,8 +122,8 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 355+ tests passing (all service tests)  
-**Tools Completed**: 25 of 40+ (62.5% complete)  
+**Test Status**: ✅ 360+ tests passing (all service tests)  
+**Tools Completed**: 27 of 40+ (67.5% complete)  
 **Phase 5 Features**: ✅ Preferences, History, Favorites, Export/Import
 
 ## 📚 Documentation

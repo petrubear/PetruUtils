@@ -26,6 +26,8 @@ enum Tool: String, CaseIterable, Identifiable {
     case lineDeduplicator
     case textReplacer
     case stringInspector
+    case htmlEntity
+    case loremIpsum
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -57,6 +59,8 @@ enum Tool: String, CaseIterable, Identifiable {
         case .lineDeduplicator: return "Line Deduplicator"
         case .textReplacer: return "Text Replacer"
         case .stringInspector: return "String Inspector"
+        case .htmlEntity: return "HTML Entity"
+        case .loremIpsum: return "Lorem Ipsum"
         }
     }
 
@@ -87,6 +91,8 @@ enum Tool: String, CaseIterable, Identifiable {
         case .lineDeduplicator: return "list.bullet.rectangle"
         case .textReplacer: return "text.magnifyingglass"
         case .stringInspector: return "info.circle"
+        case .htmlEntity: return "chevron.left.forwardslash.chevron.right"
+        case .loremIpsum: return "text.alignleft"
         }
     }
 }

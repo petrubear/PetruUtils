@@ -228,6 +228,10 @@ struct LazyToolView: View {
                 TextReplacerView()
             case .stringInspector:
                 StringInspectorView()
+            case .htmlEntity:
+                HTMLEntityView()
+            case .loremIpsum:
+                LoremIpsumView()
             }
         }
         .id(tool) // Force view recreation when tool changes
