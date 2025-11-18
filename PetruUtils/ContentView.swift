@@ -234,6 +234,8 @@ struct LazyToolView: View {
                 LoremIpsumView()
             case .urlParser:
                 URLParserView()
+            case .randomString:
+                RandomStringView()
             }
         }
         .id(tool) // Force view recreation when tool changes

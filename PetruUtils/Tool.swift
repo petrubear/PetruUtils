@@ -29,6 +29,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case htmlEntity
     case loremIpsum
     case urlParser
+    case randomString
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -63,6 +64,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .htmlEntity: return "HTML Entity"
         case .loremIpsum: return "Lorem Ipsum"
         case .urlParser: return "URL Parser"
+        case .randomString: return "Random String"
         }
     }
 
@@ -96,6 +98,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .htmlEntity: return "chevron.left.forwardslash.chevron.right"
         case .loremIpsum: return "text.alignleft"
         case .urlParser: return "link.circle"
+        case .randomString: return "lock.rectangle.stack"
         }
     }
 }

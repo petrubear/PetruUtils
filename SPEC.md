@@ -474,14 +474,16 @@ PetruUtils/
 ---
 
 #### 3.25 Random String Generator
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Generate random strings
 - Character sets: lowercase, uppercase, numbers, symbols
 - Custom length (1-1000)
-- Bulk generation
+- Bulk generation (1-100)
 - Avoid ambiguous characters option (0/O, 1/l/I)
-- Cryptographically secure randomness
+- Cryptographically secure randomness (SecRandomCopyBytes)
+- Individual copy buttons for each string
 
 ---
 
