@@ -613,6 +613,7 @@ PetruUtils/
 ---
 
 #### 3.35 URL Parser
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Parse URL components:
@@ -622,8 +623,9 @@ PetruUtils/
   - Path
   - Query parameters (as table)
   - Fragment
+  - User/password (if present)
 - Validation
-- Query parameter editing
+- Clean display of parsed components
 
 ---
 

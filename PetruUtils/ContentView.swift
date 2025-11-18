@@ -232,6 +232,8 @@ struct LazyToolView: View {
                 HTMLEntityView()
             case .loremIpsum:
                 LoremIpsumView()
+            case .urlParser:
+                URLParserView()
             }
         }
         .id(tool) // Force view recreation when tool changes

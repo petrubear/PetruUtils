@@ -28,6 +28,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case stringInspector
     case htmlEntity
     case loremIpsum
+    case urlParser
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -61,6 +62,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .stringInspector: return "String Inspector"
         case .htmlEntity: return "HTML Entity"
         case .loremIpsum: return "Lorem Ipsum"
+        case .urlParser: return "URL Parser"
         }
     }
 
@@ -93,6 +95,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .stringInspector: return "info.circle"
         case .htmlEntity: return "chevron.left.forwardslash.chevron.right"
         case .loremIpsum: return "text.alignleft"
+        case .urlParser: return "link.circle"
         }
     }
 }

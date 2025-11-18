@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 7 implemented) with a focus on privacy, offline operation, and native performance.
+**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 27 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 2 Complete (17.5% of total tools implemented)
+**Current Status**: Phase 7 Complete (67.5% of total tools implemented - 27 of 40+ tools)
 
 ---
 
@@ -345,6 +345,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - [ ] Character counts shown
 - [ ] Copy functionality works
 - [ ] **Code output uses SyntaxHighlightedText with correct language**
+- [ ] **All monospace text elements should use 'Jetbrains Mono' font included in the App**
 - [ ] Tool added to enum and ContentView
 - [ ] Documentation updated
 - [ ] No compiler warnings
