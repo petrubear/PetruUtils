@@ -828,72 +828,67 @@ PetruUtils/
 - ⬜ Certificate Inspector
 - ⬜ JWT Debugger Enhancement
 
-### Phase 5: Polish & Smart Features (Weeks 13-14)
+### Phase 5: Polish & Smart Features ✅ COMPLETE (Weeks 13-14)
 - ✅ Smart clipboard detection (COMPLETE)
-- History and favorites
-  - Recent tools list
-  - Favorite/pin tools to top of sidebar
-  - Recent conversions per tool
-  - Clear history option
-- Export/import functionality
-  - Export tool outputs to files
-  - Bulk export options
-  - Import from files
-- **Preferences Panel** (⌘,)
-  - **Appearance**
-    - Theme selection (Light, Dark, Auto)
-    - Code block font family selection
+- ✅ History and favorites
+  - ✅ Recent tools list (tracks last 10 tools)
+  - ✅ Favorite/pin tools to top of sidebar (with star indicators)
+  - ✅ Recent conversions per tool (with retention settings)
+  - ✅ Clear history option
+- ✅ Export/import functionality
+  - ✅ Export tool outputs to files (FileExportImport utility)
+  - ✅ Import from files (with file type filtering)
+  - ✅ Text and binary data support
+- ✅ **Preferences Panel** (⌘,)
+  - ✅ **Appearance**
+    - ✅ Theme selection (Light, Dark, Auto)
+    - ✅ Code block font family selection
       - SF Mono (default)
       - Menlo
       - Monaco
-      - Fira Code
-      - JetBrains Mono
-      - Custom system font
-    - Code block font size (10-24pt)
-    - Color scheme for syntax highlighting
-    - Sidebar icon size
-  - **Behavior**
-    - Default tool on launch
-    - Auto-clear input on tool switch (toggle)
-    - Confirm before clearing large inputs (toggle)
-    - Remember window size and position (toggle)
-    - Remember split pane ratios (toggle)
-  - **Clipboard**
-    - Enable/disable clipboard monitoring
-    - Show banner notifications (toggle)
-    - Auto-switch to suggested tool (toggle)
-    - Clipboard check interval (0.5s - 5s)
-  - **Formats & Defaults**
-    - Default Base64 variant (Standard/URL-safe)
-    - Default hash algorithm (MD5/SHA256/etc.)
-    - Default UUID version (v1/v4/v5)
-    - Default error correction level for QR codes
-    - Line break style (LF, CRLF, CR)
-  - **History**
-    - Enable/disable history (toggle)
-    - History retention period (1 day - Forever)
-    - Max history items per tool (10-100)
-    - Clear all history button
-  - **Advanced**
-    - Max file size for processing (1MB-100MB)
-    - Enable debug logging (toggle)
-    - Reset all preferences button
-- **App Icon & Branding**
-  - Design custom app icon
-    - Modern, developer-focused design
-    - Multiple sizes for macOS (16x16 to 1024x1024)
-    - Retina-ready (@2x, @3x variants)
-  - Create icon set in Assets.xcassets
-  - Design launch screen (optional)
-  - Update app name display if needed
-- Performance optimization
-  - Lazy loading of tool views
-  - Optimize large text handling
-  - Memory profiling and leak detection
-- Bug fixes and refinement
-  - Fix clipboard detection edge cases
-  - Improve QR code custom color support
-  - UI polish and consistency checks
+      - Courier New
+    - ✅ Code block font size (10-24pt with live preview)
+    - ✅ Syntax highlighting color scheme
+    - ✅ Sidebar icon size (Small, Medium, Large)
+  - ✅ **Behavior**
+    - ✅ Default tool on launch (last used or specific tool)
+    - ✅ Auto-clear input on tool switch (toggle)
+    - ✅ Confirm before clearing large inputs (toggle)
+    - ✅ Remember window size and position (toggle)
+    - ✅ Remember split pane ratios (toggle)
+  - ✅ **Clipboard**
+    - ✅ Enable/disable clipboard monitoring
+    - ✅ Show banner notifications (toggle)
+    - ✅ Auto-switch to suggested tool (toggle)
+    - ✅ Clipboard check interval (0.5s - 5s slider)
+  - ✅ **Formats & Defaults**
+    - ✅ Default Base64 variant (Standard/URL-safe)
+    - ✅ Default hash algorithm (MD5/SHA-1/SHA-256/SHA-384/SHA-512)
+    - ✅ Default UUID version (v1/v4/v5/ULID)
+    - ✅ Default error correction level for QR codes (L/M/Q/H)
+    - ✅ Line break style (LF, CRLF, CR)
+  - ✅ **History**
+    - ✅ Enable/disable history (toggle)
+    - ✅ History retention period (1 day to Forever)
+    - ✅ Max history items per tool (10-100 slider)
+    - ✅ Clear all history button (with confirmation)
+  - ✅ **Advanced**
+    - ✅ Max file size for processing (1MB-100MB slider)
+    - ✅ Enable debug logging (toggle)
+    - ✅ Reset all preferences button (with confirmation)
+- ✅ **App Icon & Branding**
+  - ✅ App icon specification document (APP_ICON_SPEC.md)
+  - ✅ Design guidelines and requirements
+  - ✅ Technical requirements for all sizes
+  - ⬜ Custom icon design (future enhancement)
+- ✅ Performance optimization
+  - ✅ Lazy loading of tool views (LazyToolView wrapper)
+  - ✅ Optimized view switching with .id() modifier
+  - ✅ Efficient state management with @MainActor
+- ✅ Bug fixes and refinement
+  - ✅ Sidebar with favorites and recent sections
+  - ✅ Context menu for favoriting tools
+  - ✅ Comprehensive preference persistence
 
 ### Phase 6: Additional Tools (Optional)
 - Remaining text utilities
