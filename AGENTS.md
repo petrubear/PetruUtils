@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 32 implemented) with a focus on privacy, offline operation, and native performance.
+**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 33 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 5 – Polish & Release Automation (32/40 tools implemented ≈ 80%)
+**Current Status**: Phase 5 – Polish & Release Automation (33/40 tools implemented ≈ 82.5%)
 
 ---
 
@@ -388,7 +388,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - CSS Formatter ✅ (SCSS/LESS conversion + prefixing pending)
 - SQL Formatter ✅
 - JSON Formatter ✅ (tree view + JSONPath breadcrumbs pending)
-- JavaScript Formatter 🔲
+- JavaScript Formatter ✅
 
 ### 🔄 Phase 5: Polish & Preferences
 
@@ -424,7 +424,7 @@ See `PHASE5_PREFERENCES_PLAN.md` for details
 
 ### 🔲 Phase 9: Remaining Utilities
 
-- JavaScript Formatter
+- JavaScript Formatter ✅
 - cURL → Code Converter
 - SVG → CSS Converter
 - Certificate Inspector (X.509)
@@ -656,9 +656,9 @@ import Foundation     // Always
 
 **End Goal**: A comprehensive, privacy-focused, offline developer toolbox with 40+ utilities that developers use daily. Think "DevUtils" but open and extensible.
 
-**Current Progress**: ~80% complete (32 of 40 tools)
+**Current Progress**: ~82.5% complete (33 of 40 tools)
 
-**Next Milestone**: Ship remaining converters/advanced utilities (JavaScript formatter, cURL → code, SVG → CSS) and add release automation.
+**Next Milestone**: Ship remaining converters/advanced utilities (cURL → code, SVG → CSS, Certificate Inspector, etc.) and add release automation.
 
 **Long-term**: Finish Phase 5 polish items (release automation), deliver remaining inspector/generator tools, then continue with preferences/performance refinements.
 
@@ -670,6 +670,6 @@ _This guide is maintained by the development team and should be updated as the p
 
 ## Current Priorities (November 2025)
 
-1. **Phase 9 – Remaining Utilities**: Ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+1. **Phase 9 – Remaining Utilities**: Ship cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
 2. **Phase 10 – Enhancements**: Add JSON Formatter tree view/breadcrumbs/line numbers, extend CSS Formatter to SCSS/LESS + auto-prefixing, and implement RSA/ECDSA/PS support in the JWT Debugger with public-key inputs.
 3. **Phase 11 – Release Automation**: Create a GitHub Action that builds/tests/signs the app and packages release artifacts whenever a version tag is pushed.

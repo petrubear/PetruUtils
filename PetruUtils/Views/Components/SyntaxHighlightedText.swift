@@ -24,6 +24,8 @@ struct SyntaxHighlightedText: View {
             return highlightCSS(text)
         case .sql:
             return highlightSQL(text)
+        case .javascript:
+            return highlightJavaScript(text)
         case .plain:
             return AttributedString(text)
         }
@@ -196,6 +198,42 @@ struct SyntaxHighlightedText: View {
         
         return attributed
     }
+    
+    private func highlightJavaScript(_ js: String) -> AttributedString {
+        var attributed = AttributedString(js)
+        
+        let keywordColor = Color(red: 0.45, green: 0.75, blue: 1.0)
+        let stringColor = Color(red: 0.9, green: 0.85, blue: 0.65)
+        let numberColor = Color(red: 0.9, green: 0.7, blue: 0.6)
+        let commentColor = Color(red: 0.6, green: 0.6, blue: 0.6)
+        
+        let patterns: [(regex: String, color: Color, options: NSRegularExpression.Options)] = [
+            (#"//[^\n]*"#, commentColor, []),
+            (#"/\*[\s\S]*?\*/"#, commentColor, [.dotMatchesLineSeparators]),
+            (#"'([^'\\]|\\.)*'"#, stringColor, []),
+            (#"\"([^\"\\]|\\.)*\""#, stringColor, []),
+            (#"`([^`\\]|\\.)*`"#, stringColor, []),
+            (#"\b\d+\.?\d*([eE][+\-]?\d+)?\b"#, numberColor, []),
+            (#"\b(abstract|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|function|if|import|in|instanceof|let|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|async)\b"#, keywordColor, [.caseInsensitive])
+        ]
+        
+        for (pattern, color, options) in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: options) {
+                let nsString = js as NSString
+                let matches = regex.matches(in: js, range: NSRange(location: 0, length: nsString.length))
+                
+                for match in matches {
+                    if let range = Range(match.range, in: js),
+                       let start = AttributedString.Index(range.lowerBound, within: attributed),
+                       let end = AttributedString.Index(range.upperBound, within: attributed) {
+                        attributed[start..<end].foregroundColor = color
+                    }
+                }
+            }
+        }
+        
+        return attributed
+    }
 }
 
 enum SyntaxLanguage {
@@ -204,6 +242,7 @@ enum SyntaxLanguage {
     case html
     case css
     case sql
+    case javascript
     case plain
 }
 

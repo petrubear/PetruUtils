@@ -133,7 +133,7 @@ struct SyntaxHighlightedCodeBlock: View {
         switch lang {
         case .json: return .json
         case .plain: return .plaintext
-        case .xml, .html, .css, .sql: return .plaintext
+        case .xml, .html, .css, .sql, .javascript: return .plaintext
         }
     }
 }

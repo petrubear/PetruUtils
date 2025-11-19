@@ -6,7 +6,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 **Current Phase**: Phase 5 – Polish, Documentation Reconciliation & Release Automation (in progress)
 
-- **Tools Implemented**: 32 of 40 planned (see `Tool.swift`)
+- **Tools Implemented**: 33 of 40 planned (see `Tool.swift`)
 - **Tests**: 300+ service/unit tests across implemented tools
 - **Preferences/History/Favorites**: Landed during Phase 5
 - **Release Automation**: GitHub Action still required (see “Upcoming Work”)
@@ -33,6 +33,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 **Phase 4 - Advanced Tools** ✅ (partial enhancements pending)
 - ✅ **JSON Formatter** - Format, minify, and validate JSON (tree view, JSONPath breadcrumbs still pending)
+- ✅ **JavaScript Formatter** - Format, minify, and validate JavaScript (initial formatter/minifier/validator complete; TS/JSX helpers forthcoming)
 - ✅ **RegExp Tester** - Test regular expressions with match highlighting and capture groups
 - ✅ **Text Diff** - Side-by-side text comparison with line-by-line diff highlighting
 - ✅ **XML Formatter** - Format, minify, and validate XML with indentation options
@@ -136,7 +137,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ```
 
 **Test Status**: ✅ 300+ service tests passing  
-**Tools Completed**: 32 of 40 (80% complete)  
+**Tools Completed**: 33 of 40 (82.5% complete)  
 **Phase 5 Features**: Preferences, History, Favorites, Export/Import shipped; release automation still pending
 
 ## 📚 Documentation
@@ -270,14 +271,9 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] Base32 Encoder/Decoder
 - [x] Cron Expression Parser
 - [x] JSON Path Tester
-- [ ] Certificate Inspector (X.509)
-- [ ] IP Utilities (CIDR/subnet calculator)
-- [ ] ASCII Art Generator
-- [ ] Bcrypt Generator/Verifier
-- [ ] TOTP Generator
 
-### Phase 9: Remaining Utilities 🚧
-- [ ] JavaScript Formatter
+### Phase 9: Remaining Utilities 🚧 (1/8)
+- [x] JavaScript Formatter
 - [ ] cURL → Code Converter
 - [ ] SVG → CSS Converter
 - [ ] Certificate Inspector (X.509)

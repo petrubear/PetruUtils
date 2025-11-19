@@ -198,14 +198,14 @@ PetruUtils/
 ---
 
 #### 3.5 JavaScript Formatter
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED (initial)
 
 **Features**:
-- Format/prettify JavaScript
-- Minify JavaScript
-- Validate syntax
-- Convert to TypeScript (basic)
-- ES6+ compatibility check
+- Format/prettify JavaScript with customizable indentation (2/4 spaces, tabs)
+- Minify JavaScript (removes comments/whitespace while preserving strings)
+- Validate syntax basics (balanced braces/brackets/parentheses, string closure)
+- Syntax highlighting for output pane
+- Roadmap: TypeScript conversion helpers and ES6+ linting (future)
 
 ---
 

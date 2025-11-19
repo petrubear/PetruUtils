@@ -2,6 +2,7 @@ import Testing
 import Foundation
 @testable import PetruUtils
 
+@Suite("Base64 Service Tests")
 struct Base64ServiceTests {
     
     let service = Base64Service()

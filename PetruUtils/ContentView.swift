@@ -221,6 +221,8 @@ struct LazyToolView: View {
                 MarkdownHTMLView()
             case .jsonFormatter:
                 JSONFormatterView()
+            case .javascriptFormatter:
+                JavaScriptFormatterView()
             case .regexpTester:
                 RegExpTesterView()
             case .textDiff:

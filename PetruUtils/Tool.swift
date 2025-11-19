@@ -16,6 +16,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case jsonCSV
     case markdownHTML
     case jsonFormatter
+    case javascriptFormatter
     case regexpTester
     case textDiff
     case xmlFormatter
@@ -55,6 +56,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonCSV: return "JSON ↔ CSV"
         case .markdownHTML: return "Markdown ↔ HTML"
         case .jsonFormatter: return "JSON Formatter"
+        case .javascriptFormatter: return "JavaScript Formatter"
         case .regexpTester: return "RegExp Tester"
         case .textDiff: return "Text Diff"
         case .xmlFormatter: return "XML Formatter"
@@ -93,6 +95,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonCSV: return "tablecells"
         case .markdownHTML: return "doc.richtext"
         case .jsonFormatter: return "curlybraces"
+        case .javascriptFormatter: return "curlybraces.square"
         case .regexpTester: return "asterisk.circle"
         case .textDiff: return "arrow.left.arrow.right.square"
         case .xmlFormatter: return "chevron.left.forwardslash.chevron.right"
