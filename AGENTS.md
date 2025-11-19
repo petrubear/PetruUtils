@@ -401,6 +401,48 @@ See `PHASE5_PREFERENCES_PLAN.md` for details
 - Clipboard auto-switch wiring ✅
 - GitHub Action release workflow 🔲
 
+### ✅ Phase 6: Text Utilities
+
+- Line Sorter
+- Line Deduplicator
+- Text Replacer
+- String Inspector
+
+### ✅ Phase 7: Encoders & Generators
+
+- HTML Entity Encoder/Decoder
+- Lorem Ipsum Generator
+
+### ✅ Phase 8: Inspectors & Generators
+
+- URL Parser
+- Random String Generator
+- Backslash Escape/Unescape
+- Base32 Encoder/Decoder
+- Cron Expression Parser
+- JSON Path Tester
+
+### 🔲 Phase 9: Remaining Utilities
+
+- JavaScript Formatter
+- cURL → Code Converter
+- SVG → CSS Converter
+- Certificate Inspector (X.509)
+- IP Utilities (CIDR/subnet calculator, subnet math)
+- ASCII Art Generator
+- Bcrypt Generator/Verifier
+- TOTP Generator
+
+### 🔲 Phase 10: Enhancements & Hardening
+
+- JSON Formatter tree view, JSONPath breadcrumbs, line numbers, validation improvements
+- CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
+- JWT Debugger RSA/ECDSA/PS algorithm support with public-key inputs and claim validation indicators
+
+### 🔲 Phase 11: Release Automation
+
+- GitHub Action workflow to build/test/sign the macOS app and attach artifacts when a version tag is pushed
+
 ---
 
 ## Known Issues & Gotchas
@@ -628,7 +670,6 @@ _This guide is maintained by the development team and should be updated as the p
 
 ## Current Priorities (November 2025)
 
-1. **Advanced JSON Formatter** – add tree view, JSONPath breadcrumbs, line numbers, and improved validation messaging.
-2. **JWT Algorithms** – extend HS256 support to RSA/ECDSA/PS variants with public-key input UI and claim validation indicators.
-3. **Remaining Utilities** – ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
-4. **Release Automation** – create a GitHub Action that builds/tests/signs the macOS app and produces a release artifact whenever a version tag is pushed.
+1. **Phase 9 – Remaining Utilities**: Ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+2. **Phase 10 – Enhancements**: Add JSON Formatter tree view/breadcrumbs/line numbers, extend CSS Formatter to SCSS/LESS + auto-prefixing, and implement RSA/ECDSA/PS support in the JWT Debugger with public-key inputs.
+3. **Phase 11 – Release Automation**: Create a GitHub Action that builds/tests/signs the app and packages release artifacts whenever a version tag is pushed.

@@ -276,12 +276,29 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [ ] Bcrypt Generator/Verifier
 - [ ] TOTP Generator
 
+### Phase 9: Remaining Utilities 🚧
+- [ ] JavaScript Formatter
+- [ ] cURL → Code Converter
+- [ ] SVG → CSS Converter
+- [ ] Certificate Inspector (X.509)
+- [ ] IP Utilities (CIDR/subnet calculator, subnet math)
+- [ ] ASCII Art Generator
+- [ ] Bcrypt Generator/Verifier
+- [ ] TOTP Generator
+
+### Phase 10: Enhancements & Hardening 🚧
+- [ ] JSON Formatter tree view, JSONPath breadcrumbs, line numbers, richer validation UI
+- [ ] CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
+- [ ] JWT Debugger support for RSA/ECDSA/PS algorithms plus public-key inputs and claim validation
+
+### Phase 11: Release Automation 🔲
+- [ ] GitHub Action workflow that builds/tests/signs the macOS app and uploads release artifacts on version tags
+
 ## 🔮 Upcoming Work
 
-1. Add tree view, line numbers, and JSONPath breadcrumbs to the JSON Formatter along with richer validation feedback.
-2. Extend JWT tooling with RSA/ECDSA/PS verification support, public-key inputs, and claim validation indicators.
-3. Build the remaining utilities: JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP Utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
-4. Create a GitHub Action that builds, signs/notarizes, and attaches a DMG/zip whenever a version tag (e.g., `v*`) is pushed.
+1. Ship the remaining utilities (JavaScript Formatter, cURL → Code, SVG → CSS, Certificate Inspector, IP Utilities, ASCII Art generator, Bcrypt helper, TOTP generator).
+2. Enhance existing tools: JSON Formatter tree view/breadcrumbs, CSS Formatter SCSS/LESS + prefixing, JWT Debugger RSA/ECDSA/PS support with key inputs.
+3. Create a GitHub Action that builds, signs/notarizes, tests, and attaches artifacts whenever a version tag (e.g., `v*`) is pushed.
 
 ## 🤝 Contributing
 
