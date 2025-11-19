@@ -250,7 +250,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] Export/import utilities
 - [x] Lazy loading for performance
 - [x] App icon specification
-- [ ] Clipboard auto-switch preference wiring
+- [x] Clipboard auto-switch preference wiring
 - [ ] GitHub Action workflow to build & upload releases on version tags
 
 ### Phase 6: Text Utilities ✅
@@ -280,9 +280,8 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 
 1. Add tree view, line numbers, and JSONPath breadcrumbs to the JSON Formatter along with richer validation feedback.
 2. Extend JWT tooling with RSA/ECDSA/PS verification support, public-key inputs, and claim validation indicators.
-3. Respect the clipboard auto-switch preference so detected content can immediately open the suggested tool.
-4. Build the remaining utilities: JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP Utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
-5. Create a GitHub Action that builds, signs/notarizes, and attaches a DMG/zip whenever a version tag (e.g., `v*`) is pushed.
+3. Build the remaining utilities: JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP Utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+4. Create a GitHub Action that builds, signs/notarizes, and attaches a DMG/zip whenever a version tag (e.g., `v*`) is pushed.
 
 ## 🤝 Contributing
 

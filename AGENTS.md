@@ -398,7 +398,7 @@ See `PHASE5_PREFERENCES_PLAN.md` for details
 - App icon & branding (spec complete, icon implementation later)
 - History & favorites ✅
 - Performance optimization ✅
-- Clipboard auto-switch wiring 🔲
+- Clipboard auto-switch wiring ✅
 - GitHub Action release workflow 🔲
 
 ---
@@ -618,7 +618,7 @@ import Foundation     // Always
 
 **Next Milestone**: Ship remaining converters/advanced utilities (JavaScript formatter, cURL → code, SVG → CSS) and add release automation.
 
-**Long-term**: Finish Phase 5 polish items (clipboard auto-switch, CI), deliver remaining inspector/generator tools, then continue with preferences/performance refinements.
+**Long-term**: Finish Phase 5 polish items (release automation), deliver remaining inspector/generator tools, then continue with preferences/performance refinements.
 
 ---
 
@@ -630,6 +630,5 @@ _This guide is maintained by the development team and should be updated as the p
 
 1. **Advanced JSON Formatter** – add tree view, JSONPath breadcrumbs, line numbers, and improved validation messaging.
 2. **JWT Algorithms** – extend HS256 support to RSA/ECDSA/PS variants with public-key input UI and claim validation indicators.
-3. **Clipboard Auto-Switch** – obey the `clipboardAutoSwitch` preference in `ContentView` so suggested tools open automatically when enabled.
-4. **Remaining Utilities** – ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
-5. **Release Automation** – create a GitHub Action that builds/signs the macOS app and produces a release artifact whenever a version tag is pushed.
+3. **Remaining Utilities** – ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+4. **Release Automation** – create a GitHub Action that builds/tests/signs the macOS app and produces a release artifact whenever a version tag is pushed.

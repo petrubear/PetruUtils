@@ -1,9 +1,9 @@
 # Phase 5 Completion Summary
 
 ## Overview
-Phase 5 (Polish & Features) delivered comprehensive preferences management, history tracking, favorites, and performance optimizations. Two follow-up items remain before we can officially close the phase: wiring the clipboard auto-switch preference and adding a GitHub Action release workflow.
+Phase 5 (Polish & Features) delivered comprehensive preferences management, history tracking, favorites, performance optimizations, and clipboard auto-switching for smart detection. The final outstanding item before closing the phase is adding a GitHub Action release workflow.
 
-**Status**: 🔄 **Mostly complete (clipboard auto-switch + release automation pending)**  
+**Status**: 🔄 **Mostly complete (release automation pending)**  
 **Date of last major feature**: November 17, 2025  
 **Test Status**: ✅ All tests passing (326+ tests)
 
@@ -273,7 +273,6 @@ Comprehensive test suite for HistoryManager.
 
 ## Remaining Phase 5 Work
 
-- [ ] Wire the `clipboardAutoSwitch` preference into `ContentView` so detected content can jump to the suggested tool when enabled.
 - [ ] Add a GitHub Action workflow that builds/tests the app and attaches a signed/notarized release artifact whenever a version tag is pushed.
 
 ---

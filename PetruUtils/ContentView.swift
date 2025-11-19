@@ -69,9 +69,22 @@ struct ContentView: View {
                     }
             }
             .onChange(of: clipboardMonitor.suggestedTool) { _, newTool in
-                if newTool != nil {
+                guard let tool = newTool else {
+                    showClipboardBanner = false
+                    return
+                }
+                
+                if preferences.clipboardAutoSwitch {
+                    selection = tool
+                    showClipboardBanner = false
+                } else {
                     showClipboardBanner = true
                 }
+            }
+            .onChange(of: preferences.clipboardAutoSwitch) { _, isEnabled in
+                guard isEnabled, let tool = clipboardMonitor.suggestedTool else { return }
+                selection = tool
+                showClipboardBanner = false
             }
         } detail: {
             if let selectedTool = selection {
