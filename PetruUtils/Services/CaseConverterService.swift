@@ -37,34 +37,28 @@ struct CaseConverterService {
     private func extractWords(_ text: String) -> [String] {
         var words: [String] = []
         var currentWord = ""
-        var previousCharWasLower = false
         
-        for char in text {
+        for (index, char) in text.enumerated() {
             if char.isUppercase {
-                if previousCharWasLower && !currentWord.isEmpty {
-                    // Transition from lowercase to uppercase (e.g., "camelCase" -> ["camel", "Case"])
+                if !currentWord.isEmpty && (
+                    currentWord.last?.isLowercase == true ||
+                    (currentWord.count > 1 && text.index(text.startIndex, offsetBy: index + 1) < text.endIndex && text[text.index(text.startIndex, offsetBy: index + 1)].isLowercase)
+                ) {
                     words.append(currentWord)
                     currentWord = String(char)
                 } else {
                     currentWord.append(char)
                 }
-                previousCharWasLower = false
-            } else if char.isLowercase {
-                currentWord.append(char)
-                previousCharWasLower = true
-            } else if char.isNumber {
+            } else if char.isLowercase || char.isNumber {
                 currentWord.append(char)
             } else {
-                // Delimiter found (space, underscore, hyphen, etc.)
                 if !currentWord.isEmpty {
                     words.append(currentWord)
                     currentWord = ""
                 }
-                previousCharWasLower = false
             }
         }
         
-        // Add final word
         if !currentWord.isEmpty {
             words.append(currentWord)
         }

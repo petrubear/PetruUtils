@@ -104,8 +104,7 @@ struct URLService {
     /// Encodes text for use in path segments (RFC 3986)
     private func encodePathSegment(_ text: String) -> String {
         var allowedCharacters = CharacterSet.urlPathAllowed
-        // Remove additional characters that should be encoded
-        allowedCharacters.remove(charactersIn: "?#[]@!$&'()*+,;=")
+        allowedCharacters.remove(charactersIn: "?#[]@!$&'()*+,;=/")
         
         return text.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? text
     }

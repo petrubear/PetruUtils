@@ -141,8 +141,7 @@ final class URLServiceTests: XCTestCase {
     func testEncodePathSegment_Slash() throws {
         let input = "folder/file"
         let result = try service.encode(input, type: .pathSegment)
-        // Slashes should not be encoded in path segments
-        XCTAssertTrue(result.contains("/"))
+        XCTAssertEqual(result, "folder%2Ffile")
     }
     
     func testEncodePathSegment_SpecialCharacters() throws {

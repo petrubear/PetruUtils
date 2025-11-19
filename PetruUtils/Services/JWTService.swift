@@ -130,7 +130,8 @@ struct JWTService {
         ]
         
         let headerData = try JSONSerialization.data(withJSONObject: header, options: [.sortedKeys])
-        let payloadData = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
+        let sortedPayload = try recursivelySortKeys(in: payload)
+        let payloadData = try JSONSerialization.data(withJSONObject: sortedPayload, options: [.sortedKeys])
         
         let headerBase64 = base64urlEncode(headerData)
         let payloadBase64 = base64urlEncode(payloadData)
@@ -194,6 +195,18 @@ struct JWTService {
     }
     
     // MARK: - Helpers
+    
+    private func recursivelySortKeys(in dictionary: [String: Any]) throws -> [String: Any] {
+        var sortedDict: [String: Any] = [:]
+        for key in dictionary.keys.sorted() {
+            if let nestedDict = dictionary[key] as? [String: Any] {
+                sortedDict[key] = try recursivelySortKeys(in: nestedDict)
+            } else {
+                sortedDict[key] = dictionary[key]
+            }
+        }
+        return sortedDict
+    }
     
     private func base64urlDecode(_ input: String) throws -> Data {
         var s = input.replacingOccurrences(of: "-", with: "+")

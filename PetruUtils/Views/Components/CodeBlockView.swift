@@ -12,11 +12,13 @@ struct CodeBlock: View {
     }
     
     var body: some View {
-        CodeTextView(text: text, language: language)
-            .frame(minHeight: 100)
-            .background(.background)
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-            .cornerRadius(8)
+        ZStack(alignment: .topLeading) {
+            CodeTextView(text: text, language: language)
+        }
+        .frame(minHeight: 100)
+        .background(.background)
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+        .cornerRadius(8)
     }
 }
 
@@ -126,7 +128,9 @@ struct SyntaxHighlightedCodeBlock: View {
     let language: SyntaxLanguage
     
     var body: some View {
-        CodeBlock(text: text, language: mapLanguage(language))
+        ZStack(alignment: .topLeading) {
+            CodeBlock(text: text, language: mapLanguage(language))
+        }
     }
     
     private func mapLanguage(_ lang: SyntaxLanguage) -> CodeLanguage? {

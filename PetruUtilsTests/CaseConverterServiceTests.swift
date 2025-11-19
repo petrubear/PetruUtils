@@ -251,6 +251,6 @@ struct CaseConverterServiceTests {
     @Test("Consecutive uppercase letters")
     func testConsecutiveUppercase() {
         let result = service.toSnakeCase("XMLParser")
-        #expect(result.contains("xml") || result.contains("parser"))
+        #expect(result == "xml_parser")
     }
 }

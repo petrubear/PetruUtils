@@ -3,7 +3,6 @@ import AppKit
 import Combine
 
 /// Service for monitoring clipboard and detecting content types
-@MainActor
 class ClipboardMonitor: ObservableObject {
     
     // MARK: - Published Properties
@@ -58,8 +57,12 @@ class ClipboardMonitor: ObservableObject {
     
     private var timer: Timer?
     private var lastChangeCount: Int = 0
-    private let pasteboard = NSPasteboard.general
+    private let pasteboard: NSPasteboard
     private let detector = ContentDetector()
+
+    init(pasteboard: NSPasteboard = .general) {
+        self.pasteboard = pasteboard
+    }
     
     // MARK: - Public Methods
     
@@ -91,12 +94,12 @@ class ClipboardMonitor: ObservableObject {
         
         // Only process if clipboard changed
         guard currentChangeCount != lastChangeCount else { return }
-        lastChangeCount = currentChangeCount
         
         // Get string content
         guard let content = pasteboard.string(forType: .string),
               !content.isEmpty,
               content.count < 100_000 else { // Limit size to avoid performance issues
+            lastChangeCount = currentChangeCount
             return
         }
         
@@ -107,6 +110,7 @@ class ClipboardMonitor: ObservableObject {
         lastContent = content
         lastDetectedType = detectedType
         suggestedTool = detectedType.suggestedTool
+        lastChangeCount = currentChangeCount
     }
     
     deinit {

@@ -483,4 +483,34 @@ struct JWTServiceTests {
         
         #expect(token1 == token2)
     }
+
+    @Test("Same nested payload and secret produce same token")
+    func testDeterministicTokenGenerationWithNestedPayload() throws {
+        let payload1: [String: Any] = [
+            "user": [
+                "id": 123,
+                "name": "Alice",
+            ],
+            "data": [
+                "b": 2,
+                "a": 1
+            ]
+        ]
+        let payload2: [String: Any] = [
+            "data": [
+                "a": 1,
+                "b": 2
+            ],
+            "user": [
+                "name": "Alice",
+                "id": 123,
+            ]
+        ]
+        let secret = "test-secret"
+        
+        let token1 = try service.generateHS256(payload: payload1, secret: secret)
+        let token2 = try service.generateHS256(payload: payload2, secret: secret)
+        
+        #expect(token1 == token2)
+    }
 }
