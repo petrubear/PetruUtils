@@ -198,6 +198,7 @@ PetruUtils/
 ---
 
 #### 3.5 JavaScript Formatter
+**Status**: 🔲 Planned
 
 **Features**:
 - Format/prettify JavaScript
@@ -222,7 +223,7 @@ PetruUtils/
 ### Category: Encoders & Decoders
 
 #### 3.7 Base64 Encoder/Decoder
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Encode text/files to Base64
@@ -241,6 +242,7 @@ PetruUtils/
 ---
 
 #### 3.8 URL Encoder/Decoder
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - URL encode/decode
@@ -394,6 +396,7 @@ PetruUtils/
 ---
 
 #### 3.19 cURL to Code Converter
+**Status**: 🔲 Planned
 
 **Features**:
 - Parse cURL command
@@ -409,6 +412,7 @@ PetruUtils/
 ---
 
 #### 3.20 SVG to CSS Converter
+**Status**: 🔲 Planned
 
 **Features**:
 - Convert SVG to data URI for CSS background
@@ -421,7 +425,7 @@ PetruUtils/
 ### Category: Generators
 
 #### 3.21 UUID/ULID Generator
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Generate UUIDs (v1, v4, v5)
@@ -462,7 +466,7 @@ PetruUtils/
 ---
 
 #### 3.24 QR Code Generator
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
 - Generate QR codes from text/URLs
@@ -549,6 +553,7 @@ PetruUtils/
 ---
 
 #### 3.30 Certificate Inspector (X.509)
+**Status**: 🔲 Planned
 
 **Features**:
 - Decode X.509 certificates (PEM, DER)
@@ -637,6 +642,7 @@ PetruUtils/
 ### Additional Tools (Optional/Phase 2)
 
 #### 3.36 IP Address Tools
+**Status**: 🔲 Planned
 - IP to binary/hex conversion
 - CIDR calculator
 - Subnet calculator
@@ -653,15 +659,18 @@ PetruUtils/
 - Error handling
 
 #### 3.38 ASCII Art Generator
+**Status**: 🔲 Planned
 - Text to ASCII art
 - Font selection
 
 #### 3.39 Bcrypt Generator/Verifier
+**Status**: 🔲 Planned
 - Hash passwords with bcrypt
 - Verify bcrypt hashes
 - Cost factor adjustment
 
 #### 3.40 TOTP Generator
+**Status**: 🔲 Planned
 - Time-based One-Time Password
 - QR code import
 - Multiple accounts management
@@ -935,6 +944,17 @@ PetruUtils/
 - **Usability**: Users can complete tasks without documentation
 - **Stability**: No crashes during normal operation
 - **Privacy**: Zero network requests (except for updates)
+
+---
+
+## CI/CD & Release Automation
+
+- **Trigger**: GitHub Action workflow runs on pushes of semantic version tags (`v*`).
+- **Build**: Use Xcode’s command-line tools to archive the macOS app (universal build).
+- **Tests**: Execute `xcodebuild test -scheme PetruUtils` before packaging.
+- **Artifacts**: Produce a signed/notarized `.app` plus `.dmg`/`.zip` and attach to the GitHub Release tied to the tag.
+- **Versioning**: Update `Info.plist` version/build numbers from the tag inside the workflow.
+- **Notifications**: Mark the release as “Latest” and include changelog notes derived from the tag.
 
 ---
 

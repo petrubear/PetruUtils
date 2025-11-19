@@ -4,7 +4,12 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 5 - Polish & Features ✅ COMPLETE
+**Current Phase**: Phase 5 – Polish, Documentation Reconciliation & Release Automation (in progress)
+
+- **Tools Implemented**: 32 of 40 planned (see `Tool.swift`)
+- **Tests**: 300+ service/unit tests across implemented tools
+- **Preferences/History/Favorites**: Landed during Phase 5
+- **Release Automation**: GitHub Action still required (see “Upcoming Work”)
 
 ### Implemented Tools
 
@@ -26,13 +31,13 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **JSON ↔ CSV Converter** - Convert JSON arrays to CSV and back with delimiter options
 - ✅ **Markdown ↔ HTML Converter** - Convert between Markdown and HTML formats
 
-**Phase 4 - Advanced Tools** ✅
-- ✅ **JSON Formatter** - Format, minify, and validate JSON with indentation options and key sorting
+**Phase 4 - Advanced Tools** ✅ (partial enhancements pending)
+- ✅ **JSON Formatter** - Format, minify, and validate JSON (tree view, JSONPath breadcrumbs still pending)
 - ✅ **RegExp Tester** - Test regular expressions with match highlighting and capture groups
 - ✅ **Text Diff** - Side-by-side text comparison with line-by-line diff highlighting
 - ✅ **XML Formatter** - Format, minify, and validate XML with indentation options
 - ✅ **HTML Formatter** - Format and minify HTML with intelligent tag handling
-- ✅ **CSS Formatter** - Format, minify, and validate CSS with property sorting option
+- ✅ **CSS Formatter** - Format, minify, and validate CSS with property sorting option (SCSS/LESS conversion + prefixing pending)
 - ✅ **SQL Formatter** - Format, minify, and validate SQL with keyword uppercasing option
 
 **Phase 6 - Text Utilities** ✅ (4/4 tools)
@@ -130,9 +135,9 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 375+ tests passing (all service tests)  
-**Tools Completed**: 33 of 40+ (82.5% complete)  
-**Phase 5 Features**: ✅ Preferences, History, Favorites, Export/Import
+**Test Status**: ✅ 300+ service tests passing  
+**Tools Completed**: 32 of 40 (80% complete)  
+**Phase 5 Features**: Preferences, History, Favorites, Export/Import shipped; release automation still pending
 
 ## 📚 Documentation
 
@@ -188,29 +193,29 @@ PetruUtilsTests/
 
 ### Test Coverage
 
-- ✅ **40+ Unit Tests** for JWT Service
-- ✅ Token generation, decoding, verification
+- ✅ Service suites for JWT, Base64, URL, Hash, UUID/ULID, QR Code, Clipboard Monitor, History Manager, Line utilities, etc.
+- ✅ Token generation, decoding, verification (HS256 today)
 - ✅ Edge cases (unicode, large payloads, special characters)
-- ✅ Security tests (timing attacks, tampering)
-- ✅ Error handling and validation
+- ✅ Security tests (timing attacks, tampering attempts)
+- ✅ Error handling and validation branches for each service
 
 ### Test Results
 
 ```bash
-Test Suite 'All tests' passed
-Executed 40+ tests, with 0 failures
+xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
+# BUILD SUCCEEDED – all current suites green
 ```
 
 ## 🗺 Roadmap
 
-### Phase 1: Foundation ✅ (Complete)
+### Phase 1: Foundation ✅
 - [x] Project setup and architecture
 - [x] Main navigation and sidebar
 - [x] JWT Debugger with HS256 support
 - [x] Comprehensive unit tests
 - [x] Documentation
 
-### Phase 2: Core Tools ✅ COMPLETE
+### Phase 2: Core Tools ✅
 - [x] Base64 Encoder/Decoder
 - [x] URL Encoder/Decoder
 - [x] Hash Generator
@@ -218,7 +223,7 @@ Executed 40+ tests, with 0 failures
 - [x] QR Code Generator
 - [x] Smart Clipboard Detection
 
-### Phase 3: Converters ✅ COMPLETE (7/7)
+### Phase 3: Converters 🔄 (7/9 complete)
 - [x] Number Base Converter
 - [x] Unix Timestamp Converter
 - [x] Case Converter
@@ -226,26 +231,58 @@ Executed 40+ tests, with 0 failures
 - [x] JSON ↔ YAML
 - [x] JSON ↔ CSV
 - [x] Markdown ↔ HTML
+- [ ] cURL → Code Converter
+- [ ] SVG → CSS Converter
 
-### Phase 4: Advanced Tools ✅ COMPLETE (7/7)
-- [x] JSON Formatter
+### Phase 4: Advanced Tools 🔄 (7+ complete, enhancements pending)
+- [x] JSON Formatter (needs tree view + JSONPath breadcrumbs)
 - [x] RegExp Tester
 - [x] Text Diff/Compare
 - [x] XML Formatter
 - [x] HTML Formatter
-- [x] CSS Formatter
+- [x] CSS Formatter (SCSS/LESS conversion + auto-prefixing still pending)
 - [x] SQL Formatter
+- [ ] JavaScript Formatter
 
-### Phase 5: Polish & Features ✅ COMPLETE
-- [x] Smart clipboard detection
+### Phase 5: Polish & Release 🚧
 - [x] Tool history and favorites
-- [x] Preferences panel (6 categories: Appearance, Behavior, Clipboard, Formats, History, Advanced)
-- [x] Recent tools tracking
-- [x] Favorite tools with star indicators
-- [x] Export/import functionality
-- [x] Lazy loading for performance optimization
+- [x] Preferences panel (6 categories)
+- [x] Export/import utilities
+- [x] Lazy loading for performance
 - [x] App icon specification
-- [x] Comprehensive preferences management
+- [ ] Clipboard auto-switch preference wiring
+- [ ] GitHub Action workflow to build & upload releases on version tags
+
+### Phase 6: Text Utilities ✅
+- [x] Line Sorter
+- [x] Line Deduplicator
+- [x] Text Replacer
+- [x] String Inspector
+
+### Phase 7: Encoders & Generators ✅
+- [x] HTML Entity Encoder/Decoder
+- [x] Lorem Ipsum Generator
+
+### Phase 8: Inspectors & Generators ✅
+- [x] URL Parser
+- [x] Random String Generator
+- [x] Backslash Escape/Unescape
+- [x] Base32 Encoder/Decoder
+- [x] Cron Expression Parser
+- [x] JSON Path Tester
+- [ ] Certificate Inspector (X.509)
+- [ ] IP Utilities (CIDR/subnet calculator)
+- [ ] ASCII Art Generator
+- [ ] Bcrypt Generator/Verifier
+- [ ] TOTP Generator
+
+## 🔮 Upcoming Work
+
+1. Add tree view, line numbers, and JSONPath breadcrumbs to the JSON Formatter along with richer validation feedback.
+2. Extend JWT tooling with RSA/ECDSA/PS verification support, public-key inputs, and claim validation indicators.
+3. Respect the clipboard auto-switch preference so detected content can immediately open the suggested tool.
+4. Build the remaining utilities: JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP Utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+5. Create a GitHub Action that builds, signs/notarizes, and attaches a DMG/zip whenever a version tag (e.g., `v*`) is pushed.
 
 ## 🤝 Contributing
 

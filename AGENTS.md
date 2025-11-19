@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 27 implemented) with a focus on privacy, offline operation, and native performance.
+**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 32 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 7 Complete (67.5% of total tools implemented - 27 of 40+ tools)
+**Current Status**: Phase 5 – Polish & Release Automation (32/40 tools implemented ≈ 80%)
 
 ---
 
@@ -138,7 +138,7 @@ struct NewToolServiceTests {
         #expect(result == "expected")
     }
 
-    // Add 20-30+ tests covering:
+    // Add strictly necessary unit tests to cover the core functionality of the service:
     // - Happy path
     // - Error cases
     // - Edge cases
@@ -149,7 +149,7 @@ struct NewToolServiceTests {
 **Testing Standards**:
 
 - Use Swift Testing framework (`@Test`, `#expect`)
-- Aim for 20+ tests per service
+- Test only the core functionality of the service
 - Test edge cases, errors, and Unicode
 - All tests must pass before committing
 
@@ -338,7 +338,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 ### Quality Checklist
 
 - [ ] Service has no SwiftUI dependencies
-- [ ] 20+ tests written and passing
+- [ ] Unit tests written and passing
 - [ ] View follows split-pane pattern
 - [ ] Keyboard shortcuts implemented
 - [ ] Error messages are user-friendly
@@ -369,36 +369,37 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - QR Code Generator
 - Smart Clipboard Detection
 
-### 🔲 Phase 3: Converters (Next - 0/7 tools)
+### ✅ Phase 3: Converters (Complete - 7/7 tools)
 
-**Priority Order**:
+- Number Base Converter
+- Unix Timestamp Converter
+- Case Converter
+- Color Converter
+- JSON ↔ YAML
+- JSON ↔ CSV
+- Markdown ↔ HTML (remaining converter work: cURL→Code + SVG→CSS listed in priorities)
 
-1. Number Base Converter (Binary/Octal/Decimal/Hex)
-2. Unix Timestamp Converter
-3. Case Converter (camelCase, snake_case, etc.)
-4. Color Converter (HEX/RGB/HSL/HSV/CMYK)
-5. JSON ↔ YAML
-6. JSON ↔ CSV
-7. Markdown ↔ HTML
+### 🔄 Phase 4: Advanced Tools (In Progress)
 
-### 🔲 Phase 4: Advanced Tools (0/7+ tools)
+- RegExp Tester ✅
+- Text Diff/Compare ✅
+- XML Formatter ✅
+- HTML Formatter ✅
+- CSS Formatter ✅ (SCSS/LESS conversion + prefixing pending)
+- SQL Formatter ✅
+- JSON Formatter ✅ (tree view + JSONPath breadcrumbs pending)
+- JavaScript Formatter 🔲
 
-- RegExp Tester
-- Text Diff/Compare
-- XML Formatter
-- HTML Formatter
-- CSS Formatter
-- SQL Formatter
-- JSON Formatter (enhanced)
-
-### 🔲 Phase 5: Polish & Preferences
+### 🔄 Phase 5: Polish & Preferences
 
 See `PHASE5_PREFERENCES_PLAN.md` for details
 
-- Preferences panel with 6 categories
-- App icon & branding
-- History & favorites
-- Performance optimization
+- Preferences panel with 6 categories ✅
+- App icon & branding (spec complete, icon implementation later)
+- History & favorites ✅
+- Performance optimization ✅
+- Clipboard auto-switch wiring 🔲
+- GitHub Action release workflow 🔲
 
 ---
 
@@ -482,7 +483,7 @@ import Foundation     // Always
 
 1. Add to `Tool.swift` enum
 2. Create `Services/[Tool]Service.swift`
-3. Create `Tests/[Tool]ServiceTests.swift` (20+ tests)
+3. Create `Tests/[Tool]ServiceTests.swift` (strictly necessary unit tests)
 4. Create `Views/[Tool]View.swift`
 5. Add case to `ContentView.swift` switch
 6. Update README.md and SPEC.md
@@ -556,7 +557,7 @@ import Foundation     // Always
 
 ### For Each Tool
 
-- ✅ 20+ service tests passing
+- ✅ Unit tests passing
 - ✅ No compiler warnings
 - ✅ Follows existing UI patterns
 - ✅ Documentation updated
@@ -613,12 +614,22 @@ import Foundation     // Always
 
 **End Goal**: A comprehensive, privacy-focused, offline developer toolbox with 40+ utilities that developers use daily. Think "DevUtils" but open and extensible.
 
-**Current Progress**: 17.5% complete (7 of 40+ tools)
+**Current Progress**: ~80% complete (32 of 40 tools)
 
-**Next Milestone**: Complete Phase 3 (Converters) - 7 tools
+**Next Milestone**: Ship remaining converters/advanced utilities (JavaScript formatter, cURL → code, SVG → CSS) and add release automation.
 
-**Long-term**: Preferences, history, favorites, custom icon, performance optimization, then more tools in phases 4+.
+**Long-term**: Finish Phase 5 polish items (clipboard auto-switch, CI), deliver remaining inspector/generator tools, then continue with preferences/performance refinements.
 
 ---
 
 _This guide is maintained by the development team and should be updated as the project evolves. Last updated: November 2025_
+
+---
+
+## Current Priorities (November 2025)
+
+1. **Advanced JSON Formatter** – add tree view, JSONPath breadcrumbs, line numbers, and improved validation messaging.
+2. **JWT Algorithms** – extend HS256 support to RSA/ECDSA/PS variants with public-key input UI and claim validation indicators.
+3. **Clipboard Auto-Switch** – obey the `clipboardAutoSwitch` preference in `ContentView` so suggested tools open automatically when enabled.
+4. **Remaining Utilities** – ship JavaScript Formatter, cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
+5. **Release Automation** – create a GitHub Action that builds/signs the macOS app and produces a release artifact whenever a version tag is pushed.

@@ -1,10 +1,10 @@
 # Phase 5 Completion Summary
 
 ## Overview
-Phase 5 (Polish & Features) has been successfully completed, adding comprehensive preferences management, history tracking, favorites system, and performance optimizations to PetruUtils.
+Phase 5 (Polish & Features) delivered comprehensive preferences management, history tracking, favorites, and performance optimizations. Two follow-up items remain before we can officially close the phase: wiring the clipboard auto-switch preference and adding a GitHub Action release workflow.
 
-**Status**: ✅ **COMPLETE**  
-**Date Completed**: November 17, 2025  
+**Status**: 🔄 **Mostly complete (clipboard auto-switch + release automation pending)**  
+**Date of last major feature**: November 17, 2025  
 **Test Status**: ✅ All tests passing (326+ tests)
 
 ---
@@ -268,6 +268,13 @@ Comprehensive test suite for HistoryManager.
 - Case Converter Service: 20+ tests
 - Color Converter Service: 20+ tests
 - History Manager: 8 tests ✅ NEW
+
+---
+
+## Remaining Phase 5 Work
+
+- [ ] Wire the `clipboardAutoSwitch` preference into `ContentView` so detected content can jump to the suggested tool when enabled.
+- [ ] Add a GitHub Action workflow that builds/tests the app and attaches a signed/notarized release artifact whenever a version tag is pushed.
 
 ---
 
