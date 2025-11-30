@@ -300,6 +300,3 @@ final class HashViewModel: ObservableObject {
 
 // MARK: - Preview
 
-#Preview {
-    HashView()
-}

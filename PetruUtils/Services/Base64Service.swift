@@ -98,7 +98,8 @@ struct Base64Service {
     /// - Returns: Decoded data
     /// - Throws: Base64Error if decoding fails
     func decodeData(_ base64: String, variant: Base64Variant = .standard) throws -> Data {
-        var processedString = base64.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Remove all whitespace/newlines so we can decode formatted strings too
+        var processedString = removeFormatting(base64)
         
         // Handle URL-safe variant
         if variant == .urlSafe {

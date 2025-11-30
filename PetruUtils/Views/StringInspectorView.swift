@@ -162,6 +162,3 @@ final class StringInspectorViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    StringInspectorView()
-}

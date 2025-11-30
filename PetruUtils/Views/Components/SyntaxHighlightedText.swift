@@ -246,17 +246,3 @@ enum SyntaxLanguage {
     case plain
 }
 
-#Preview {
-    VStack {
-        SyntaxHighlightedText(
-            text: """
-            {
-              "alg": "HS256",
-              "typ": "JWT"
-            }
-            """,
-            language: .json
-        )
-        .padding()
-    }
-}

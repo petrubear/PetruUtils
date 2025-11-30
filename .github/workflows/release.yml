@@ -1,0 +1,64 @@
+name: Release Build & Test
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-test-archive:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Run tests
+        env:
+          ENABLE_PREVIEWS: "NO"
+          SWIFT_DISABLE_PREVIEWS: "1"
+        run: |
+          xcodebuild test \
+            -scheme PetruUtils \
+            -destination 'platform=macOS' \
+            -derivedDataPath DerivedData
+
+      - name: Archive app
+        env:
+          ENABLE_PREVIEWS: "NO"
+          SWIFT_DISABLE_PREVIEWS: "1"
+        run: |
+          xcodebuild archive \
+            -scheme PetruUtils \
+            -configuration Release \
+            -archivePath build/PetruUtils.xcarchive \
+            -derivedDataPath DerivedData
+
+      - name: Package .app
+        run: |
+          APP_PATH="build/PetruUtils.xcarchive/Products/Applications/PetruUtils.app"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" PetruUtils.app.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PetruUtils-macOS
+          path: PetruUtils.app.zip
+
+      - name: Archive xcresult (optional)
+        if: success() || failure()
+        run: |
+          find DerivedData/Logs/Test -name "*.xcresult" -maxdepth 1 -print -exec cp {} test-results.xcresult \; || true
+        continue-on-error: true
+
+      - name: Upload test results (optional)
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: test-results.xcresult

@@ -164,4 +164,3 @@ final class SQLFormatterViewModel: ObservableObject {
     }
 }
 
-#Preview { SQLFormatterView() }

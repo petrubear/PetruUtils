@@ -167,6 +167,3 @@ final class HTMLEntityViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    HTMLEntityView()
-}

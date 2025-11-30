@@ -188,6 +188,3 @@ final class ColorConverterViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    ColorConverterView()
-}

@@ -249,6 +249,3 @@ final class TextReplacerViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    TextReplacerView()
-}

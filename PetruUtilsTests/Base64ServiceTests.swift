@@ -301,7 +301,8 @@ struct Base64ServiceTests {
     
     @Test("Decode to binary data")
     func testDecodeToBinaryData() throws {
-        let base64 = "AAEC/v79"
+        // Encodes bytes: 00 01 02 FF FE FD
+        let base64 = "AAEC//79"
         
         let data = try service.decodeData(base64)
         

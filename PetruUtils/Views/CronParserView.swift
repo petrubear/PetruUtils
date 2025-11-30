@@ -218,7 +218,3 @@ final class CronParserViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    CronParserView()
-        .frame(width: 800, height: 700)
-}

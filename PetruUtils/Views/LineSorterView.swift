@@ -168,6 +168,3 @@ final class LineSorterViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    LineSorterView()
-}

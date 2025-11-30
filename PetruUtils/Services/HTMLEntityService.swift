@@ -47,29 +47,25 @@ struct HTMLEntityService {
     
     /// Encode text to HTML entities (named and numeric)
     func encode(_ text: String, useNamedEntities: Bool = true, useNumericEntities: Bool = true) -> String {
-        var result = text
+        var encoded = ""
         
-        if useNamedEntities {
-            // Replace characters that have named entities
-            for (char, entity) in namedEntities {
-                result = result.replacingOccurrences(of: char, with: entity)
+        for scalar in text.unicodeScalars {
+            let char = String(scalar)
+            
+            if useNamedEntities, let entity = namedEntities[char] {
+                encoded += entity
+                continue
             }
+            
+            if useNumericEntities, scalar.value > 127 || (!useNamedEntities && shouldEncode(scalar)) {
+                encoded += "&#\(scalar.value);"
+                continue
+            }
+            
+            encoded += char
         }
         
-        if useNumericEntities {
-            // Replace remaining special characters with numeric entities
-            var encoded = ""
-            for scalar in result.unicodeScalars {
-                if scalar.value > 127 || (!useNamedEntities && shouldEncode(scalar)) {
-                    encoded += "&#\(scalar.value);"
-                } else {
-                    encoded += String(scalar)
-                }
-            }
-            result = encoded
-        }
-        
-        return result
+        return encoded
     }
     
     /// Encode text to hex HTML entities

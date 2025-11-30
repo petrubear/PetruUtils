@@ -164,7 +164,3 @@ final class JavaScriptFormatterViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    JavaScriptFormatterView()
-        .frame(width: 900, height: 600)
-}

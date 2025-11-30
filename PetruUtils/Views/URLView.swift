@@ -278,7 +278,3 @@ struct URLView: View {
 
 // MARK: - Preview
 
-#Preview {
-    URLView()
-        .frame(width: 900, height: 600)
-}

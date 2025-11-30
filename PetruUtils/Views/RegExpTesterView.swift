@@ -155,4 +155,3 @@ final class RegExpTesterViewModel: ObservableObject {
     }
 }
 
-#Preview { RegExpTesterView() }

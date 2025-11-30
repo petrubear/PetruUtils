@@ -162,4 +162,3 @@ final class XMLFormatterViewModel: ObservableObject {
     }
 }
 
-#Preview { XMLFormatterView() }

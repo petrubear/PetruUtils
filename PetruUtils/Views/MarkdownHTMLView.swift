@@ -57,4 +57,3 @@ final class MarkdownHTMLViewModel: ObservableObject {
     func clear() { input = ""; output = ""; errorMessage = nil }
 }
 
-#Preview { MarkdownHTMLView() }

@@ -142,31 +142,4 @@ struct SyntaxHighlightedCodeBlock: View {
     }
 }
 
-#Preview("Plain Code Block") {
-    VStack {
-        Text("Plain Text").font(.headline)
-        CodeBlock(text: """
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-            """)
-    }
-    .padding()
-}
 
-#Preview("JSON Highlighted") {
-    VStack {
-        Text("JSON Syntax Highlighting").font(.headline)
-        SyntaxHighlightedCodeBlock(
-            text: """
-            {
-              "alg": "HS256",
-              "typ": "JWT",
-              "number": 123,
-              "boolean": true,
-              "null": null
-            }
-            """,
-            language: .json
-        )
-    }
-    .padding()
-}

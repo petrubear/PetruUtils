@@ -372,6 +372,3 @@ struct AdvancedPreferencesView: View {
 
 // MARK: - Preview
 
-#Preview {
-    PreferencesView()
-}

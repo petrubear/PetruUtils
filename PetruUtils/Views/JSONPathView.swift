@@ -170,7 +170,3 @@ final class JSONPathViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    JSONPathView()
-        .frame(width: 900, height: 600)
-}

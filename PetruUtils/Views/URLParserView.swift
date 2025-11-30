@@ -165,6 +165,3 @@ final class URLParserViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    URLParserView()
-}

@@ -307,6 +307,3 @@ final class UUIDViewModel: ObservableObject {
 
 // MARK: - Preview
 
-#Preview {
-    UUIDView()
-}

@@ -74,4 +74,3 @@ final class JSONYAMLViewModel: ObservableObject {
     }
 }
 
-#Preview { JSONYAMLView() }

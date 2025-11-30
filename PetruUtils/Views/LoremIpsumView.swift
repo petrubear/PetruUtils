@@ -101,6 +101,3 @@ final class LoremIpsumViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    LoremIpsumView()
-}

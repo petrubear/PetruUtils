@@ -5,7 +5,7 @@ Phase 5 (Polish & Features) delivered comprehensive preferences management, hist
 
 **Status**: 🔄 **Mostly complete (release automation pending)**  
 **Date of last major feature**: November 17, 2025  
-**Test Status**: ✅ All tests passing (326+ tests)
+**Test Status**: ⚠️ 328 service tests authored; latest xcodebuild run blocked by SwiftUI Preview macro sandboxing in this environment (attempted Nov 30, 2025)
 
 ---
 

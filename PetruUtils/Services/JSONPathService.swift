@@ -50,7 +50,19 @@ struct JSONPathService {
     }
     
     func formatResult(_ result: PathResult) throws -> String {
-        let data = try JSONSerialization.data(withJSONObject: result.value, options: [.prettyPrinted, .sortedKeys])
+        // Allow primitive fragments (e.g., a single string/number/bool) returned by JSONPath
+        let data: Data
+        if JSONSerialization.isValidJSONObject(result.value) {
+            data = try JSONSerialization.data(withJSONObject: result.value, options: [.prettyPrinted, .sortedKeys])
+        } else {
+            // fragmentsAllowed lets us serialize primitives; fall back to a description if that somehow fails
+            do {
+                data = try JSONSerialization.data(withJSONObject: result.value,
+                                                  options: [.prettyPrinted, .sortedKeys, .fragmentsAllowed])
+            } catch {
+                return "\(result.value)"
+            }
+        }
         return String(data: data, encoding: .utf8) ?? "{}"
     }
     
@@ -151,19 +163,28 @@ struct JSONPathService {
                 continue
             }
             
-            // Handle property access
-            if let dotIndex = current.firstIndex(of: ".") {
-                let key = String(current[..<dotIndex])
+            // Handle property access (respect nearest delimiter whether dot or bracket)
+            let dotIndex = current.firstIndex(of: ".")
+            let bracketIndex = current.firstIndex(of: "[")
+            
+            let nextDelimiter: String.Index?
+            switch (dotIndex, bracketIndex) {
+            case let (dot?, bracket?):
+                nextDelimiter = dot < bracket ? dot : bracket
+            case let (dot?, nil):
+                nextDelimiter = dot
+            case let (nil, bracket?):
+                nextDelimiter = bracket
+            default:
+                nextDelimiter = nil
+            }
+            
+            if let delimiter = nextDelimiter {
+                let key = String(current[..<delimiter])
                 if !key.isEmpty {
                     components.append(.property(key))
                 }
-                current = String(current[dotIndex...])
-            } else if let bracketIndex = current.firstIndex(of: "[") {
-                let key = String(current[..<bracketIndex])
-                if !key.isEmpty {
-                    components.append(.property(key))
-                }
-                current = String(current[bracketIndex...])
+                current = String(current[delimiter...])
             } else {
                 if !current.isEmpty {
                     components.append(.property(current))

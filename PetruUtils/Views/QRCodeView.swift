@@ -281,6 +281,3 @@ extension QRCodeViewModel {
 
 // MARK: - Preview
 
-#Preview {
-    QRCodeView()
-}

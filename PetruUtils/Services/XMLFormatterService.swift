@@ -165,6 +165,5 @@ private extension NSRegularExpression {
     }
 }
 
-// MARK: - XML Parser Delegate
-
-private class XMLValidationDelegate: NSObject, XMLParserDelegate {}
+// Minimal delegate to allow XMLParser validation without UI side effects
+private final class XMLValidationDelegate: NSObject, XMLParserDelegate {}

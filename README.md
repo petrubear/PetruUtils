@@ -4,7 +4,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 5 – Polish, Documentation Reconciliation & Release Automation (in progress)
+**Current Phase**: Phase 5 – Polish & Release Automation (mostly complete; GitHub Action pending)
 
 - **Tools Implemented**: 33 of 40 planned (see `Tool.swift`)
 - **Tests**: 300+ service/unit tests across implemented tools
@@ -136,7 +136,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 ⌘U
 ```
 
-**Test Status**: ✅ 300+ service tests passing  
+**Test Status**: ⚠️ 328 service tests defined; local CI run currently blocked by Preview macro sandboxing in this environment (last attempt Nov 30, 2025)  
 **Tools Completed**: 33 of 40 (82.5% complete)  
 **Phase 5 Features**: Preferences, History, Favorites, Export/Import shipped; release automation still pending
 
@@ -235,7 +235,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [ ] cURL → Code Converter
 - [ ] SVG → CSS Converter
 
-### Phase 4: Advanced Tools 🔄 (7+ complete, enhancements pending)
+### Phase 4: Advanced Tools ✅ (enhancements pending)
 - [x] JSON Formatter (needs tree view + JSONPath breadcrumbs)
 - [x] RegExp Tester
 - [x] Text Diff/Compare
@@ -243,7 +243,7 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] HTML Formatter
 - [x] CSS Formatter (SCSS/LESS conversion + auto-prefixing still pending)
 - [x] SQL Formatter
-- [ ] JavaScript Formatter
+- [x] JavaScript Formatter
 
 ### Phase 5: Polish & Release 🚧
 - [x] Tool history and favorites
@@ -326,4 +326,4 @@ Edison Martinez - Project Creator
 
 **Note**: This project is under active development. Features and APIs may change.
 
-*Last Updated: November 10, 2025*
+*Last Updated: November 30, 2025*

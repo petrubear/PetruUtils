@@ -193,6 +193,3 @@ final class CaseConverterViewModel: ObservableObject {
 
 // MARK: - Preview
 
-#Preview {
-    CaseConverterView()
-}

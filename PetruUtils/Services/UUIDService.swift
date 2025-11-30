@@ -1,4 +1,5 @@
 import Foundation
+import CommonCrypto
 
 /// Service for generating UUIDs and ULIDs
 struct UUIDService {
@@ -286,6 +287,3 @@ struct UUIDService {
     static let namespaceOID = "6ba7b812-9dad-11d1-80b4-00c04fd430c8"
     static let namespaceX500 = "6ba7b814-9dad-11d1-80b4-00c04fd430c8"
 }
-
-// Import CommonCrypto for SHA-1
-import CommonCrypto

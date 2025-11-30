@@ -169,6 +169,3 @@ final class RandomStringViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    RandomStringView()
-}

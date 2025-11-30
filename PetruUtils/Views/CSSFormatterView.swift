@@ -164,4 +164,3 @@ final class CSSFormatterViewModel: ObservableObject {
     }
 }
 
-#Preview { CSSFormatterView() }

@@ -4,6 +4,11 @@
 
 PetruUtils is a native macOS application that provides an all-in-one toolbox for software developers, inspired by DevUtils. It offers 40+ carefully crafted developer tools in a single, offline-first application with a focus on privacy, performance, and developer experience.
 
+**Current Snapshot (Nov 30, 2025)**
+- 33 of 40 tools implemented (see `Tool.swift`)
+- Phase 5 mostly complete; release automation workflow still outstanding
+- 328 service tests authored (latest run blocked by Preview macro sandboxing)
+
 ### Core Philosophy
 - **Privacy First**: All operations run locally; no data leaves the user's machine
 - **Offline by Default**: Full functionality without internet connection

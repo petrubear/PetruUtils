@@ -141,6 +141,3 @@ final class BackslashEscapeViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    BackslashEscapeView()
-}

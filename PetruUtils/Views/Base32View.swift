@@ -158,7 +158,3 @@ final class Base32ViewModel: ObservableObject {
     }
 }
 
-#Preview {
-    Base32View()
-        .frame(width: 800, height: 600)
-}

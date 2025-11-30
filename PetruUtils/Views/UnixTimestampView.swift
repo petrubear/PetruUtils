@@ -197,6 +197,3 @@ final class UnixTimestampViewModel: ObservableObject {
 
 // MARK: - Preview
 
-#Preview {
-    UnixTimestampView()
-}

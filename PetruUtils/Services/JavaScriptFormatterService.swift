@@ -51,6 +51,7 @@ struct JavaScriptFormatterService {
         var indentLevel = 0
         var inString: Character?
         var isEscaping = false
+        var parenDepth = 0
         
         func appendIndent() {
             result.append(String(repeating: indentUnit, count: max(indentLevel, 0)))
@@ -107,11 +108,17 @@ struct JavaScriptFormatterService {
                 result.append(";\n")
                 appendIndent()
             case ",":
-                result.append(",\n")
-                appendIndent()
+                if parenDepth > 0 {
+                    result.append(",")
+                } else {
+                    result.append(",\n")
+                    appendIndent()
+                }
             case "(":
+                parenDepth += 1
                 result.append(char)
             case ")":
+                parenDepth = max(parenDepth - 1, 0)
                 result.append(char)
             case " " where result.last == " ":
                 break
@@ -180,6 +187,30 @@ struct JavaScriptFormatterService {
                 inString = char
                 result.append(char)
                 index += 1
+                continue
+            }
+            
+            // Preserve readability around assignment/arrow operators
+            if char == "=" {
+                var op = "="
+                var lookahead = index + 1
+                while lookahead < characters.count && (characters[lookahead] == "=" || characters[lookahead] == ">") {
+                    op.append(characters[lookahead])
+                    lookahead += 1
+                }
+                
+                if let last = result.last, !last.isWhitespace {
+                    result.append(" ")
+                }
+                
+                result.append(op)
+                
+                if let next = nextNonWhitespace(from: characters, start: lookahead),
+                   !";,)}]".contains(next) {
+                    result.append(" ")
+                }
+                
+                index = lookahead
                 continue
             }
             

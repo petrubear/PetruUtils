@@ -173,4 +173,3 @@ final class JSONFormatterViewModel: ObservableObject {
     }
 }
 
-#Preview { JSONFormatterView() }

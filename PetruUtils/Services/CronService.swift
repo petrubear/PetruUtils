@@ -1,7 +1,7 @@
 import Foundation
 
 struct CronService {
-    enum CronError: LocalizedError {
+    enum CronError: LocalizedError, Equatable {
         case invalidFormat
         case invalidField(String)
         

@@ -175,6 +175,3 @@ enum Base64Mode {
 
 // MARK: - Preview
 
-#Preview {
-    Base64View()
-}

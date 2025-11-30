@@ -287,6 +287,3 @@ struct PlaceholderView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}

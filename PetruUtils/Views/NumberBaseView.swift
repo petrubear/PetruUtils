@@ -371,6 +371,3 @@ final class NumberBaseViewModel: ObservableObject {
 
 // MARK: - Preview
 
-#Preview {
-    NumberBaseView()
-}
