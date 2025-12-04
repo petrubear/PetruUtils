@@ -261,6 +261,8 @@ struct LazyToolView: View {
                 JSONPathView()
             case .curlConverter:
                 CurlConverterView()
+            case .svgToCSS:
+                SVGToCSSView()
             }
         }
         .id(tool) // Force view recreation when tool changes

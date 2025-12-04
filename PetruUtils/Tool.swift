@@ -36,6 +36,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case cronParser
     case jsonPath
     case curlConverter
+    case svgToCSS
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -77,6 +78,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .cronParser: return "Cron Expression Parser"
         case .jsonPath: return "JSON Path Tester"
         case .curlConverter: return "cURL → Code"
+        case .svgToCSS: return "SVG → CSS"
         }
     }
 
@@ -117,6 +119,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .cronParser: return "clock.arrow.circlepath"
         case .jsonPath: return "arrow.triangle.branch"
         case .curlConverter: return "arrow.triangle.2.circlepath"
+        case .svgToCSS: return "photo.badge.arrow.down"
         }
     }
 }

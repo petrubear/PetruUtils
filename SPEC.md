@@ -5,10 +5,10 @@
 PetruUtils is a native macOS application that provides an all-in-one toolbox for software developers, inspired by DevUtils. It offers 40+ carefully crafted developer tools in a single, offline-first application with a focus on privacy, performance, and developer experience.
 
 **Current Snapshot (Dec 3, 2025)**
-- 34 of 40 tools implemented (85%) (see `Tool.swift`)
-- Phase 9 in progress; cURL → Code converter shipped
-- 330+ service tests authored
-- Release automation workflow still outstanding
+- 35 of 40 tools implemented (87.5%) (see `Tool.swift`)
+- Phase 9 in progress; cURL → Code and SVG → CSS converters shipped
+- 360+ service tests authored
+- Release automation workflow ✅ complete
 
 ### Core Philosophy
 - **Privacy First**: All operations run locally; no data leaves the user's machine
@@ -420,13 +420,15 @@ PetruUtils/
 ---
 
 #### 3.20 SVG to CSS Converter
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
-- Convert SVG to data URI for CSS background
-- Optimize SVG (remove metadata, minimize)
-- Preview SVG
-- Generate CSS code
+- Convert SVG to data URI for CSS background ✅
+- Optimize SVG (remove metadata, minimize) ✅
+- Preview SVG ✅
+- Generate CSS code for multiple formats (background-image, mask-image, etc.) ✅
+- File size calculation ✅
+- Dimension extraction ✅
 
 ---
 
