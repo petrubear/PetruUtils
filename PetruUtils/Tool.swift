@@ -37,6 +37,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case jsonPath
     case curlConverter
     case svgToCSS
+    case certificateInspector
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -79,6 +80,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonPath: return "JSON Path Tester"
         case .curlConverter: return "cURL → Code"
         case .svgToCSS: return "SVG → CSS"
+        case .certificateInspector: return "Certificate Inspector"
         }
     }
 
@@ -120,6 +122,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .jsonPath: return "arrow.triangle.branch"
         case .curlConverter: return "arrow.triangle.2.circlepath"
         case .svgToCSS: return "photo.badge.arrow.down"
+        case .certificateInspector: return "doc.text.magnifyingglass"
         }
     }
 }

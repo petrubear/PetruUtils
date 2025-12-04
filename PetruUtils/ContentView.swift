@@ -263,6 +263,8 @@ struct LazyToolView: View {
                 CurlConverterView()
             case .svgToCSS:
                 SVGToCSSView()
+            case .certificateInspector:
+                CertificateInspectorView()
             }
         }
         .id(tool) // Force view recreation when tool changes

@@ -5,9 +5,9 @@
 PetruUtils is a native macOS application that provides an all-in-one toolbox for software developers, inspired by DevUtils. It offers 40+ carefully crafted developer tools in a single, offline-first application with a focus on privacy, performance, and developer experience.
 
 **Current Snapshot (Dec 3, 2025)**
-- 35 of 40 tools implemented (87.5%) (see `Tool.swift`)
-- Phase 9 in progress; cURL → Code and SVG → CSS converters shipped
-- 360+ service tests authored
+- 36 of 40 tools implemented (90%) (see `Tool.swift`)
+- Phase 9 in progress; cURL → Code, SVG → CSS, and Certificate Inspector shipped
+- 375+ service tests authored
 - Release automation workflow ✅ complete
 
 ### Core Philosophy
@@ -563,20 +563,23 @@ PetruUtils/
 ---
 
 #### 3.30 Certificate Inspector (X.509)
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
-- Decode X.509 certificates (PEM, DER)
-- Display certificate details:
-  - Subject, Issuer
-  - Valid from/to dates
-  - Serial number
-  - Public key algorithm
-  - Signature algorithm
-  - Extensions (SAN, key usage, etc.)
-- Certificate chain validation
-- File or paste input
-- Export as JSON
+- Decode X.509 certificates (PEM, DER) ✅
+- Display certificate details: ✅
+  - Subject, Issuer ✅
+  - Valid from/to dates ✅
+  - Serial number ✅
+  - Public key algorithm and size ✅
+  - Signature algorithm ✅
+  - Extensions (SAN, extended key usage) ✅
+  - Basic constraints (CA flag) ✅
+- Self-signed certificate detection ✅
+- Expiration status and days until expiry ✅
+- SHA-1 and SHA-256 fingerprints ✅
+- Export as JSON ✅
+- Copy certificate details to clipboard ✅
 
 ---
 
