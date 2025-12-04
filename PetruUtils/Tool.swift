@@ -35,6 +35,7 @@ enum Tool: String, CaseIterable, Identifiable {
     case base32
     case cronParser
     case jsonPath
+    case curlConverter
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -75,6 +76,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .base32: return "Base32 Encoder/Decoder"
         case .cronParser: return "Cron Expression Parser"
         case .jsonPath: return "JSON Path Tester"
+        case .curlConverter: return "cURL → Code"
         }
     }
 
@@ -114,6 +116,7 @@ enum Tool: String, CaseIterable, Identifiable {
         case .base32: return "textformat.123"
         case .cronParser: return "clock.arrow.circlepath"
         case .jsonPath: return "arrow.triangle.branch"
+        case .curlConverter: return "arrow.triangle.2.circlepath"
         }
     }
 }

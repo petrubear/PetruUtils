@@ -4,10 +4,11 @@
 
 PetruUtils is a native macOS application that provides an all-in-one toolbox for software developers, inspired by DevUtils. It offers 40+ carefully crafted developer tools in a single, offline-first application with a focus on privacy, performance, and developer experience.
 
-**Current Snapshot (Nov 30, 2025)**
-- 33 of 40 tools implemented (see `Tool.swift`)
-- Phase 5 mostly complete; release automation workflow still outstanding
-- 328 service tests authored (latest run blocked by Preview macro sandboxing)
+**Current Snapshot (Dec 3, 2025)**
+- 34 of 40 tools implemented (85%) (see `Tool.swift`)
+- Phase 9 in progress; cURL → Code converter shipped
+- 330+ service tests authored
+- Release automation workflow still outstanding
 
 ### Core Philosophy
 - **Privacy First**: All operations run locally; no data leaves the user's machine
@@ -401,18 +402,20 @@ PetruUtils/
 ---
 
 #### 3.19 cURL to Code Converter
-**Status**: 🔲 Planned
+**Status**: ✅ IMPLEMENTED
 
 **Features**:
-- Parse cURL command
+- Parse cURL command (supports -X, -H, -d, -F, -u, -G flags)
 - Generate equivalent code in:
-  - Swift (URLSession, Alamofire)
-  - Python (requests, urllib)
-  - JavaScript (fetch, axios)
+  - Swift (URLSession)
+  - Python (requests)
+  - JavaScript (fetch)
   - Go (net/http)
   - PHP (cURL)
   - Ruby (Net::HTTP)
 - Copy to clipboard
+- Auto-convert when changing target language
+- Comprehensive error handling
 
 ---
 

@@ -259,6 +259,8 @@ struct LazyToolView: View {
                 CronParserView()
             case .jsonPath:
                 JSONPathView()
+            case .curlConverter:
+                CurlConverterView()
             }
         }
         .id(tool) // Force view recreation when tool changes

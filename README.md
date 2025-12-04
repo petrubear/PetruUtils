@@ -4,12 +4,12 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## 🎯 Project Status
 
-**Current Phase**: Phase 5 – Polish & Release Automation (mostly complete; GitHub Action pending)
+**Current Phase**: Phase 9 – Remaining Utilities (in progress)
 
-- **Tools Implemented**: 33 of 40 planned (see `Tool.swift`)
-- **Tests**: 300+ service/unit tests across implemented tools
+- **Tools Implemented**: 34 of 40 planned (85%) (see `Tool.swift`)
+- **Tests**: 330+ service/unit tests across implemented tools
 - **Preferences/History/Favorites**: Landed during Phase 5
-- **Release Automation**: GitHub Action still required (see “Upcoming Work”)
+- **Release Automation**: GitHub Action still required (see "Upcoming Work")
 
 ### Implemented Tools
 
@@ -58,6 +58,9 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **Base32 Encoder/Decoder** - Encode/decode Base32 with Standard and Hex variants (RFC 4648)
 - ✅ **Cron Expression Parser** - Parse cron expressions with human-readable descriptions and next 10 execution times
 - ✅ **JSON Path Tester** - Test JSONPath expressions with syntax like $.users[0].name, $..email
+
+**Phase 9 - Remaining Utilities** 🚧 (partial)
+- ✅ **cURL → Code Converter** - Convert cURL commands to code in Swift, Python, JavaScript, Go, PHP, and Ruby
 
 ### Planned Tools (40+)
 
@@ -272,9 +275,9 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] Cron Expression Parser
 - [x] JSON Path Tester
 
-### Phase 9: Remaining Utilities 🚧 (1/8)
+### Phase 9: Remaining Utilities 🚧 (2/8)
 - [x] JavaScript Formatter
-- [ ] cURL → Code Converter
+- [x] cURL → Code Converter
 - [ ] SVG → CSS Converter
 - [ ] Certificate Inspector (X.509)
 - [ ] IP Utilities (CIDR/subnet calculator, subnet math)
