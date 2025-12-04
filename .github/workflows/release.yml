@@ -5,12 +5,22 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
-  build-test-archive:
+  build-test-release:
     runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
 
       - name: Select Xcode 15
         run: sudo xcode-select -s /Applications/Xcode.app
@@ -39,18 +49,85 @@ jobs:
             -archivePath build/PetruUtils.xcarchive \
             -derivedDataPath DerivedData
 
-      - name: Package .app
+      - name: Package .app as ZIP
         run: |
           APP_PATH="build/PetruUtils.xcarchive/Products/Applications/PetruUtils.app"
-          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" PetruUtils.app.zip
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" PetruUtils-${{ steps.version.outputs.version }}.zip
 
-      - name: Upload artifact
+      - name: Create DMG
+        run: |
+          APP_PATH="build/PetruUtils.xcarchive/Products/Applications/PetruUtils.app"
+
+          # Create temporary directory for DMG contents
+          mkdir -p dmg
+          cp -R "$APP_PATH" dmg/
+
+          # Create DMG with hdiutil
+          hdiutil create -volname "PetruUtils" \
+            -srcfolder dmg \
+            -ov -format UDZO \
+            PetruUtils-${{ steps.version.outputs.version }}.dmg
+
+          # Clean up
+          rm -rf dmg
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          cat > release_notes.md << 'EOF'
+          ## PetruUtils v${{ steps.version.outputs.version }}
+
+          A native macOS developer toolbox with 40+ utilities for developers.
+
+          ### Installation
+
+          **Option 1: DMG (Recommended)**
+          1. Download `PetruUtils-${{ steps.version.outputs.version }}.dmg`
+          2. Open the DMG file
+          3. Drag PetruUtils.app to your Applications folder
+
+          **Option 2: ZIP**
+          1. Download `PetruUtils-${{ steps.version.outputs.version }}.zip`
+          2. Unzip the file
+          3. Move PetruUtils.app to your Applications folder
+
+          ### System Requirements
+          - macOS 13.0 (Ventura) or later
+          - Apple Silicon or Intel Mac
+
+          ### What's New
+          See the [CHANGELOG](CHANGELOG.md) for detailed release notes.
+
+          ### Notes
+          - **First Launch**: Right-click the app and select "Open" to bypass Gatekeeper (app is not yet notarized)
+          - **Privacy**: All processing happens locally, no network requests
+          - **Open Source**: This is an open-source project
+
+          ---
+
+          🤖 Generated with [Claude Code](https://claude.com/claude-code)
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            PetruUtils-${{ steps.version.outputs.version }}.zip
+            PetruUtils-${{ steps.version.outputs.version }}.dmg
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+
+      - name: Upload build artifacts (workflow)
         uses: actions/upload-artifact@v4
         with:
-          name: PetruUtils-macOS
-          path: PetruUtils.app.zip
+          name: PetruUtils-v${{ steps.version.outputs.version }}
+          path: |
+            PetruUtils-${{ steps.version.outputs.version }}.zip
+            PetruUtils-${{ steps.version.outputs.version }}.dmg
 
-      - name: Archive xcresult (optional)
+      - name: Archive test results (optional)
         if: success() || failure()
         run: |
           find DerivedData/Logs/Test -name "*.xcresult" -maxdepth 1 -print -exec cp {} test-results.xcresult \; || true
@@ -60,5 +137,6 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
-          name: TestResults
+          name: TestResults-v${{ steps.version.outputs.version }}
           path: test-results.xcresult
+        continue-on-error: true

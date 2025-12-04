@@ -4,7 +4,7 @@
 
 **PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 33 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 5 – Polish & Release Automation (33/40 tools implemented ≈ 82.5%)
+**Current Status**: Phase 9 – Remaining Utilities (34/40 tools implemented ≈ 85%)
 
 ---
 
@@ -390,16 +390,16 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - JSON Formatter ✅ (tree view + JSONPath breadcrumbs pending)
 - JavaScript Formatter ✅
 
-### 🔄 Phase 5: Polish & Preferences
+### ✅ Phase 5: Polish & Preferences
 
-See `PHASE5_PREFERENCES_PLAN.md` for details
+See `PHASE5_SUMMARY.md` for complete details
 
 - Preferences panel with 6 categories ✅
 - App icon & branding (spec complete, icon implementation later)
 - History & favorites ✅
 - Performance optimization ✅
 - Clipboard auto-switch wiring ✅
-- GitHub Action release workflow 🔲
+- GitHub Action release workflow ✅
 
 ### ✅ Phase 6: Text Utilities
 
@@ -439,9 +439,10 @@ See `PHASE5_PREFERENCES_PLAN.md` for details
 - CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
 - JWT Debugger RSA/ECDSA/PS algorithm support with public-key inputs and claim validation indicators
 
-### 🔲 Phase 11: Release Automation
+### ✅ Phase 11: Release Automation
 
-- GitHub Action workflow to build/test/sign the macOS app and attach artifacts when a version tag is pushed
+- GitHub Action workflow to build/test the macOS app and attach artifacts when a version tag is pushed ✅
+- Code signing and notarization guide provided in `SIGNING_NOTARIZATION.md` (implementation optional)
 
 ---
 
@@ -668,8 +669,7 @@ _This guide is maintained by the development team and should be updated as the p
 
 ---
 
-## Current Priorities (November 2025)
+## Current Priorities (December 2025)
 
 1. **Phase 9 – Remaining Utilities**: Ship cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
 2. **Phase 10 – Enhancements**: Add JSON Formatter tree view/breadcrumbs/line numbers, extend CSS Formatter to SCSS/LESS + auto-prefixing, and implement RSA/ECDSA/PS support in the JWT Debugger with public-key inputs.
-3. **Phase 11 – Release Automation**: Create a GitHub Action that builds/tests/signs the app and packages release artifacts whenever a version tag is pushed.

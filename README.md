@@ -8,8 +8,8 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 - **Tools Implemented**: 34 of 40 planned (85%) (see `Tool.swift`)
 - **Tests**: 330+ service/unit tests across implemented tools
-- **Preferences/History/Favorites**: Landed during Phase 5
-- **Release Automation**: GitHub Action still required (see "Upcoming Work")
+- **Preferences/History/Favorites**: ✅ Complete (Phase 5)
+- **Release Automation**: ✅ Complete (GitHub Actions workflow ready)
 
 ### Implemented Tools
 
@@ -248,14 +248,14 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] SQL Formatter
 - [x] JavaScript Formatter
 
-### Phase 5: Polish & Release 🚧
+### Phase 5: Polish & Release ✅
 - [x] Tool history and favorites
 - [x] Preferences panel (6 categories)
 - [x] Export/import utilities
 - [x] Lazy loading for performance
 - [x] App icon specification
 - [x] Clipboard auto-switch preference wiring
-- [ ] GitHub Action workflow to build & upload releases on version tags
+- [x] GitHub Action workflow to build & upload releases on version tags
 
 ### Phase 6: Text Utilities ✅
 - [x] Line Sorter

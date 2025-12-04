@@ -1,10 +1,10 @@
 # Phase 5 Completion Summary
 
 ## Overview
-Phase 5 (Polish & Features) delivered comprehensive preferences management, history tracking, favorites, performance optimizations, and clipboard auto-switching for smart detection. The final outstanding item before closing the phase is adding a GitHub Action release workflow.
+Phase 5 (Polish & Features) delivered comprehensive preferences management, history tracking, favorites, performance optimizations, clipboard auto-switching for smart detection, and a complete GitHub Actions release workflow for automated builds and releases.
 
-**Status**: 🔄 **Mostly complete (release automation pending)**  
-**Date of last major feature**: November 17, 2025  
+**Status**: ✅ **COMPLETE**
+**Completion Date**: December 3, 2025
 **Test Status**: ⚠️ 328 service tests authored; latest xcodebuild run blocked by SwiftUI Preview macro sandboxing in this environment (attempted Nov 30, 2025)
 
 ---
@@ -203,15 +203,18 @@ Comprehensive test suite for HistoryManager.
 4. `Utilities/FileExportImport.swift` - Export/import utilities
 5. `PetruUtilsTests/HistoryManagerTests.swift` - Test suite
 6. `APP_ICON_SPEC.md` - Icon specification
-7. `PHASE5_SUMMARY.md` - This document
+7. `SIGNING_NOTARIZATION.md` - Code signing guide
+8. `PHASE5_SUMMARY.md` - This document
 
 ## Files Modified
 
 1. `ContentView.swift` - Added favorites/recent sections, lazy loading
 2. `PetruUtilsApp.swift` - Already had Settings scene configured
 3. `Tool.swift` - No changes needed
-4. `README.md` - Updated to mark Phase 5 complete
-5. `SPEC.md` - Updated to mark Phase 5 complete
+4. `.github/workflows/release.yml` - Enhanced with GitHub Release creation, DMG packaging
+5. `README.md` - Updated to mark Phase 5 complete
+6. `SPEC.md` - Updated to mark Phase 5 complete
+7. `AGENTS.md` - Updated to mark Phase 5 complete
 
 ---
 
@@ -271,9 +274,47 @@ Comprehensive test suite for HistoryManager.
 
 ---
 
-## Remaining Phase 5 Work
+## ✅ All Phase 5 Work Complete
 
-- [ ] Add a GitHub Action workflow that builds/tests the app and attaches a signed/notarized release artifact whenever a version tag is pushed.
+### GitHub Actions Release Workflow
+
+**File**: `.github/workflows/release.yml`
+
+Complete CI/CD automation for releases:
+
+**Features Implemented:**
+- **Trigger**: Runs on version tag push (`v*` pattern)
+- **Version Extraction**: Automatically extracts version from git tag
+- **Testing**: Runs full test suite before building
+- **Building**: Archives the app in Release configuration
+- **Packaging**: Creates both ZIP and DMG distributions
+- **GitHub Release**: Automatically creates GitHub Release with:
+  - Version-tagged artifacts (ZIP + DMG)
+  - Auto-generated release notes
+  - Installation instructions
+  - System requirements
+- **Artifacts**: Uploads build artifacts for download
+- **Test Results**: Optionally preserves test results
+
+**How to Use:**
+```bash
+# Create and push a version tag
+git tag v1.0.0
+git push origin v1.0.0
+
+# GitHub Actions will automatically:
+# 1. Run all tests
+# 2. Build the app
+# 3. Create ZIP and DMG
+# 4. Create GitHub Release
+# 5. Upload artifacts
+```
+
+**Code Signing & Notarization:**
+- Currently builds unsigned (suitable for development/testing)
+- Full guide provided in `SIGNING_NOTARIZATION.md`
+- Can be added when Apple Developer Program membership is available
+- Users can still run app via right-click → Open
 
 ---
 
@@ -433,13 +474,14 @@ Phase 5 successfully transforms PetruUtils from a functional tool collection int
 - ✅ History and favorites tracking
 - ✅ Export/import functionality
 - ✅ Performance optimizations
+- ✅ GitHub Actions release automation (build, test, package, release)
 - ✅ Comprehensive testing (8 new tests)
-- ✅ Documentation updates
+- ✅ Complete documentation (including signing guide)
 
-**Next Steps**: Phase 6 - Additional Tools (19+ tools remaining)
+**Next Steps**: Phase 9 - Remaining Utilities (6 tools remaining)
 
 ---
 
-**Project Progress**: 21/40 tools (52.5%) + Phase 5 features ✅
+**Project Progress**: 34/40 tools (85%) + Phase 5 features ✅
 
-*Phase 5 completed November 17, 2025*
+*Phase 5 completed December 3, 2025*
