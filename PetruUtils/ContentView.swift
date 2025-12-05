@@ -267,6 +267,12 @@ struct LazyToolView: View {
                 CertificateInspectorView()
             case .ipUtilities:
                 IPUtilitiesView()
+            case .asciiArtGenerator:
+                ASCIIArtGeneratorView()
+            case .bcryptGenerator:
+                BcryptGeneratorView()
+            case .totpGenerator:
+                TOTPGeneratorView()
             }
         }
         .id(tool) // Force view recreation when tool changes

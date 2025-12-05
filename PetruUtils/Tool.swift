@@ -39,6 +39,9 @@ enum Tool: String, CaseIterable, Identifiable {
     case svgToCSS
     case certificateInspector
     case ipUtilities
+    case asciiArtGenerator
+    case bcryptGenerator
+    case totpGenerator
 
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
@@ -83,6 +86,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .svgToCSS: return "SVG → CSS"
         case .certificateInspector: return "Certificate Inspector"
         case .ipUtilities: return "IP Utilities"
+        case .asciiArtGenerator: return "ASCII Art Generator"
+        case .bcryptGenerator: return "Bcrypt Generator"
+        case .totpGenerator: return "TOTP Generator"
         }
     }
 
@@ -126,6 +132,9 @@ enum Tool: String, CaseIterable, Identifiable {
         case .svgToCSS: return "photo.badge.arrow.down"
         case .certificateInspector: return "doc.text.magnifyingglass"
         case .ipUtilities: return "network"
+        case .asciiArtGenerator: return "textformat.abc"
+        case .bcryptGenerator: return "lock.rectangle"
+        case .totpGenerator: return "clock.badge.checkmark"
         }
     }
 }

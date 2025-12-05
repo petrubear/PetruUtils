@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 37 implemented) with a focus on privacy, offline operation, and native performance.
+**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (all 40 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 9 – Remaining Utilities (37/40 tools implemented = 92.5%)
+**Current Status**: Phase 10 – Enhancements & Hardening (40/40 tools implemented = 100%)
 
 ---
 
@@ -422,16 +422,16 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - Cron Expression Parser
 - JSON Path Tester
 
-### 🔄 Phase 9: Remaining Utilities (In Progress)
+### ✅ Phase 9: Remaining Utilities (Complete)
 
 - JavaScript Formatter ✅
 - cURL → Code Converter ✅
 - SVG → CSS Converter ✅
 - Certificate Inspector (X.509) ✅
 - IP Utilities (CIDR/subnet calculator, subnet math) ✅
-- ASCII Art Generator
-- Bcrypt Generator/Verifier
-- TOTP Generator
+- ASCII Art Generator ✅
+- Bcrypt Generator/Verifier ✅
+- TOTP Generator ✅
 
 ### 🔲 Phase 10: Enhancements & Hardening
 
@@ -617,9 +617,9 @@ import Foundation     // Always
 
 **End Goal**: A comprehensive, privacy-focused, offline developer toolbox with 40+ utilities that developers use daily. Think "DevUtils" but open and extensible.
 
-**Current Progress**: ~92.5% complete (37 of 40 tools)
+**Current Progress**: 100% complete (40 of 40 tools)
 
-**Next Milestone**: Ship remaining utilities (ASCII Art generator, Bcrypt helper, TOTP generator) and complete Phase 10 enhancements.
+**Next Milestone**: Complete Phase 10 enhancements (JSON Formatter tree view, CSS SCSS/LESS support, JWT RSA/ECDSA) and release v1.0.
 
 ---
 

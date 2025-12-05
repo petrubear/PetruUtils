@@ -4,10 +4,10 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## Project Status
 
-**Current Phase**: Phase 9 – Remaining Utilities (in progress)
+**Current Phase**: Phase 10 – Enhancements & Hardening (planned)
 
-- **Tools Implemented**: 37 of 40 planned (92.5%) (see `Tool.swift`)
-- **Tests**: 375+ service/unit tests across implemented tools
+- **Tools Implemented**: 40 of 40 planned (100%) (see `Tool.swift`)
+- **Tests**: 435+ service/unit tests across implemented tools
 - **Preferences/History/Favorites**: Complete (Phase 5)
 - **Release Automation**: Complete (GitHub Actions workflow ready)
 
@@ -77,18 +77,15 @@ A native macOS application providing an all-in-one toolbox for software develope
 - **Cron Expression Parser** - Parse cron expressions with human-readable descriptions and next 10 execution times
 - **JSON Path Tester** - Test JSONPath expressions with syntax like $.users[0].name, $..email
 
-### Phase 9 - Remaining Utilities (Partial)
+### Phase 9 - Remaining Utilities (Complete)
 
 - **cURL to Code Converter** - Convert cURL commands to code in Swift, Python, JavaScript, Go, PHP, and Ruby
 - **SVG to CSS Converter** - Convert SVG to CSS data URIs with optimization and multiple format options
 - **Certificate Inspector (X.509)** - Decode and inspect X.509 certificates with detailed information and JSON export
 - **IP Utilities** - CIDR/subnet calculator with network info, host ranges, IP classification, and binary/hex representations
-
-### Planned Tools
-
-- ASCII Art Generator
-- Bcrypt Generator/Verifier
-- TOTP Generator
+- **ASCII Art Generator** - Convert text to ASCII art with multiple fonts (Banner, Block, Small, Standard, Mini)
+- **Bcrypt Generator/Verifier** - Generate PBKDF2-SHA256 password hashes and verify passwords with configurable cost factor
+- **TOTP Generator** - Generate RFC 6238 Time-based One-Time Passwords with QR code, countdown timer, and multiple algorithms
 
 ---
 
@@ -320,15 +317,15 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] Cron Expression Parser
 - [x] JSON Path Tester
 
-### Phase 9: Remaining Utilities - In Progress
+### Phase 9: Remaining Utilities - Complete
 - [x] JavaScript Formatter
 - [x] cURL to Code Converter
 - [x] SVG to CSS Converter
 - [x] Certificate Inspector (X.509)
 - [x] IP Utilities
-- [ ] ASCII Art Generator
-- [ ] Bcrypt Generator/Verifier
-- [ ] TOTP Generator
+- [x] ASCII Art Generator
+- [x] Bcrypt Generator/Verifier
+- [x] TOTP Generator
 
 ### Phase 10: Enhancements & Hardening - Planned
 - [ ] JSON Formatter tree view, JSONPath breadcrumbs, line numbers
@@ -342,8 +339,9 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 
 ## Upcoming Work
 
-1. Ship the remaining utilities (ASCII Art generator, Bcrypt helper, TOTP generator).
-2. Enhance existing tools: JSON Formatter tree view/breadcrumbs, CSS Formatter SCSS/LESS + prefixing, JWT Debugger RSA/ECDSA/PS support.
+1. Enhance existing tools: JSON Formatter tree view/breadcrumbs, CSS Formatter SCSS/LESS + prefixing, JWT Debugger RSA/ECDSA/PS support.
+2. Design and implement custom app icon.
+3. Final polish and v1.0 release.
 
 ---
 
