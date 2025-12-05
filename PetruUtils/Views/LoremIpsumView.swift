@@ -78,6 +78,17 @@ struct LoremIpsumView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.primary.opacity(0.1), lineWidth: 1)
             )
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Usage:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Generate placeholder text for designs, mockups, and layouts.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

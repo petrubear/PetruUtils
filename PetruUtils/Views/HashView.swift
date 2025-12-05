@@ -83,9 +83,9 @@ struct HashView: View {
                         .foregroundStyle(.secondary)
                         .font(.caption)
                 }
-                
+
                 Spacer()
-                
+
                 if let error = vm.errorMessage {
                     HStack(spacing: 4) {
                         Image(systemName: "exclamationmark.triangle.fill")
@@ -96,6 +96,20 @@ struct HashView: View {
                     }
                 }
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("MD5: hello → 5d41402abc4b2a76b9719d911017c592")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("SHA-256: hello → 2cf24dba5fb0a30e...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
         }
         .padding()
     }

@@ -63,9 +63,9 @@ struct Base64View: View {
                         .foregroundStyle(.secondary)
                         .font(.caption)
                 }
-                
+
                 Spacer()
-                
+
                 if let error = vm.errorMessage {
                     Text(error)
                         .foregroundStyle(.red)
@@ -73,6 +73,25 @@ struct Base64View: View {
                         .textSelection(.enabled)
                 }
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                if vm.mode == .encode {
+                    Text("Hello, World! → SGVsbG8sIFdvcmxkIQ==")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                } else {
+                    Text("SGVsbG8sIFdvcmxkIQ== → Hello, World!")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+            }
+            .padding(.top, 8)
         }
         .padding()
     }

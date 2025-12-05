@@ -97,12 +97,12 @@ struct RandomStringView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                     .frame(width: 30, alignment: .trailing)
-                                
+
                                 Text(string)
                                     .font(.system(.body, design: .monospaced))
                                     .textSelection(.enabled)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
+
                                 Button(action: {
                                     NSPasteboard.general.clearContents()
                                     NSPasteboard.general.setString(string, forType: .string)
@@ -122,6 +122,17 @@ struct RandomStringView: View {
                     .padding(8)
                 }
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Usage:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Great for passwords, API keys, tokens, and test data.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

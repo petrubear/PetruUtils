@@ -197,7 +197,7 @@ struct URLView: View {
     }
     
     // MARK: - Input Pane
-    
+
     private var inputPane: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Input label
@@ -211,12 +211,26 @@ struct URLView: View {
             }
             .padding(.horizontal, 12)
             .padding(.top, 12)
-            
+
             // Input editor
             FocusableTextEditor(text: $viewModel.input)
                 .onChange(of: viewModel.input) { _, _ in
                     viewModel.process()
                 }
+            .padding(.horizontal, 12)
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Encode: Hello World → Hello%20World")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Decode: price%3D100%26qty%3D5 → price=100&qty=5")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             .padding(.horizontal, 12)
             .padding(.bottom, 12)
         }

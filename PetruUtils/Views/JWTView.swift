@@ -73,6 +73,19 @@ struct JWTView: View {
                     Text(err).foregroundStyle(.red).font(.callout).textSelection(.enabled)
                 }
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Example:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+                    .lineLimit(2)
+            }
+            .padding(.top, 8)
         }
         .padding()
     }

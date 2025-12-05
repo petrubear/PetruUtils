@@ -121,12 +121,26 @@ struct TextReplacerView: View {
                     .font(.subheadline.weight(.medium))
                 Spacer()
             }
-            
+
             FocusableTextEditor(text: $vm.input)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onChange(of: vm.input) { _, _ in
                     vm.updateMatchCount()
                 }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Find: \"foo\" Replace: \"bar\"")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Regex: \\d+ matches numbers")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

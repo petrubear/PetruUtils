@@ -38,12 +38,23 @@ struct StringInspectorView: View {
                     .font(.subheadline.weight(.medium))
                 Spacer()
             }
-            
+
             FocusableTextEditor(text: $vm.input)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onChange(of: vm.input) { _, _ in
                     vm.analyze()
                 }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Usage:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Paste or type any text to analyze character counts, byte sizes, and frequency.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

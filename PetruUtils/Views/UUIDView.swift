@@ -177,6 +177,21 @@ struct UUIDView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.orange.opacity(0.1))
             }
+
+            // Help text at bottom
+            Spacer()
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("UUID v4: 550e8400-e29b-41d4-a716-446655440000")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("ULID: 01ARZ3NDEKTSV4RRFFQ69G5FAV")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
         }
     }
 }

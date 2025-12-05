@@ -45,6 +45,20 @@ struct TextDiffView: View {
                 FocusableTextEditor(text: $vm.leftText)
                     .padding(4)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Usage:")
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                    Text("Enter original text here, modified text on the right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("Green = added, Red = removed")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.top, 4)
             }
         }
         .padding()

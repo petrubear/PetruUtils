@@ -85,9 +85,21 @@ struct JSONPathView: View {
                     .foregroundColor(.secondary)
             }
             .padding([.horizontal, .top], 8)
-            
+
             FocusableTextEditor(text: $vm.jsonInput)
                 .font(.custom("JetBrains Mono", size: 12))
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Path syntax:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("$ (root), .key (child), [0] (index), [*] (all), ..key (recursive)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 4)
         }
     }
     

@@ -31,16 +31,23 @@ struct URLParserView: View {
     }
     
     private var inputField: some View {
-        HStack(spacing: 12) {
-            TextField("Enter URL (e.g., https://example.com:8080/path?key=value#fragment)", text: $vm.input, onCommit: { vm.parse() })
-                .textFieldStyle(.roundedBorder)
-                .font(.system(.body, design: .monospaced))
-            
-            if let error = vm.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                TextField("Enter URL (e.g., https://example.com:8080/path?key=value#fragment)", text: $vm.input, onCommit: { vm.parse() })
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(.body, design: .monospaced))
+
+                if let error = vm.errorMessage {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
             }
+
+            // Help text
+            Text("Example: https://user:pass@example.com:8080/path?key=value&foo=bar#section")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
         .padding(.horizontal)
         .padding(.vertical, 8)

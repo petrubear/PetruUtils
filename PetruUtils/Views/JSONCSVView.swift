@@ -27,6 +27,22 @@ struct JSONCSVView: View {
                     Text("Input").font(.headline)
                     FocusableTextEditor(text: $vm.input).padding(4).overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
                     if let error = vm.errorMessage { Text(error).foregroundStyle(.red).font(.callout) }
+                    // Help text
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Examples:")
+                            .font(.caption.bold())
+                            .foregroundStyle(.secondary)
+                        if vm.mode {
+                            Text(#"JSON: [{"name": "John", "age": 30}]"#)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text("CSV: name,age\\n     John,30")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.top, 4)
                 }.padding()
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Output").font(.headline)

@@ -66,7 +66,21 @@ struct UnixTimestampView: View {
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(8)
             }
-            
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Seconds: 1704067200 (Jan 1, 2024)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Milliseconds: 1704067200000")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
+
             Spacer()
         }
         .padding()

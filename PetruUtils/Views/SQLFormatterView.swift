@@ -47,6 +47,18 @@ struct SQLFormatterView: View {
                 .font(.system(.body, design: .monospaced))
                 .padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Example:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("select id,name from users where active=1 order by name")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

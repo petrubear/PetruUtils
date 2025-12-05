@@ -63,7 +63,21 @@ struct ColorConverterView: View {
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(8)
             }
-            
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("HEX: #FF5733, #F00, FF5733")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("RGB: 255, 87, 51 or rgb(255, 87, 51)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
+
             Spacer()
         }
         .padding()

@@ -46,6 +46,18 @@ struct XMLFormatterView: View {
                 .font(.system(.body, design: .monospaced))
                 .padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Example:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("<root><item id=\"1\">Value</item></root>")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

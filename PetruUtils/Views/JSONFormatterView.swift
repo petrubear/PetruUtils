@@ -80,6 +80,18 @@ struct JSONFormatterView: View {
                     .background(Color.red.opacity(0.1))
                     .cornerRadius(6)
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Example:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text(#"{"name":"John","age":30,"city":"NYC"}"#)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

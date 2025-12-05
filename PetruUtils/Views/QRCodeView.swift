@@ -69,20 +69,20 @@ struct QRCodeView: View {
                     let charCount = vm.input.count
                     let capacity = vm.service.estimatedCapacity(for: vm.errorCorrection)
                     let percentage = Double(charCount) / Double(capacity) * 100
-                    
+
                     HStack(spacing: 8) {
                         Text("\(charCount) / \(capacity) characters")
                             .foregroundStyle(charCount > capacity ? .red : .secondary)
                             .font(.caption)
-                        
+
                         ProgressView(value: min(Double(charCount), Double(capacity)), total: Double(capacity))
                             .frame(width: 100)
                             .tint(percentage > 80 ? .orange : .blue)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 if let error = vm.errorMessage {
                     HStack(spacing: 4) {
                         Image(systemName: "exclamationmark.triangle.fill")
@@ -93,6 +93,23 @@ struct QRCodeView: View {
                     }
                 }
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("URL: https://example.com")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Text: Hello, World!")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("WiFi: WIFI:T:WPA;S:NetworkName;P:password;;")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
         }
         .padding()
     }

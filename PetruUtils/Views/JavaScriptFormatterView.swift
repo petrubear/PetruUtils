@@ -75,6 +75,18 @@ struct JavaScriptFormatterView: View {
                     .background(Color.red.opacity(0.1))
                     .cornerRadius(6)
             }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Example:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("function hello(){return\"world\"}")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

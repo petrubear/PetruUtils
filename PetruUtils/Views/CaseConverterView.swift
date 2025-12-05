@@ -61,7 +61,21 @@ struct CaseConverterView: View {
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(8)
             }
-            
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("hello_world → helloWorld, HelloWorld, hello-world")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("myVariableName → my_variable_name, MY_VARIABLE_NAME")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
+
             Spacer()
         }
         .padding()

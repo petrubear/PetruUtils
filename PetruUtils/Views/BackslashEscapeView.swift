@@ -60,9 +60,23 @@ struct BackslashEscapeView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            
+
             FocusableTextEditor(text: $vm.input)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Escape: newline → \\n, tab → \\t, quote → \\\"")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Unescape: \\n → newline, \\t → tab")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

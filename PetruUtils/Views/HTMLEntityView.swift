@@ -60,9 +60,23 @@ struct HTMLEntityView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            
+
             FocusableTextEditor(text: $vm.input)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Encode: <div> → &lt;div&gt;")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Decode: &amp; → &")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

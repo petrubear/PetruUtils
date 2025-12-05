@@ -55,12 +55,27 @@ struct Base32View: View {
                     .foregroundColor(.secondary)
             }
             .padding([.horizontal, .top], 8)
-            
+
             FocusableTextEditor(text: $vm.input)
                 .font(.custom("JetBrains Mono", size: 12))
                 .onChange(of: vm.input) {
                     vm.process()
                 }
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Encode: Hello → JBSWY3DP")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Decode: JBSWY3DP → Hello")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 4)
         }
     }
     

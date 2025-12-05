@@ -45,12 +45,26 @@ struct CronParserView: View {
                 Text("Format: minute hour day month weekday")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 if let error = vm.errorMessage {
                     Text(error)
                         .foregroundColor(.red)
                         .font(.caption)
                 }
+
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Examples:")
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                    Text("*/5 * * * * (every 5 minutes)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("0 9 * * 1-5 (9 AM weekdays)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.top, 4)
             }
             .padding()
             

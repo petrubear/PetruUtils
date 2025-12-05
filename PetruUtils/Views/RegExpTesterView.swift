@@ -57,6 +57,20 @@ struct RegExpTesterView: View {
             FocusableTextEditor(text: $vm.testString)
                 .padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Pattern: \\d+ matches: 123, 456")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Pattern: [a-z]+ matches: hello, world")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }

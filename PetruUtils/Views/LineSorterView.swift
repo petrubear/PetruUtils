@@ -54,9 +54,20 @@ struct LineSorterView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            
+
             FocusableTextEditor(text: $vm.input)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Help text
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Usage:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Enter one item per line. Sort alphabetically, reverse, or shuffle.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 4)
         }
         .padding()
     }
