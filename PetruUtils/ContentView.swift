@@ -265,6 +265,8 @@ struct LazyToolView: View {
                 SVGToCSSView()
             case .certificateInspector:
                 CertificateInspectorView()
+            case .ipUtilities:
+                IPUtilitiesView()
             }
         }
         .id(tool) // Force view recreation when tool changes

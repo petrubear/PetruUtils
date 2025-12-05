@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 36 implemented) with a focus on privacy, offline operation, and native performance.
+**PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (currently 37 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 9 – Remaining Utilities (36/40 tools implemented = 90%)
+**Current Status**: Phase 9 – Remaining Utilities (37/40 tools implemented = 92.5%)
 
 ---
 
@@ -428,7 +428,7 @@ See `PHASE5_SUMMARY.md` for complete details
 - cURL → Code Converter ✅
 - SVG → CSS Converter ✅
 - Certificate Inspector (X.509) ✅
-- IP Utilities (CIDR/subnet calculator, subnet math)
+- IP Utilities (CIDR/subnet calculator, subnet math) ✅
 - ASCII Art Generator
 - Bcrypt Generator/Verifier
 - TOTP Generator

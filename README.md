@@ -6,7 +6,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 **Current Phase**: Phase 9 – Remaining Utilities (in progress)
 
-- **Tools Implemented**: 36 of 40 planned (90%) (see `Tool.swift`)
+- **Tools Implemented**: 37 of 40 planned (92.5%) (see `Tool.swift`)
 - **Tests**: 375+ service/unit tests across implemented tools
 - **Preferences/History/Favorites**: ✅ Complete (Phase 5)
 - **Release Automation**: ✅ Complete (GitHub Actions workflow ready)
@@ -63,6 +63,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 - ✅ **cURL → Code Converter** - Convert cURL commands to code in Swift, Python, JavaScript, Go, PHP, and Ruby
 - ✅ **SVG → CSS Converter** - Convert SVG to CSS data URIs with optimization and multiple format options
 - ✅ **Certificate Inspector (X.509)** - Decode and inspect X.509 certificates with detailed information and JSON export
+- ✅ **IP Utilities** - CIDR/subnet calculator with network info, host ranges, IP classification, and binary/hex representations
 
 ### Planned Tools (40+)
 
@@ -277,12 +278,12 @@ xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
 - [x] Cron Expression Parser
 - [x] JSON Path Tester
 
-### Phase 9: Remaining Utilities 🚧 (4/8)
+### Phase 9: Remaining Utilities 🚧 (5/8)
 - [x] JavaScript Formatter
 - [x] cURL → Code Converter
 - [x] SVG → CSS Converter
 - [x] Certificate Inspector (X.509)
-- [ ] IP Utilities (CIDR/subnet calculator, subnet math)
+- [x] IP Utilities (CIDR/subnet calculator, subnet math)
 - [ ] ASCII Art Generator
 - [ ] Bcrypt Generator/Verifier
 - [ ] TOTP Generator
@@ -331,4 +332,4 @@ Edison Martinez - Project Creator
 
 **Note**: This project is under active development. Features and APIs may change.
 
-*Last Updated: November 30, 2025*
+*Last Updated: December 4, 2025*

@@ -4,9 +4,9 @@
 
 PetruUtils is a native macOS application that provides an all-in-one toolbox for software developers, inspired by DevUtils. It offers 40+ carefully crafted developer tools in a single, offline-first application with a focus on privacy, performance, and developer experience.
 
-**Current Snapshot (Dec 3, 2025)**
-- 36 of 40 tools implemented (90%) (see `Tool.swift`)
-- Phase 9 in progress; cURL → Code, SVG → CSS, and Certificate Inspector shipped
+**Current Snapshot (Dec 4, 2025)**
+- 37 of 40 tools implemented (92.5%) (see `Tool.swift`)
+- Phase 9 in progress; cURL → Code, SVG → CSS, Certificate Inspector, and IP Utilities shipped
 - 375+ service tests authored
 - Release automation workflow ✅ complete
 
@@ -655,11 +655,18 @@ PetruUtils/
 ### Additional Tools (Optional/Phase 2)
 
 #### 3.36 IP Address Tools
-**Status**: 🔲 Planned
-- IP to binary/hex conversion
-- CIDR calculator
-- Subnet calculator
-- IP validation (IPv4/IPv6)
+**Status**: ✅ IMPLEMENTED
+
+**Features**:
+- CIDR notation parsing and calculation ✅
+- Subnet calculator (network, broadcast, first/last host) ✅
+- Subnet mask and wildcard mask calculation ✅
+- IP to binary/hex conversion ✅
+- IP validation (IPv4) ✅
+- IP classification (Class A/B/C/D/E) ✅
+- Private/public IP detection ✅
+- Subnet division calculator ✅
+- Common subnet masks reference table ✅
 
 #### 3.37 Base32 Encoder/Decoder
 **Status**: ✅ IMPLEMENTED
