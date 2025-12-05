@@ -4,4 +4,5 @@
 
 ## Quick Context
 
-Read all Markdown files in the root folder to understand the product specs.
+- `README.md` - Project overview and current status
+- `AGENTS.md` - Development guidelines and AI agent instructions

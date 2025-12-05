@@ -14,9 +14,7 @@
 
 1. **Read these files first** (in order):
    - `README.md` - Project overview and current status
-   - `SPEC.md` - Complete technical specification
-   - `IMPLEMENTATION_SUMMARY.md` - What's been built
-   - `PHASE5_PREFERENCES_PLAN.md` - Detailed Phase 5 plans
+   - `AGENTS.md` - This file (development guidelines)
 
 2. **Architecture Pattern**: MVVM with Service Layer
 
@@ -48,6 +46,8 @@ PetruUtils/
 │   │   ├── HashService.swift
 │   │   ├── UUIDService.swift
 │   │   ├── QRCodeService.swift
+│   │   ├── PreferencesManager.swift
+│   │   ├── HistoryManager.swift
 │   │   └── ClipboardMonitor.swift
 │   ├── Views/                     # SwiftUI views
 │   │   ├── JWTView.swift
@@ -56,11 +56,13 @@ PetruUtils/
 │   │   ├── HashView.swift
 │   │   ├── UUIDView.swift
 │   │   ├── QRCodeView.swift
+│   │   ├── PreferencesView.swift
 │   │   └── Components/            # Reusable components
 │   │       ├── CodeBlockView.swift
 │   │       ├── FocusableTextEditor.swift
 │   │       └── SyntaxHighlightedText.swift
 │   └── Utilities/
+│       ├── FileExportImport.swift
 │       └── Extensions/
 │           └── Font+Extensions.swift
 ├── PetruUtilsTests/               # Unit tests
@@ -70,6 +72,7 @@ PetruUtils/
 │   ├── HashServiceTests.swift     (30+ tests)
 │   ├── UUIDServiceTests.swift     (35+ tests)
 │   ├── QRCodeServiceTests.swift   (25+ tests)
+│   ├── HistoryManagerTests.swift  (8 tests)
 │   └── ClipboardMonitorTests.swift (35+ tests)
 └── PetruUtilsUITests/             # UI tests (currently disabled)
 ```
@@ -222,7 +225,6 @@ switch selection {
 - Add tool to `README.md` "Implemented Tools" section
 - Update test count
 - Update percentage complete
-- Mark in `SPEC.md` with ✅
 
 ---
 
@@ -304,7 +306,7 @@ ScrollView {
 ### Before Starting Work
 
 1. Read relevant documentation
-2. Check `SPEC.md` for tool specifications
+2. Check `README.md` for tool specifications
 3. Look at similar existing tools for patterns
 4. Run tests to ensure baseline: `xcodebuild test -scheme PetruUtils`
 
@@ -377,43 +379,41 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - Color Converter
 - JSON ↔ YAML
 - JSON ↔ CSV
-- Markdown ↔ HTML (remaining converter work: cURL→Code + SVG→CSS listed in priorities)
+- Markdown ↔ HTML
 
-### 🔄 Phase 4: Advanced Tools (In Progress)
+### ✅ Phase 4: Advanced Tools (Complete)
 
-- RegExp Tester ✅
-- Text Diff/Compare ✅
-- XML Formatter ✅
-- HTML Formatter ✅
-- CSS Formatter ✅ (SCSS/LESS conversion + prefixing pending)
-- SQL Formatter ✅
-- JSON Formatter ✅ (tree view + JSONPath breadcrumbs pending)
-- JavaScript Formatter ✅
+- RegExp Tester
+- Text Diff/Compare
+- XML Formatter
+- HTML Formatter
+- CSS Formatter (SCSS/LESS conversion + prefixing pending)
+- SQL Formatter
+- JSON Formatter (tree view + JSONPath breadcrumbs pending)
+- JavaScript Formatter
 
-### ✅ Phase 5: Polish & Preferences
+### ✅ Phase 5: Polish & Preferences (Complete)
 
-See `PHASE5_SUMMARY.md` for complete details
+- Preferences panel with 6 categories
+- App icon specification
+- History & favorites
+- Performance optimization
+- Clipboard auto-switch wiring
+- GitHub Action release workflow
 
-- Preferences panel with 6 categories ✅
-- App icon & branding (spec complete, icon implementation later)
-- History & favorites ✅
-- Performance optimization ✅
-- Clipboard auto-switch wiring ✅
-- GitHub Action release workflow ✅
-
-### ✅ Phase 6: Text Utilities
+### ✅ Phase 6: Text Utilities (Complete)
 
 - Line Sorter
 - Line Deduplicator
 - Text Replacer
 - String Inspector
 
-### ✅ Phase 7: Encoders & Generators
+### ✅ Phase 7: Encoders & Generators (Complete)
 
 - HTML Entity Encoder/Decoder
 - Lorem Ipsum Generator
 
-### ✅ Phase 8: Inspectors & Generators
+### ✅ Phase 8: Inspectors & Generators (Complete)
 
 - URL Parser
 - Random String Generator
@@ -422,7 +422,7 @@ See `PHASE5_SUMMARY.md` for complete details
 - Cron Expression Parser
 - JSON Path Tester
 
-### 🔲 Phase 9: Remaining Utilities
+### 🔄 Phase 9: Remaining Utilities (In Progress)
 
 - JavaScript Formatter ✅
 - cURL → Code Converter ✅
@@ -439,10 +439,10 @@ See `PHASE5_SUMMARY.md` for complete details
 - CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
 - JWT Debugger RSA/ECDSA/PS algorithm support with public-key inputs and claim validation indicators
 
-### ✅ Phase 11: Release Automation
+### ✅ Phase 11: Release Automation (Complete)
 
-- GitHub Action workflow to build/test the macOS app and attach artifacts when a version tag is pushed ✅
-- Code signing and notarization guide provided in `SIGNING_NOTARIZATION.md` (implementation optional)
+- GitHub Action workflow to build/test the macOS app and attach artifacts when a version tag is pushed
+- Code signing and notarization guide provided in `SIGNING_NOTARIZATION.md`
 
 ---
 
@@ -450,17 +450,17 @@ See `PHASE5_SUMMARY.md` for complete details
 
 ### Color Conversion
 
-**Problem**: SwiftUI `Color` to `NSColor` conversion can cause infinite recursion  
+**Problem**: SwiftUI `Color` to `NSColor` conversion can cause infinite recursion
 **Solution**: Use simple system color mapping only (see `QRCodeView.swift` for example)
 
 ### Clipboard Monitoring
 
-**Issue**: Some tests fail due to detection being too eager  
+**Issue**: Some tests fail due to detection being too eager
 **Status**: Service works, tests need tuning
 
 ### UI Tests
 
-**Status**: Disabled - focus on service-level unit tests only  
+**Status**: Disabled - focus on service-level unit tests only
 **Reason**: Faster development, better coverage for business logic
 
 ### Import Order
@@ -481,17 +481,17 @@ import Foundation     // Always
 
 ### What to Test
 
-✅ All service business logic  
-✅ Error conditions  
-✅ Edge cases (empty, very long, Unicode)  
-✅ Roundtrip operations (encode → decode → verify)  
-✅ Known test vectors  
+✅ All service business logic
+✅ Error conditions
+✅ Edge cases (empty, very long, Unicode)
+✅ Roundtrip operations (encode → decode → verify)
+✅ Known test vectors
 ✅ Boundary conditions
 
 ### What NOT to Test
 
-❌ SwiftUI view rendering (too brittle)  
-❌ Trivial getters/setters  
+❌ SwiftUI view rendering (too brittle)
+❌ Trivial getters/setters
 ❌ Third-party framework behavior
 
 ### Test Quality Standards
@@ -504,19 +504,64 @@ import Foundation     // Always
 
 ---
 
-## Documentation Updates
+## App Icon Specification
 
-### Always Update These Files
+### Design Concept
 
-1. **README.md** - Add to "Implemented Tools", update test count
-2. **SPEC.md** - Mark tool as ✅ in appropriate phase
-3. **IMPLEMENTATION_SUMMARY.md** - If adding major features
+**Primary Concept**: Developer Toolbox
+- Central icon: Wrench + Code Brackets
+- Color scheme: Blue/Purple gradient (tech-focused)
+- Style: Modern, flat design with subtle depth
+- Mood: Professional, trustworthy, developer-friendly
 
-### Version Control
+### Required Sizes (macOS)
 
-- Phase completion should update all docs
-- Keep README.md "Test Status" current
-- Update "Last Updated" dates
+- 16x16 (@1x, @2x)
+- 32x32 (@1x, @2x)
+- 128x128 (@1x, @2x)
+- 256x256 (@1x, @2x)
+- 512x512 (@1x, @2x)
+- 1024x1024 (@1x, @2x)
+
+### Color Palette
+
+- **Primary Blue**: `#007AFF` (iOS/macOS system blue)
+- **Dark Blue**: `#0051D5`
+- **Purple Accent**: `#5856D6`
+- **Background**: White or light gray gradient
+
+### Design Guidelines
+
+**Do's**:
+- Keep it simple and recognizable at small sizes
+- Use clear, bold shapes
+- Maintain visual consistency with macOS design language
+- Test at all sizes (especially 16x16)
+
+**Don'ts**:
+- Don't use too much detail
+- Avoid text or small typography
+- Don't use more than 3-4 colors
+- Avoid photorealistic effects
+
+---
+
+## Preferences System
+
+### Categories
+
+1. **Appearance**: Theme, fonts, icon size
+2. **Behavior**: Default tool, auto-clear, window memory
+3. **Clipboard**: Monitoring, notifications, intervals
+4. **Formats & Defaults**: Base64, hash, UUID, QR, line breaks
+5. **History**: Enable/disable, retention, limits
+6. **Advanced**: File size limits, debug logging
+
+### Key Files
+
+- `Services/PreferencesManager.swift` - Manages all preferences
+- `Services/HistoryManager.swift` - Tracks tool usage, favorites, history
+- `Views/PreferencesView.swift` - Preferences UI (⌘,)
 
 ---
 
@@ -529,7 +574,7 @@ import Foundation     // Always
 3. Create `Tests/[Tool]ServiceTests.swift` (strictly necessary unit tests)
 4. Create `Views/[Tool]View.swift`
 5. Add case to `ContentView.swift` switch
-6. Update README.md and SPEC.md
+6. Update README.md
 7. Run tests and verify build
 
 ### Fix a Bug
@@ -542,77 +587,10 @@ import Foundation     // Always
 
 ### Add a Preference
 
-1. Check `PHASE5_PREFERENCES_PLAN.md` for spec
-2. Add key to PreferencesManager (when created)
-3. Add UI to PreferencesView
-4. Update relevant tools to read preference
-5. Test persistence across app restarts
-
----
-
-## Resources
-
-### Project Documentation
-
-- [SPEC.md](SPEC.md) - Complete specification
-- [README.md](README.md) - Overview and status
-- [PHASE5_PREFERENCES_PLAN.md](PHASE5_PREFERENCES_PLAN.md) - Preferences details
-- [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - What's built
-
-### External References
-
-- [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/macos)
-- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui)
-- [Swift Testing Guide](https://developer.apple.com/documentation/testing)
-- [CryptoKit](https://developer.apple.com/documentation/cryptokit)
-
-### Inspiration
-
-- [DevUtils](https://devutils.com) - Original inspiration for the project
-
----
-
-## Communication Protocol
-
-### When Starting Work
-
-1. Announce which tool/feature you're implementing
-2. Check if it's in the current phase priority
-3. Read the SPEC.md section for that tool
-
-### During Development
-
-1. Follow the checklist above
-2. Run tests frequently
-3. Keep code consistent with existing patterns
-
-### When Completing Work
-
-1. Run full test suite
-2. Update all relevant documentation
-3. Verify build succeeds
-4. Report test count and pass rate
-5. Note any issues or deviations from spec
-
----
-
-## Success Metrics
-
-### For Each Tool
-
-- ✅ Unit tests passing
-- ✅ No compiler warnings
-- ✅ Follows existing UI patterns
-- ✅ Documentation updated
-- ✅ Build succeeds
-
-### For Each Phase
-
-- ✅ All planned tools implemented
-- ✅ All tests passing (100%)
-- ✅ No known bugs
-- ✅ Documentation complete
-- ✅ Ready for next phase
+1. Add key to PreferencesManager
+2. Add UI to PreferencesView
+3. Update relevant tools to read preference
+4. Test persistence across app restarts
 
 ---
 
@@ -635,41 +613,27 @@ import Foundation     // Always
 
 ---
 
-## Getting Help
-
-### Understanding the Project
-
-1. Start with README.md for overview
-2. Check SPEC.md for detailed requirements
-3. Look at similar existing tools for patterns
-4. Review test files to understand expected behavior
-
-### Implementation Questions
-
-1. Check PHASE5_PREFERENCES_PLAN.md for preferences
-2. Look at Service files for business logic patterns
-3. Review View files for UI patterns
-4. Check existing tests for testing patterns
-
----
-
 ## Project Vision
 
 **End Goal**: A comprehensive, privacy-focused, offline developer toolbox with 40+ utilities that developers use daily. Think "DevUtils" but open and extensible.
 
-**Current Progress**: ~82.5% complete (33 of 40 tools)
+**Current Progress**: ~92.5% complete (37 of 40 tools)
 
-**Next Milestone**: Ship remaining converters/advanced utilities (cURL → code, SVG → CSS, Certificate Inspector, etc.) and add release automation.
-
-**Long-term**: Finish Phase 5 polish items (release automation), deliver remaining inspector/generator tools, then continue with preferences/performance refinements.
+**Next Milestone**: Ship remaining utilities (ASCII Art generator, Bcrypt helper, TOTP generator) and complete Phase 10 enhancements.
 
 ---
 
-_This guide is maintained by the development team and should be updated as the project evolves. Last updated: November 2025_
+## External References
+
+- [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/macos)
+- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui)
+- [Swift Testing Guide](https://developer.apple.com/documentation/testing)
+- [CryptoKit](https://developer.apple.com/documentation/cryptokit)
+
+### Inspiration
+
+- [DevUtils](https://devutils.com) - Original inspiration for the project
 
 ---
 
-## Current Priorities (December 2025)
-
-1. **Phase 9 – Remaining Utilities**: Ship cURL → Code converter, SVG → CSS converter, Certificate Inspector, IP utilities, ASCII Art generator, Bcrypt helper, and TOTP generator.
-2. **Phase 10 – Enhancements**: Add JSON Formatter tree view/breadcrumbs/line numbers, extend CSS Formatter to SCSS/LESS + auto-prefixing, and implement RSA/ECDSA/PS support in the JWT Debugger with public-key inputs.
+_This guide is maintained by the development team and should be updated as the project evolves. Last updated: December 2025_
