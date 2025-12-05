@@ -18,118 +18,177 @@ struct Base64View: View {
     
     private var toolbar: some View {
         HStack {
-            Picker("Mode", selection: $vm.mode) {
+            Text("Base64 Converter")
+                .font(.headline)
+            
+            Spacer()
+            
+            Picker("", selection: $vm.mode) {
                 Text("Encode").tag(Base64Mode.encode)
                 Text("Decode").tag(Base64Mode.decode)
             }
             .pickerStyle(.segmented)
-            .frame(width: 200)
+            .labelsHidden()
+            .frame(width: 150)
             
-            Picker("Variant", selection: $vm.variant) {
+            Picker("", selection: $vm.variant) {
                 Text("Standard").tag(Base64Service.Base64Variant.standard)
                 Text("URL-Safe").tag(Base64Service.Base64Variant.urlSafe)
             }
             .pickerStyle(.menu)
-            
-            Spacer()
+            .labelsHidden()
+            .frame(width: 100)
             
             Button("Process") { vm.process() }
                 .keyboardShortcut(.return, modifiers: [.command])
             
             Button("Clear") { vm.clear() }
                 .keyboardShortcut("k", modifiers: [.command])
-            
-            Button("Copy Output") { vm.copyOutput() }
-                .keyboardShortcut("c", modifiers: [.command, .shift])
-                .disabled(vm.output.isEmpty)
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(vm.mode == .encode ? "Input Text" : "Base64 Input")
-                .font(.headline)
-            
-            FocusableTextEditor(text: $vm.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                .background(.background)
-            
-            HStack {
-                if !vm.input.isEmpty {
-                    Text("\(vm.input.count) characters")
-                        .foregroundStyle(.secondary)
-                        .font(.caption)
-                }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: vm.mode == .encode ? "text.alignleft" : "textformat.123", 
+                              title: vm.mode == .encode ? "Input Text" : "Base64 Input", 
+                              color: .blue)
+                
+                FocusableTextEditor(text: $vm.input)
+                    .frame(minHeight: 200)
+                    .padding(4)
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    .font(.system(.body, design: .monospaced))
+                    .background(.background)
+                
+                HStack {
+                    if !vm.input.isEmpty {
+                        Text("\(vm.input.count) characters")
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    }
 
-                Spacer()
+                    Spacer()
+                }
 
                 if let error = vm.errorMessage {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.callout)
-                        .textSelection(.enabled)
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                            .textSelection(.enabled)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
                 }
-            }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                if vm.mode == .encode {
-                    Text("Hello, World! → SGVsbG8sIFdvcmxkIQ==")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-                } else {
-                    Text("SGVsbG8sIFdvcmxkIQ== → Hello, World!")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    if vm.mode == .encode {
+                        Text("Hello, World! → SGVsbG8sIFdvcmxkIQ==")
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(4)
+                    } else {
+                        Text("SGVsbG8sIFdvcmxkIQ== → Hello, World!")
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(4)
+                    }
                 }
+                .padding(.top, 8)
+                
+                Spacer()
             }
-            .padding(.top, 8)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(vm.mode == .encode ? "Base64 Output" : "Decoded Text")
-                .font(.headline)
-            
-            CodeBlock(text: vm.output)
-            
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                if !vm.output.isEmpty {
-                    if vm.mode == .encode {
-                        Text("\(vm.output.count) characters")
-                            .foregroundStyle(.secondary)
-                            .font(.caption)
-                    } else {
-                        Text("\(vm.output.count) characters")
-                            .foregroundStyle(.secondary)
-                            .font(.caption)
-                    }
-                }
-                
+                Text(vm.mode == .encode ? "Base64 Output" : "Decoded Text")
+                    .font(.headline)
                 Spacer()
-                
-                if vm.isValidBase64 && vm.mode == .decode {
-                    HStack(spacing: 4) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                        Text("Valid Base64")
-                            .foregroundStyle(.green)
-                            .font(.caption)
-                    }
+                if !vm.output.isEmpty {
+                    Button("Copy") { vm.copyOutput() }
+                        .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
+            .padding()
+            
+            Divider()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    if !vm.output.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                             sectionHeader(icon: vm.mode == .encode ? "textformat.123" : "text.alignleft", 
+                                          title: "Result", 
+                                          color: .green)
+                            
+                            CodeBlock(text: vm.output)
+                            
+                            HStack {
+                                Text("\(vm.output.count) characters")
+                                    .foregroundStyle(.secondary)
+                                    .font(.caption)
+                                
+                                Spacer()
+                                
+                                if vm.isValidBase64 && vm.mode == .decode {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.green)
+                                        Text("Valid Base64")
+                                            .foregroundStyle(.green)
+                                            .font(.caption)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 12) {
+                            Image(systemName: vm.mode == .encode ? "textformat.123" : "text.alignleft")
+                                .font(.system(size: 48))
+                                .foregroundStyle(.secondary)
+                            Text(vm.mode == .encode ? "Enter text to encode" : "Enter Base64 to decode")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.top, 40)
+                    }
+                }
+                .padding()
+            }
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -191,6 +250,3 @@ enum Base64Mode {
     case encode
     case decode
 }
-
-// MARK: - Preview
-

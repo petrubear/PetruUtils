@@ -18,20 +18,8 @@ struct HashView: View {
     
     private var toolbar: some View {
         HStack(spacing: 16) {
-            // Algorithm picker
-            Picker("Algorithm", selection: $vm.algorithm) {
-                ForEach(HashService.HashAlgorithm.allCases) { algo in
-                    Text(algo.displayName).tag(algo)
-                }
-            }
-            .pickerStyle(.menu)
-            .frame(width: 140)
-            
-            Divider().frame(height: 20)
-            
-            // HMAC toggle
-            Toggle("HMAC Mode", isOn: $vm.isHMACMode)
-                .toggleStyle(.switch)
+            Text("Hash Generator")
+                .font(.headline)
             
             Spacer()
             
@@ -44,179 +32,248 @@ struct HashView: View {
                 vm.clear()
             }
             .keyboardShortcut("k", modifiers: [.command])
-            
-            Button("Copy Output") {
-                vm.copyOutput()
-            }
-            .keyboardShortcut("c", modifiers: [.command, .shift])
-            .disabled(vm.output.isEmpty)
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Input")
-                .font(.headline)
-            
-            FocusableTextEditor(text: $vm.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                .background(.background)
-            
-            if vm.isHMACMode {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("HMAC Secret Key")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.quote", title: "Input Text", color: .blue)
+                
+                FocusableTextEditor(text: $vm.input)
+                    .frame(minHeight: 150)
+                    .padding(4)
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    .font(.system(.body, design: .monospaced))
+                
+                HStack {
+                    if !vm.input.isEmpty {
+                        Text("\(vm.input.count) characters")
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Algorithm
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Algorithm")
+                            .font(.subheadline.weight(.medium))
+                        
+                        Picker("", selection: $vm.algorithm) {
+                            ForEach(HashService.HashAlgorithm.allCases) { algo in
+                                Text(algo.displayName).tag(algo)
+                            }
+                        }
+                        .labelsHidden()
+                    }
                     
-                    SecureField("Enter secret key", text: $vm.hmacKey)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(.body, design: .monospaced))
-                }
-            }
-            
-            HStack {
-                if !vm.input.isEmpty {
-                    Text("\(vm.input.count) characters")
-                        .foregroundStyle(.secondary)
-                        .font(.caption)
-                }
-
-                Spacer()
-
-                if let error = vm.errorMessage {
-                    HStack(spacing: 4) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
-                        Text(error)
-                            .foregroundStyle(.orange)
-                            .font(.callout)
+                    Divider()
+                    
+                    // HMAC
+                    VStack(alignment: .leading, spacing: 8) {
+                        Toggle("HMAC Mode", isOn: $vm.isHMACMode)
+                            .toggleStyle(.switch)
+                        
+                        if vm.isHMACMode {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("HMAC Secret Key")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                
+                                SecureField("Enter secret key", text: $vm.hmacKey)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.system(.body, design: .monospaced))
+                            }
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(8)
+                        }
                     }
                 }
-            }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("MD5: hello → 5d41402abc4b2a76b9719d911017c592")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("SHA-256: hello → 2cf24dba5fb0a30e...")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                }
+                
+                Spacer()
             }
-            .padding(.top, 8)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Hash Output")
-                    .font(.headline)
-                
-                Spacer()
-                
-                if !vm.output.isEmpty {
-                    Text("\(vm.selectedAlgorithmInfo)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Primary Output
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        sectionHeader(icon: "number.square", title: "Output", color: .green)
+                        Spacer()
+                        if !vm.output.isEmpty {
+                            Text(vm.selectedAlgorithmInfo)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            
+                            Button(action: { vm.copyOutput() }) {
+                                Label("Copy", systemImage: "doc.on.doc")
+                                    .font(.caption)
+                            }
+                            .keyboardShortcut("c", modifiers: [.command, .shift])
+                        }
+                    }
+                    
+                    if !vm.output.isEmpty {
+                        Text(vm.output)
+                            .font(.system(.body, design: .monospaced))
+                            .textSelection(.enabled)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(8)
+                    } else {
+                        Text("Enter text to generate hash")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(8)
+                    }
                 }
-            }
-            
-            CodeBlock(text: vm.output)
-            
-            // All algorithms output
-            if vm.showAllAlgorithms && !vm.input.isEmpty && vm.errorMessage == nil {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
-                        ForEach(HashService.HashAlgorithm.allCases) { algo in
-                            if algo != vm.algorithm {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    HStack {
-                                        Text(algo.displayName)
-                                            .font(.caption.weight(.semibold))
-                                            .foregroundStyle(.secondary)
-                                        
-                                        Spacer()
-                                        
-                                        Button(action: {
-                                            vm.copyHash(vm.allHashes[algo] ?? "")
-                                        }) {
-                                            Image(systemName: "doc.on.doc")
-                                                .font(.caption)
+                
+                // All Algorithms
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        sectionHeader(icon: "list.bullet", title: "All Algorithms", color: .orange)
+                        Spacer()
+                        Toggle("", isOn: $vm.showAllAlgorithms)
+                            .toggleStyle(.switch)
+                            .labelsHidden()
+                    }
+                    
+                    if vm.showAllAlgorithms && !vm.output.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(HashService.HashAlgorithm.allCases) { algo in
+                                if algo != vm.algorithm {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        HStack {
+                                            Text(algo.displayName)
+                                                .font(.caption.weight(.semibold))
+                                                .foregroundStyle(.secondary)
+                                            
+                                            Spacer()
+                                            
+                                            Button(action: {
+                                                vm.copyHash(vm.allHashes[algo] ?? "")
+                                            }) {
+                                                Image(systemName: "doc.on.doc")
+                                                    .font(.caption)
+                                            }
+                                            .buttonStyle(.plain)
                                         }
-                                        .buttonStyle(.plain)
+                                        
+                                        Text(vm.allHashes[algo] ?? "...")
+                                            .font(.system(.caption, design: .monospaced))
+                                            .textSelection(.enabled)
+                                            .padding(6)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .background(Color.secondary.opacity(0.1))
+                                            .cornerRadius(4)
                                     }
-                                    
-                                    Text(vm.allHashes[algo] ?? "")
-                                        .font(.system(.caption, design: .monospaced))
-                                        .textSelection(.enabled)
-                                        .padding(6)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .background(Color.secondary.opacity(0.1))
-                                        .cornerRadius(4)
                                 }
                             }
                         }
+                        .padding()
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
                     }
                 }
-                .frame(maxHeight: 200)
-            }
-            
-            HStack {
-                Toggle("Show all algorithms", isOn: $vm.showAllAlgorithms)
-                    .font(.caption)
+                
+                Divider()
+                
+                // Verification
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        sectionHeader(icon: "checkmark.shield", title: "Verify Hash", color: .teal)
+                        Spacer()
+                        Toggle("", isOn: $vm.verifyMode)
+                            .toggleStyle(.switch)
+                            .labelsHidden()
+                    }
+                    
+                    if vm.verifyMode {
+                        VStack(alignment: .leading, spacing: 12) {
+                            TextField("Paste hash to verify against input", text: $vm.verifyHash)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.system(.body, design: .monospaced))
+                            
+                            if let verifyResult = vm.verificationResult {
+                                HStack(spacing: 8) {
+                                    Image(systemName: verifyResult ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                        .font(.title3)
+                                        .foregroundStyle(verifyResult ? .green : .red)
+                                    
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(verifyResult ? "Hash Match" : "Hash Mismatch")
+                                            .font(.subheadline.weight(.semibold))
+                                            .foregroundStyle(verifyResult ? .green : .red)
+                                        
+                                        if !verifyResult {
+                                            Text("The provided hash does not match the current input.")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(verifyResult ? Color.green.opacity(0.05) : Color.red.opacity(0.05))
+                                .cornerRadius(8)
+                            }
+                        }
+                        .padding()
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
+                    }
+                }
                 
                 Spacer()
-                
-                if !vm.output.isEmpty {
-                    Button(action: {
-                        vm.verifyMode.toggle()
-                    }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: vm.verifyMode ? "checkmark.circle.fill" : "checkmark.circle")
-                            Text("Verify")
-                        }
-                        .font(.caption)
-                    }
-                }
             }
-            
-            if vm.verifyMode {
-                VStack(alignment: .leading, spacing: 8) {
-                    Divider()
-                    
-                    Text("Verify Hash")
-                        .font(.subheadline.weight(.semibold))
-                    
-                    TextField("Paste hash to verify", text: $vm.verifyHash)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(.body, design: .monospaced))
-                    
-                    if let verifyResult = vm.verificationResult {
-                        HStack(spacing: 4) {
-                            Image(systemName: verifyResult ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                .foregroundStyle(verifyResult ? .green : .red)
-                            Text(verifyResult ? "Hash matches!" : "Hash does not match")
-                                .foregroundStyle(verifyResult ? .green : .red)
-                                .font(.caption)
-                        }
-                    }
-                }
-                .padding(.top, 8)
-            }
+            .padding()
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
-// MARK: - ViewModel
+// MARK: - ViewModel (Unchanged)
 
 @MainActor
 final class HashViewModel: ObservableObject {
@@ -311,6 +368,3 @@ final class HashViewModel: ObservableObject {
         pasteboard.setString(text, forType: .string)
     }
 }
-
-// MARK: - Preview
-

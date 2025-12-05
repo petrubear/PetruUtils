@@ -9,40 +9,19 @@ struct UUIDView: View {
             toolbar
             Divider()
             
-            if vm.showV5Options {
-                v5OptionsPanel
-                Divider()
-            }
-            
-            ScrollView {
-                outputList
+            HSplitView {
+                inputPane
+                outputPane
             }
         }
     }
     
     private var toolbar: some View {
         HStack(spacing: 16) {
-            Picker("Version", selection: $vm.version) {
-                ForEach(UUIDService.UUIDVersion.allCases) { version in
-                    Text(version.rawValue).tag(version)
-                }
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 300)
-            .help(vm.version.description)
-            
-            Divider().frame(height: 20)
-            
-            Stepper("Count: \(vm.count)", value: $vm.count, in: 1...100)
-                .frame(width: 150)
+            Text("UUID/ULID Generator")
+                .font(.headline)
             
             Spacer()
-            
-            if vm.version == .v5 {
-                Button(vm.showV5Options ? "Hide Options" : "Show Options") {
-                    vm.showV5Options.toggle()
-                }
-            }
             
             Button("Generate") {
                 vm.generate()
@@ -58,145 +37,202 @@ struct UUIDView: View {
         .padding(.vertical, 8)
     }
     
-    private var v5OptionsPanel: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("UUID v5 Options")
-                    .font(.headline)
-                Spacer()
-            }
-            
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Namespace")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    
-                    Menu {
-                        Button("DNS") { vm.namespace = UUIDService.namespaceDNS }
-                        Button("URL") { vm.namespace = UUIDService.namespaceURL }
-                        Button("OID") { vm.namespace = UUIDService.namespaceOID }
-                        Button("X.500") { vm.namespace = UUIDService.namespaceX500 }
-                        Divider()
-                        Button("Custom...") { vm.useCustomNamespace = true }
-                    } label: {
-                        Text(vm.namespaceDisplayName)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(width: 200)
-                    
-                    if vm.useCustomNamespace {
-                        TextField("Custom namespace UUID", text: $vm.namespace)
-                            .textFieldStyle(.roundedBorder)
-                            .font(.system(.caption, design: .monospaced))
-                    }
-                }
+    private var inputPane: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .blue)
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Name")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    
-                    TextField("Enter name (e.g., example.com)", text: $vm.v5Name)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 300)
-                }
-            }
-        }
-        .padding()
-        .background(Color.secondary.opacity(0.05))
-    }
-    
-    private var outputList: some View {
-        VStack(spacing: 0) {
-            if !vm.generated.isEmpty {
-                // Header with format options
-                HStack {
-                    Text("\(vm.generated.count) generated")
-                        .font(.headline)
-                    
-                    Spacer()
-                    
-                    Menu("Format") {
-                        Button("Lowercase") { vm.applyFormat(.lowercase) }
-                        Button("Uppercase") { vm.applyFormat(.uppercase) }
-                        Button("With hyphens") { vm.applyFormat(.withHyphens) }
-                        Button("Without hyphens") { vm.applyFormat(.withoutHyphens) }
+                // Version & Count
+                VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Version")
+                            .font(.subheadline.weight(.medium))
+                        Picker("", selection: $vm.version) {
+                            ForEach(UUIDService.UUIDVersion.allCases) {
+                                version in
+                                Text(version.rawValue).tag(version)
+                            }
+                        }
+                        .labelsHidden()
+                        
+                        Text(vm.version.description)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     
-                    Button("Copy All") {
-                        vm.copyAll()
+                    Divider()
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text("Count: \(vm.count)")
+                                .font(.subheadline.weight(.medium))
+                            Spacer()
+                        }
+                        Stepper("", value: $vm.count, in: 1...100)
+                            .labelsHidden()
                     }
-                    .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
                 .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
                 
-                Divider()
-                
-                // UUID List
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(vm.generated.enumerated()), id: \.offset) { index, uuid in
-                        UUIDRow(uuid: uuid, index: index + 1) {
-                            vm.copy(uuid)
+                // v5 Options
+                if vm.version == .v5 {
+                    sectionHeader(icon: "link", title: "v5 Options", color: .purple)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Namespace")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            
+                            Menu {
+                                Button("DNS") { vm.namespace = UUIDService.namespaceDNS }
+                                Button("URL") { vm.namespace = UUIDService.namespaceURL }
+                                Button("OID") { vm.namespace = UUIDService.namespaceOID }
+                                Button("X.500") { vm.namespace = UUIDService.namespaceX500 }
+                                Divider()
+                                Button("Custom...") { vm.useCustomNamespace = true }
+                            } label: {
+                                Text(vm.namespaceDisplayName)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                            if vm.useCustomNamespace {
+                                TextField("Custom namespace UUID", text: $vm.namespace)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.system(.caption, design: .monospaced))
+                            }
                         }
                         
-                        if index < vm.generated.count - 1 {
-                            Divider()
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Name")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            
+                            TextField("Enter name (e.g., example.com)", text: $vm.v5Name)
+                                .textFieldStyle(.roundedBorder)
                         }
                     }
+                    .padding()
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(8)
                 }
-            } else {
-                VStack(spacing: 16) {
-                    Image(systemName: "number.square")
-                        .font(.system(size: 48))
-                        .foregroundStyle(.secondary)
-                    
-                    Text("Generate UUIDs or ULIDs")
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                    
-                    Text(vm.version.description)
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 400)
+                
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
                 }
-                .frame(maxHeight: .infinity)
-                .padding()
-            }
-            
-            if let error = vm.errorMessage {
-                Divider()
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
-                    Text(error)
-                        .foregroundStyle(.orange)
-                }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.orange.opacity(0.1))
-            }
-
-            // Help text at bottom
-            Spacer()
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("UUID v4: 550e8400-e29b-41d4-a716-446655440000")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("ULID: 01ARZ3NDEKTSV4RRFFQ69G5FAV")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                
+                Spacer()
             }
             .padding()
         }
     }
+    
+    private var outputPane: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Generated UUIDs")
+                    .font(.headline)
+                
+                Spacer()
+                
+                if !vm.generated.isEmpty {
+                    Menu {
+                        Button("Lowercase") { vm.applyFormat(.lowercase) }
+                        Button("Uppercase") { vm.applyFormat(.uppercase) }
+                        Button("With hyphens") { vm.applyFormat(.withHyphens) }
+                        Button("Without hyphens") { vm.applyFormat(.withoutHyphens) }
+                    } label: {
+                        Label("Format", systemImage: "textformat")
+                    }
+                    .menuStyle(.borderlessButton)
+                    .fixedSize()
+                    
+                    Button(action: { vm.copyAll() }) {
+                        Label("Copy All", systemImage: "doc.on.doc")
+                    }
+                    .keyboardShortcut("c", modifiers: [.command, .shift])
+                }
+            }
+            .padding()
+            
+            Divider()
+            
+            if vm.generated.isEmpty {
+                 VStack(spacing: 16) {
+                    Image(systemName: "number.square")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    
+                    Text("Click Generate to create UUIDs")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                    
+                    Text("Supports v1, v4, v5 UUIDs and ULIDs")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxHeight: .infinity)
+            } else {
+                // UUID List
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(vm.generated.enumerated()), id: \.offset) {
+                            index, uuid in
+                            UUIDRow(uuid: uuid, index: index + 1) {
+                                vm.copy(uuid)
+                            }
+                            
+                            if index < vm.generated.count - 1 {
+                                Divider()
+                            }
+                        }
+                    }
+                    .background(Color.white)
+                }
+            }
+            
+            // Footer info
+            Divider()
+            HStack(spacing: 16) {
+                Text("Examples:")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("v4: 550e8400-e29b...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("ULID: 01ARZ3NDEK...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(8)
+            .background(Color.secondary.opacity(0.05))
+        }
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
+    }
 }
 
-// MARK: - UUID Row
+// MARK: - UUID Row (Unchanged logic, slight visual tweak)
 
 struct UUIDRow: View {
     let uuid: String
@@ -210,7 +246,7 @@ struct UUIDRow: View {
             Text("\(index).")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(width: 40, alignment: .trailing)
+                .frame(width: 30, alignment: .trailing)
             
             Text(uuid)
                 .font(.system(.body, design: .monospaced))
@@ -237,14 +273,15 @@ struct UUIDRow: View {
                 }
             }
             .buttonStyle(.plain)
-            .foregroundStyle(showCopied ? .green : .primary)
+            .foregroundStyle(showCopied ? .green : .blue)
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
+        .background(showCopied ? Color.green.opacity(0.05) : Color.clear)
     }
 }
 
-// MARK: - ViewModel
+// MARK: - ViewModel (Unchanged)
 
 @MainActor
 final class UUIDViewModel: ObservableObject {
@@ -319,6 +356,3 @@ final class UUIDViewModel: ObservableObject {
         generated = service.formatBulk(generated, as: format)
     }
 }
-
-// MARK: - Preview
-

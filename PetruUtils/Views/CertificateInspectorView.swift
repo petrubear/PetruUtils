@@ -32,76 +32,95 @@ struct CertificateInspectorView: View {
     }
 
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Certificate (PEM or DER)").font(.headline)
-
-            FocusableTextEditor(text: $viewModel.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-
-            HStack {
-                if !viewModel.input.isEmpty {
-                    Text("\(viewModel.input.count) characters")
-                        .font(.caption)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "doc.text.magnifyingglass", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Certificate (PEM or DER)")
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
+
+                    FocusableTextEditor(text: $viewModel.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+
+                    HStack {
+                        if !viewModel.input.isEmpty {
+                            Text("\(viewModel.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
                 }
+
+                if let error = viewModel.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .font(.callout)
+                            .foregroundStyle(.red)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
+
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Supported Formats")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("• PEM (-----BEGIN CERTIFICATE-----)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text("• DER (base64 encoded)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.leading, 4)
+
+                    Text("Example:")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 4)
+
+                    Text("""
+                    -----BEGIN CERTIFICATE-----
+                    MIIBkTCB+wIJAKHHCg...
+                    -----END CERTIFICATE-----
+                    """)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                
                 Spacer()
             }
-
-            if let error = viewModel.errorMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                    Text(error)
-                        .font(.callout)
-                        .foregroundStyle(.red)
-                }
-                .padding(8)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.red.opacity(0.1))
-                .cornerRadius(6)
-            }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Supported formats:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Text("• PEM (-----BEGIN CERTIFICATE-----)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Text("• DER (base64 encoded)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Text("\nExample:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 4)
-
-                Text("""
-                -----BEGIN CERTIFICATE-----
-                MIIBkTCB+wIJAKHHCg...
-                -----END CERTIFICATE-----
-                """)
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                    .padding(6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(4)
-            }
-
-            Spacer()
+            .padding()
         }
-        .padding()
     }
 
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
+            // Output Header
             HStack {
-                Text("Certificate Details").font(.headline)
+                Text("Certificate Details")
+                    .font(.headline)
                 Spacer()
                 if viewModel.certificateInfo != nil {
                     Button {
@@ -120,6 +139,9 @@ struct CertificateInspectorView: View {
                     .help("Copy certificate details (⌘⇧C)")
                 }
             }
+            .padding()
+            
+            Divider()
 
             if let info = viewModel.certificateInfo {
                 ScrollView {
@@ -130,10 +152,10 @@ struct CertificateInspectorView: View {
                         Divider()
 
                         // Subject section
-                        certificateSection(title: "Subject", content: info.formattedSubject)
+                        certificateSection(title: "Subject", content: info.formattedSubject, icon: "person.text.rectangle", color: .blue)
 
                         // Issuer section
-                        certificateSection(title: "Issuer", content: info.formattedIssuer)
+                        certificateSection(title: "Issuer", content: info.formattedIssuer, icon: "building.columns", color: .purple)
 
                         Divider()
 
@@ -158,21 +180,29 @@ struct CertificateInspectorView: View {
                         // Additional details
                         detailsSection(info)
                     }
-                    .padding(8)
+                    .padding()
+                }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "doc.text.magnifyingglass")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Paste a certificate and click Inspect")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-            } else {
-                Text("Paste a certificate and click Inspect")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
             }
-
-            Spacer(minLength: 0)
         }
-        .padding()
+    }
+
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.headline)
+        }
     }
 
     private func certificateStatusSection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
@@ -180,11 +210,11 @@ struct CertificateInspectorView: View {
             HStack(spacing: 12) {
                 if info.isExpired {
                     Label("EXPIRED", systemImage: "xmark.circle.fill")
-                        .font(.headline)
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(.red)
                 } else {
                     Label("VALID", systemImage: "checkmark.circle.fill")
-                        .font(.headline)
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(.green)
                 }
 
@@ -192,124 +222,132 @@ struct CertificateInspectorView: View {
                     Label("CA", systemImage: "building.columns.fill")
                         .font(.subheadline)
                         .foregroundStyle(.blue)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(4)
                 }
 
                 if info.isSelfSigned {
                     Label("Self-Signed", systemImage: "arrow.triangle.2.circlepath")
                         .font(.subheadline)
                         .foregroundStyle(.orange)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(4)
                 }
             }
 
             if let days = info.daysUntilExpiration {
-                Text("Expires in \(days) days")
+                Text(days > 0 ? "Expires in \(days) days" : "Expired \(abs(days)) days ago")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(days > 0 ? Color.secondary : Color.red)
             }
         }
-        .padding(.vertical, 4)
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(info.isExpired ? Color.red.opacity(0.05) : Color.green.opacity(0.05))
+        .cornerRadius(8)
     }
 
-    private func certificateSection(title: String, content: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.subheadline)
-                .fontWeight(.semibold)
+    private func certificateSection(title: String, content: String, icon: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            sectionHeader(icon: icon, title: title, color: color)
+            
             Text(content)
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(.primary)
                 .textSelection(.enabled)
+                .padding(8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(6)
         }
     }
 
     private func validitySection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Validity Period")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            sectionHeader(icon: "calendar", title: "Validity Period", color: .orange)
 
             HStack {
-                Text("From:")
-                    .foregroundStyle(.secondary)
-                Text(info.validFrom, style: .date)
-                    .font(.system(.body, design: .monospaced))
-                Text(info.validFrom, style: .time)
-                    .font(.system(.body, design: .monospaced))
-            }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Not Before")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(info.validFrom, style: .date)
+                        .font(.system(.body, design: .monospaced))
+                    Text(info.validFrom, style: .time)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            HStack {
-                Text("To:")
-                    .foregroundStyle(.secondary)
-                Text(info.validTo, style: .date)
-                    .font(.system(.body, design: .monospaced))
-                Text(info.validTo, style: .time)
-                    .font(.system(.body, design: .monospaced))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Not After")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(info.validTo, style: .date)
+                        .font(.system(.body, design: .monospaced))
+                    Text(info.validTo, style: .time)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .padding(8)
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(6)
         }
     }
 
     private func publicKeySection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Public Key")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            sectionHeader(icon: "key", title: "Public Key Info", color: .green)
 
-            HStack {
-                Text("Algorithm:")
-                    .foregroundStyle(.secondary)
-                Text(info.publicKeyAlgorithm)
-                    .font(.system(.body, design: .monospaced))
-            }
-
-            if let keySize = info.publicKeySize {
-                HStack {
-                    Text("Key Size:")
-                        .foregroundStyle(.secondary)
-                    Text("\(keySize) bits")
-                        .font(.system(.body, design: .monospaced))
+            VStack(alignment: .leading, spacing: 8) {
+                resultRow(label: "Algorithm", value: info.publicKeyAlgorithm)
+                if let keySize = info.publicKeySize {
+                    resultRow(label: "Key Size", value: "\(keySize) bits")
                 }
+                resultRow(label: "Signature Algorithm", value: info.signatureAlgorithm)
             }
-
-            HStack {
-                Text("Signature:")
-                    .foregroundStyle(.secondary)
-                Text(info.signatureAlgorithm)
-                    .font(.system(.body, design: .monospaced))
-            }
+            .padding(8)
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(6)
         }
     }
 
     private func extensionsSection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Extensions")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            sectionHeader(icon: "puzzlepiece", title: "Extensions", color: .teal)
 
-            if !info.subjectAlternativeNames.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Subject Alternative Names:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    ForEach(info.subjectAlternativeNames, id: \.self) { san in
-                        Text("• \(san)")
-                            .font(.system(.caption, design: .monospaced))
+            if !info.subjectAlternativeNames.isEmpty || !info.extendedKeyUsage.isEmpty {
+                if !info.subjectAlternativeNames.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Subject Alternative Names")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        ForEach(info.subjectAlternativeNames, id: \.self) { san in
+                            Text("• \(san)")
+                                .font(.system(.caption, design: .monospaced))
+                        }
+                    }
+                    .padding(.bottom, 4)
+                }
+
+                if !info.extendedKeyUsage.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Extended Key Usage")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        ForEach(info.extendedKeyUsage, id: \.self) { usage in
+                            Text("• \(usage)")
+                                .font(.system(.caption, design: .monospaced))
+                        }
                     }
                 }
-            }
-
-            if !info.extendedKeyUsage.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Extended Key Usage:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    ForEach(info.extendedKeyUsage, id: \.self) { usage in
-                        Text("• \(usage)")
-                            .font(.system(.caption, design: .monospaced))
-                    }
-                }
-            }
-
-            if info.subjectAlternativeNames.isEmpty && info.extendedKeyUsage.isEmpty {
+            } else {
                 Text("No extensions found")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -319,51 +357,63 @@ struct CertificateInspectorView: View {
 
     private func fingerprintsSection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Fingerprints")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            sectionHeader(icon: "fingerprint", title: "Fingerprints", color: .indigo)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text("SHA-1:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(info.sha1Fingerprint)
-                    .font(.system(size: 10, design: .monospaced))
-                    .textSelection(.enabled)
-            }
+            VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("SHA-1")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(info.sha1Fingerprint)
+                        .font(.system(size: 11, design: .monospaced))
+                        .textSelection(.enabled)
+                }
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text("SHA-256:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(info.sha256Fingerprint)
-                    .font(.system(size: 10, design: .monospaced))
-                    .textSelection(.enabled)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("SHA-256")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(info.sha256Fingerprint)
+                        .font(.system(size: 11, design: .monospaced))
+                        .textSelection(.enabled)
+                }
             }
+            .padding(8)
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(6)
         }
     }
 
     private func detailsSection(_ info: CertificateInspectorService.CertificateInfo) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Additional Details")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            sectionHeader(icon: "info.circle", title: "Technical Details", color: .gray)
 
-            HStack {
-                Text("Version:")
-                    .foregroundStyle(.secondary)
-                Text("v\(info.version)")
-                    .font(.system(.body, design: .monospaced))
+            VStack(alignment: .leading, spacing: 8) {
+                resultRow(label: "Version", value: "v\(info.version)")
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Serial Number")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(info.serialNumber)
+                        .font(.system(size: 11, design: .monospaced))
+                        .textSelection(.enabled)
+                }
             }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Serial Number:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(info.serialNumber)
-                    .font(.system(size: 11, design: .monospaced))
-                    .textSelection(.enabled)
-            }
+            .padding(8)
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(6)
+        }
+    }
+    
+    private func resultRow(label: String, value: String) -> some View {
+        HStack {
+            Text(label)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.system(.callout, design: .monospaced))
         }
     }
 }

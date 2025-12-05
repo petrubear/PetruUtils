@@ -8,9 +8,11 @@ struct URLParserView: View {
         VStack(spacing: 0) {
             toolbar
             Divider()
-            inputField
-            Divider()
-            outputPane
+            
+            HSplitView {
+                inputPane
+                outputPane
+            }
         }
     }
     
@@ -30,105 +32,190 @@ struct URLParserView: View {
         .padding(.vertical, 8)
     }
     
-    private var inputField: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                TextField("Enter URL (e.g., https://example.com:8080/path?key=value#fragment)", text: $vm.input, onCommit: { vm.parse() })
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
-
-                if let error = vm.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                }
-            }
-
-            // Help text
-            Text("Example: https://user:pass@example.com:8080/path?key=value&foo=bar#section")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 8)
-    }
-    
-    private var outputPane: some View {
+    private var inputPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if let parsed = vm.parsed {
-                    componentSection(title: "Components") {
-                        componentRow(label: "Scheme", value: parsed.scheme ?? "—")
-                        componentRow(label: "Host", value: parsed.host ?? "—")
-                        if let port = parsed.port {
-                            componentRow(label: "Port", value: String(port))
+                sectionHeader(icon: "link", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("URL to Parse")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 100)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                        componentRow(label: "Path", value: parsed.path ?? "—")
-                        if let user = parsed.user {
-                            componentRow(label: "User", value: user)
-                        }
-                        if let password = parsed.password {
-                            componentRow(label: "Password", value: "••••••")
-                        }
-                        componentRow(label: "Query", value: parsed.query ?? "—")
-                        componentRow(label: "Fragment", value: parsed.fragment ?? "—")
+                        Spacer()
+                    }
+                }
+
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .font(.callout)
+                            .foregroundStyle(.red)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
                     }
                     
-                    if !parsed.queryParameters.isEmpty {
-                        Divider()
-                        
-                        componentSection(title: "Query Parameters (\(parsed.queryParameters.count))") {
-                            ForEach(Array(parsed.queryParameters.enumerated()), id: \.offset) { _, param in
-                                HStack(alignment: .top, spacing: 8) {
-                                    Text(param.key)
-                                        .font(.system(.subheadline, design: .monospaced))
-                                        .foregroundStyle(.blue)
-                                        .frame(width: 120, alignment: .leading)
-                                    
-                                    Text("=")
-                                        .foregroundStyle(.secondary)
-                                    
-                                    Text(param.value.isEmpty ? "(empty)" : param.value)
-                                        .font(.system(.subheadline, design: .monospaced))
-                                        .textSelection(.enabled)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                                .padding(.vertical, 4)
-                            }
-                        }
-                    }
-                } else {
-                    VStack(spacing: 12) {
-                        Image(systemName: "link.circle")
-                            .font(.system(size: 48))
-                            .foregroundStyle(.secondary)
-                        Text("Enter a URL to parse")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Text("https://user:pass@example.com:8080/path?key=value&foo=bar#section")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
                 }
+                
+                Spacer()
             }
             .padding()
         }
     }
     
-    @ViewBuilder
-    private func componentSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.headline)
-            
-            VStack(alignment: .leading, spacing: 6) {
-                content()
+    private var outputPane: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text("Parsed Components")
+                    .font(.headline)
+                Spacer()
             }
-            .padding(.leading, 8)
+            .padding()
+            
+            Divider()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    if let parsed = vm.parsed {
+                        // Core Components
+                        VStack(alignment: .leading, spacing: 8) {
+                            sectionHeader(icon: "server.rack", title: "Components", color: .purple)
+                            
+                            VStack(alignment: .leading, spacing: 0) {
+                                componentRow(label: "Scheme", value: parsed.scheme ?? "—", icon: "globe")
+                                Divider().padding(.leading, 36)
+                                componentRow(label: "Host", value: parsed.host ?? "—", icon: "network")
+                                Divider().padding(.leading, 36)
+                                if let port = parsed.port {
+                                    componentRow(label: "Port", value: String(port), icon: "number")
+                                    Divider().padding(.leading, 36)
+                                }
+                                componentRow(label: "Path", value: parsed.path ?? "—", icon: "folder")
+                                
+                                if parsed.user != nil || parsed.password != nil {
+                                    Divider().padding(.leading, 36)
+                                    if let user = parsed.user {
+                                        componentRow(label: "User", value: user, icon: "person")
+                                    }
+                                    if let _ = parsed.password {
+                                        if parsed.user != nil { Divider().padding(.leading, 36) }
+                                        componentRow(label: "Password", value: "••••••", icon: "key")
+                                    }
+                                }
+                                
+                                Divider().padding(.leading, 36)
+                                componentRow(label: "Fragment", value: parsed.fragment ?? "—", icon: "number.square")
+                            }
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(8)
+                        }
+                        
+                        // Query Parameters
+                        if !parsed.queryParameters.isEmpty {
+                            VStack(alignment: .leading, spacing: 8) {
+                                sectionHeader(icon: "list.bullet", title: "Query Parameters (\(parsed.queryParameters.count))", color: .orange)
+                                
+                                VStack(spacing: 1) {
+                                    ForEach(Array(parsed.queryParameters.enumerated()), id: \.offset) { index, param in
+                                        HStack(alignment: .top, spacing: 8) {
+                                            Text(param.key)
+                                                .font(.system(.subheadline, design: .monospaced))
+                                                .foregroundStyle(.blue)
+                                                .frame(width: 120, alignment: .leading)
+                                            
+                                            Text("=")
+                                                .foregroundStyle(.secondary)
+                                            
+                                            Text(param.value.isEmpty ? "(empty)" : param.value)
+                                                .font(.system(.subheadline, design: .monospaced))
+                                                .textSelection(.enabled)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 8)
+                                        .background(index % 2 == 0 ? Color.secondary.opacity(0.02) : Color.clear)
+                                    }
+                                }
+                                .background(Color.secondary.opacity(0.05))
+                                .cornerRadius(8)
+                            }
+                        } else {
+                             VStack(alignment: .leading, spacing: 8) {
+                                sectionHeader(icon: "list.bullet", title: "Query Parameters", color: .orange)
+                                Text("No query parameters found")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .padding(.leading, 8)
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 12) {
+                            Image(systemName: "link.circle")
+                                .font(.system(size: 48))
+                                .foregroundStyle(.secondary)
+                            Text("Enter a URL to parse")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.top, 40)
+                    }
+                }
+                .padding()
+            }
         }
     }
     
-    @ViewBuilder
-    private func componentRow(label: String, value: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
+    }
+    
+    private func componentRow(label: String, value: String, icon: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 16)
+                .padding(.top, 2)
+            
             Text(label)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -139,6 +226,7 @@ struct URLParserView: View {
                 .textSelection(.enabled)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(12)
     }
 }
 
@@ -171,4 +259,3 @@ final class URLParserViewModel: ObservableObject {
         errorMessage = nil
     }
 }
-

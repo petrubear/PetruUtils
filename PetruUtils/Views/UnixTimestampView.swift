@@ -16,8 +16,8 @@ struct UnixTimestampView: View {
     }
     
     private var toolbar: some View {
-        HStack {
-            Text("Unix Timestamp Converter")
+        HStack(spacing: 12) {
+            Text("Unix Timestamp")
                 .font(.headline)
             
             Spacer()
@@ -27,7 +27,8 @@ struct UnixTimestampView: View {
                     Text(UnixTimestampService.timezoneName(tz)).tag(tz)
                 }
             }
-            .frame(width: 200)
+            .frame(width: 220)
+            .pickerStyle(.menu)
             
             Button("Now") { vm.useCurrentTimestamp() }
             
@@ -39,132 +40,183 @@ struct UnixTimestampView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Input")
-                .font(.headline)
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Unix Timestamp")
-                    .font(.subheadline.weight(.semibold))
-                TextField("e.g., 1704067200 or 1704067200000", text: $vm.input, onCommit: { vm.convert() })
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
-                Text("Auto-detects seconds or milliseconds")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            if let error = vm.errorMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.callout)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "clock.arrow.circlepath", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Unix Timestamp")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    
+                    TextField("e.g., 1704067200 or 1704067200000", text: $vm.input, onCommit: { vm.convert() })
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(.body, design: .monospaced))
+                    
+                    Text("Auto-detects seconds or milliseconds")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.secondary.opacity(0.05))
                 .cornerRadius(8)
-            }
+                
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Seconds: 1704067200 (Jan 1, 2024)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Milliseconds: 1704067200000")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Examples")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Seconds: 1704067200 (Jan 1, 2024)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("Milliseconds: 1704067200000")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(4)
+                }
+                
+                Spacer()
             }
-            .padding(.top, 8)
-
-            Spacer()
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Output")
-                    .font(.headline)
-                
                 if let result = vm.result {
-                    VStack(alignment: .leading, spacing: 12) {
-                        resultRow(title: "Timestamp (seconds)", value: String(result.timestamp), icon: "clock")
-                        resultRow(title: "Timestamp (milliseconds)", value: String(result.timestampMilliseconds), icon: "clock.fill")
+                    // Timestamps
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "number", title: "Timestamps", color: .purple)
                         
-                        Divider()
+                        VStack(alignment: .leading, spacing: 8) {
+                             resultRow(title: "Seconds", value: String(result.timestamp), icon: "clock")
+                             Divider()
+                             resultRow(title: "Milliseconds", value: String(result.timestampMilliseconds), icon: "clock.fill")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Date Formats
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "calendar", title: "Date Formats", color: .orange)
                         
-                        resultRow(title: "ISO 8601", value: result.iso8601, icon: "calendar")
-                        resultRow(title: "RFC 2822", value: result.rfc2822, icon: "envelope")
-                        resultRow(title: "Full", value: result.full, icon: "textformat")
-                        resultRow(title: "Long", value: result.long, icon: "textformat")
-                        resultRow(title: "Medium", value: result.medium, icon: "textformat")
-                        resultRow(title: "Short", value: result.short, icon: "textformat")
-                        resultRow(title: "Custom", value: result.custom, icon: "textformat")
-                        
-                        Divider()
+                        VStack(alignment: .leading, spacing: 8) {
+                            resultRow(title: "ISO 8601", value: result.iso8601, icon: "globe")
+                            Divider()
+                            resultRow(title: "RFC 2822", value: result.rfc2822, icon: "envelope")
+                            Divider()
+                            resultRow(title: "Full Date", value: result.full, icon: "calendar.badge.clock")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Relative Time
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "hourglass", title: "Relative Time", color: .green)
                         
                         HStack {
-                            Image(systemName: "clock.arrow.circlepath")
-                                .foregroundStyle(.blue)
-                            Text("Relative Time")
-                                .font(.subheadline.weight(.semibold))
-                            Spacer()
                             Text(result.relativeTime)
-                                .font(.system(.body, design: .monospaced))
-                                .foregroundStyle(.secondary)
+                                .font(.system(.title3, design: .rounded).weight(.medium))
+                                .padding()
+                            Spacer()
                         }
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Other Formats
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "text.alignleft", title: "Other Styles", color: .gray)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            resultRow(title: "Long", value: result.long, icon: "text.quote")
+                            Divider()
+                            resultRow(title: "Medium", value: result.medium, icon: "text.quote")
+                            Divider()
+                            resultRow(title: "Short", value: result.short, icon: "text.quote")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
                     }
                 } else {
                     VStack(spacing: 12) {
                         Image(systemName: "clock")
                             .font(.system(size: 48))
                             .foregroundStyle(.secondary)
-                        Text("Enter a Unix timestamp")
+                        Text("Enter a timestamp to convert")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, 40)
                 }
             }
             .padding()
         }
     }
     
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
+    }
+    
     @ViewBuilder
     private func resultRow(title: String, value: String, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundStyle(.green)
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Button(action: { vm.copyValue(value) }) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.caption)
-                }
-                .buttonStyle(.plain)
-                .help("Copy \(title)")
-            }
+        HStack {
+            Label(title, systemImage: icon)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .frame(width: 120, alignment: .leading)
             
             Text(value)
                 .font(.system(.body, design: .monospaced))
                 .textSelection(.enabled)
-                .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.secondary.opacity(0.1))
-                .cornerRadius(6)
+                
+            Button(action: { vm.copyValue(value) }) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .help("Copy \(title)")
         }
+        .padding(.vertical, 2)
     }
 }
 
-// MARK: - ViewModel
+// MARK: - ViewModel (Unchanged)
 
 @MainActor
 final class UnixTimestampViewModel: ObservableObject {
@@ -208,6 +260,3 @@ final class UnixTimestampViewModel: ObservableObject {
         pasteboard.setString(value, forType: .string)
     }
 }
-
-// MARK: - Preview
-
