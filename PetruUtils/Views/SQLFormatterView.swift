@@ -5,55 +5,21 @@ struct SQLFormatterView: View {
     @StateObject private var vm = SQLFormatterViewModel()
     
     var body: some View {
-        VStack(spacing: 0) {
-            toolbar
-            Divider()
-            HSplitView {
-                inputPane
-                outputPane
-            }
-        }
-    }
-    
-    private var toolbar: some View {
-        HStack(spacing: 12) {
-            Text("SQL Formatter").font(.headline)
-            Spacer()
-            
-            Button("Format") { vm.format() }.keyboardShortcut("f", modifiers: [.command])
-            Button("Minify") { vm.minify() }.keyboardShortcut("m", modifiers: [.command])
-            Button("Validate") { vm.validate() }.keyboardShortcut("v", modifiers: [.command])
-            Button("Clear") { vm.clear() }.keyboardShortcut("k", modifiers: [.command])
-        }
-        .padding(.horizontal).padding(.vertical, 8)
-    }
-    
-    private var inputPane: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                sectionHeader(icon: "cylinder", title: "Input SQL", color: .blue)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    FocusableTextEditor(text: $vm.input)
-                        .frame(minHeight: 200)
-                        .padding(4)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                        .font(.system(.body, design: .monospaced))
-                    
-                    HStack {
-                        if !vm.input.isEmpty {
-                            Text("\(vm.input.count) characters")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                    }
+        GenericTextToolView(
+            vm: vm,
+            title: "SQL Formatter",
+            inputTitle: "Input SQL",
+            outputTitle: "Output",
+            inputIcon: "cylinder",
+            outputIcon: "cylinder.split.1x2",
+            toolbarContent: {
+                HStack(spacing: 12) {
+                    Button("Format") { vm.format() }.keyboardShortcut("f", modifiers: [.command])
+                    Button("Minify") { vm.minify() }.keyboardShortcut("m", modifiers: [.command])
+                    Button("Validate") { vm.validate() }.keyboardShortcut("v", modifiers: [.command])
                 }
-                
-                Divider()
-                
-                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
-                
+            },
+            configContent: {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Indentation")
@@ -76,22 +42,8 @@ struct SQLFormatterView: View {
                 .padding()
                 .background(Color.secondary.opacity(0.05))
                 .cornerRadius(8)
-
-                if let error = vm.errorMessage {
-                    HStack(spacing: 8) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.red)
-                        Text(error)
-                            .foregroundStyle(.red)
-                            .font(.callout)
-                    }
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(6)
-                }
-                
-                // Help text
+            },
+            helpContent: {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: "info.circle")
@@ -108,81 +60,54 @@ struct SQLFormatterView: View {
                         .cornerRadius(4)
                 }
                 .padding(.top, 4)
-                
-                Spacer()
-            }
-            .padding()
-        }
-    }
-    
-    private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Text("Output")
-                    .font(.headline)
-                Spacer()
-                if !vm.output.isEmpty {
-                    Text("\(vm.output.count) characters")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.trailing, 8)
+            },
+            inputFooter: {
+                HStack {
+                    if !vm.input.isEmpty {
+                        Text("\(vm.input.count) characters")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+            },
+            outputFooter: {
+                HStack {
+                    if let validationMessage = vm.validationMessage {
+                        HStack(spacing: 4) {
+                            Image(systemName: vm.validationIsValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundStyle(vm.validationIsValid ? .green : .red)
+                            
+                            Text(validationMessage)
+                                .foregroundStyle(vm.validationIsValid ? .green : .red)
+                                .font(.caption)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(vm.validationIsValid ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+                        .cornerRadius(4)
+                    }
                     
-                    Button("Copy") { vm.copyOutput() }
-                        .keyboardShortcut("c", modifiers: [.command, .shift])
-                }
-            }
-            .padding()
-            
-            Divider()
-            
-            if let validationMessage = vm.validationMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: vm.validationIsValid ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(vm.validationIsValid ? .green : .red)
+                    Spacer()
                     
-                    Text(validationMessage)
-                        .foregroundStyle(vm.validationIsValid ? .green : .red)
-                        .font(.system(.body, design: .monospaced))
+                    if !vm.output.isEmpty {
+                        Text("\(vm.output.count) characters")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.trailing, 8)
+                    }
                 }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(vm.validationIsValid ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
             }
-            
-            if !vm.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: vm.output, language: .sql)
-                        .padding(8)
-                }
-            } else if vm.validationMessage == nil {
-                VStack(spacing: 12) {
-                    Image(systemName: "cylinder.split.1x2")
-                        .font(.system(size: 48))
-                        .foregroundStyle(.secondary)
-                    Text("Format, minify, or validate SQL")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        }
-    }
-    
-    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .foregroundStyle(color)
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-        }
+        )
     }
 }
 
 @MainActor
-final class SQLFormatterViewModel: ObservableObject {
+final class SQLFormatterViewModel: TextToolViewModel {
     @Published var input = ""
     @Published var output = ""
     @Published var errorMessage: String?
+    @Published var isValid: Bool = false
     @Published var validationMessage: String?
     @Published var validationIsValid = false
     @Published var indentStyle: SQLFormatterService.IndentStyle = .twoSpaces
@@ -190,12 +115,18 @@ final class SQLFormatterViewModel: ObservableObject {
     
     private let service = SQLFormatterService()
     
+    func process() {
+        format()
+    }
+    
     func format() {
         errorMessage = nil
         validationMessage = nil
+        isValid = false
         
         do {
             output = try service.format(input, indentStyle: indentStyle, uppercaseKeywords: uppercaseKeywords)
+            isValid = true
         } catch {
             errorMessage = error.localizedDescription
             output = ""
@@ -205,9 +136,11 @@ final class SQLFormatterViewModel: ObservableObject {
     func minify() {
         errorMessage = nil
         validationMessage = nil
+        isValid = false
         
         do {
             output = try service.minify(input)
+            isValid = true
         } catch {
             errorMessage = error.localizedDescription
             output = ""
@@ -217,6 +150,7 @@ final class SQLFormatterViewModel: ObservableObject {
     func validate() {
         errorMessage = nil
         output = ""
+        isValid = false
         
         let result = service.validate(input)
         validationMessage = result.message
@@ -228,10 +162,6 @@ final class SQLFormatterViewModel: ObservableObject {
         output = ""
         errorMessage = nil
         validationMessage = nil
-    }
-    
-    func copyOutput() {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(output, forType: .string)
+        isValid = false
     }
 }
