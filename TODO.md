@@ -36,8 +36,8 @@ The app currently uses hardcoded strings throughout the UI.
 
 ### Syntax Highlighting
 The current `CodeBlockView` appears basic.
-- [ ] **Integrate Syntax Highlighter:** Adopt a library (like Highlightr or a lightweight custom solution) to provide real syntax highlighting for JSON, XML, HTML, and SQL outputs.
-- [ ] **Theme Support:** Allow the syntax highlighter to respect the system appearance (Dark/Light mode).
+- [x] **Integrate Syntax Highlighter:** Adopt a library (like Highlightr or a lightweight custom solution) to provide real syntax highlighting for JSON, XML, HTML, and SQL outputs. (Implemented custom regex-based highlighter in `CodeBlockView` with theme support)
+- [x] **Theme Support:** Allow the syntax highlighter to respect the system appearance (Dark/Light mode). (Implemented in `CodeBlockView`)
 
 ### Accessibility
 - [ ] **Improve Custom Components:** Ensure `FocusableTextEditor` and `FocusableTextField` properly expose accessibility labels and hints to the accessibility engine.

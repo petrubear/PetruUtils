@@ -147,7 +147,7 @@ struct GenericTextToolView<VM: TextToolViewModel, ToolbarContent: View, ConfigCo
                     .padding([.top, .horizontal])
                     .padding(.bottom, 8)
                     
-                    CodeBlock(text: vm.output)
+                    CodeBlock(text: vm.output, language: vm.outputLanguage)
                         .frame(maxHeight: .infinity)
                         .padding([.horizontal, .bottom])
                 }

@@ -152,10 +152,8 @@ struct JavaScriptFormatterView: View {
             }
             
             if !vm.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: vm.output, language: .javascript)
-                        .padding(8)
-                }
+                CodeBlock(text: vm.output, language: .javascript)
+                    .padding(8)
             } else if vm.validationResult == nil {
                 VStack(spacing: 12) {
                     Image(systemName: "curlybraces.square")

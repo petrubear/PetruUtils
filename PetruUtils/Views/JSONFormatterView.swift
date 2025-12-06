@@ -192,10 +192,8 @@ struct JSONFormatterView: View {
                 if vm.showLineNumbers {
                     LineNumberedCodeView(text: vm.output, language: .json)
                 } else {
-                    ScrollView {
-                        SyntaxHighlightedText(text: vm.output, language: .json)
-                            .padding(8)
-                    }
+                    CodeBlock(text: vm.output, language: .json)
+                        .padding(8)
                 }
             } else if vm.validationResult == nil {
                 VStack(spacing: 12) {

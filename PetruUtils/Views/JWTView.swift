@@ -185,8 +185,8 @@ struct JWTView: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
 
-                    SyntaxHighlightedCodeBlock(text: vm.headerPretty, language: .json)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    CodeBlock(text: vm.headerPretty, language: .json)
+                        .frame(minHeight: 100, maxHeight: .infinity)
                 }
 
                 // Payload
@@ -195,8 +195,8 @@ struct JWTView: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
 
-                    SyntaxHighlightedCodeBlock(text: vm.payloadPretty, language: .json)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    CodeBlock(text: vm.payloadPretty, language: .json)
+                        .frame(minHeight: 100, maxHeight: .infinity)
                 }
 
                 // Claims Validation

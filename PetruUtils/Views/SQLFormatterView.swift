@@ -164,4 +164,6 @@ final class SQLFormatterViewModel: TextToolViewModel {
         validationMessage = nil
         isValid = false
     }
+    
+    var outputLanguage: CodeLanguage { .sql }
 }

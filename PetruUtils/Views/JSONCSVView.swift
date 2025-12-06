@@ -146,10 +146,8 @@ struct JSONCSVView: View {
             Divider()
             
             if !vm.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: vm.output, language: vm.mode ? .plain : .json)
-                        .padding(8)
-                }
+                CodeBlock(text: vm.output, language: vm.mode ? .plaintext : .json)
+                    .padding(8)
             } else {
                 VStack(spacing: 12) {
                     Image(systemName: "tablecells")

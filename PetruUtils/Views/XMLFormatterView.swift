@@ -145,10 +145,8 @@ struct XMLFormatterView: View {
             }
             
             if !vm.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: vm.output, language: .xml)
-                        .padding(8)
-                }
+                CodeBlock(text: vm.output, language: .xml)
+                    .padding(8)
             } else if vm.validationMessage == nil {
                 VStack(spacing: 12) {
                     Image(systemName: "chevron.left.forwardslash.chevron.right")

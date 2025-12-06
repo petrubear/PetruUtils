@@ -197,10 +197,8 @@ struct CSSFormatterView: View {
             }
             
             if !vm.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: vm.output, language: .css)
-                        .padding(8)
-                }
+                CodeBlock(text: vm.output, language: .css)
+                    .padding(8)
             } else if vm.validationMessage == nil {
                 VStack(spacing: 12) {
                     Image(systemName: "paintbrush")

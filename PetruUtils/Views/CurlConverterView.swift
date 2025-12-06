@@ -119,10 +119,8 @@ struct CurlConverterView: View {
             Divider()
 
             if !viewModel.output.isEmpty {
-                ScrollView {
-                    SyntaxHighlightedText(text: viewModel.output, language: languageForSyntax())
-                        .padding()
-                }
+                CodeBlock(text: viewModel.output, language: languageForCodeBlock())
+                    .padding(8)
             } else {
                 VStack(spacing: 12) {
                     Image(systemName: "arrow.triangle.2.circlepath")
@@ -149,12 +147,12 @@ struct CurlConverterView: View {
         }
     }
 
-    private func languageForSyntax() -> SyntaxLanguage {
+    private func languageForCodeBlock() -> CodeLanguage {
         switch viewModel.selectedLanguage {
-        case .javascript:
-            return .javascript
-        default:
-            return .plain
+        case .swift: return .swift
+        case .python: return .python
+        case .javascript: return .javascript
+        default: return .plaintext
         }
     }
 }

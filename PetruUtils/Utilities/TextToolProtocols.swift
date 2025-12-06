@@ -7,6 +7,7 @@ protocol TextToolViewModel: ObservableObject {
     var output: String { get }
     var errorMessage: String? { get }
     var isValid: Bool { get }
+    var outputLanguage: CodeLanguage { get }
     
     func process()
     func clear()
@@ -24,4 +25,6 @@ extension TextToolViewModel {
     
     var inputCharCount: Int { input.count }
     var outputCharCount: Int { output.count }
+    
+    var outputLanguage: CodeLanguage { .plaintext }
 }

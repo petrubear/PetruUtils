@@ -185,12 +185,8 @@ struct SVGToCSSView: View {
                 }
             }
 
-            ScrollView {
-                SyntaxHighlightedText(text: viewModel.output, language: .css)
-                    .padding(8)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+            CodeBlock(text: viewModel.output, language: .css)
+                .frame(maxHeight: .infinity)
 
             HStack {
                 if !viewModel.output.isEmpty {
