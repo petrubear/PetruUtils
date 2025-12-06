@@ -76,7 +76,8 @@ final class Base64ViewModel: TextToolViewModel {
     @Published var variant: Base64Service.Base64Variant = .standard
     @Published var errorMessage: String?
     @Published var isValid: Bool = false
-    
+
+    let tool: Tool = .base64
     private let service = Base64Service()
     
     func process() {

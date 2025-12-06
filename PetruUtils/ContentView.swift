@@ -11,9 +11,10 @@ struct ContentView: View {
     @StateObject private var clipboardMonitor = ClipboardMonitor()
     @StateObject private var historyManager = HistoryManager.shared
     @StateObject private var preferences = PreferencesManager.shared
+    @EnvironmentObject private var commandPaletteState: CommandPaletteState
     @State private var selection: Tool? = .jwt
     @State private var showClipboardBanner: Bool = false
-    
+
     var body: some View {
         NavigationSplitView {
             VStack(spacing: 0) {
@@ -108,6 +109,12 @@ struct ContentView: View {
                 historyManager.recordToolUsage(tool)
             }
         }
+        .commandPalette(isPresented: $commandPaletteState.isPresented, selectedTool: $selection)
+        .background(
+            KeyboardShortcutHandler(key: "k", modifiers: .command) {
+                commandPaletteState.show()
+            }
+        )
     }
     
     // MARK: - Tool Row
@@ -124,13 +131,15 @@ struct ContentView: View {
                 Image(systemName: "star.fill")
                     .foregroundStyle(.yellow)
                     .font(.caption)
+                    .accessibilityLabel(String(localized: "accessibility.label.favorite"))
             }
-            
+
             // Show clipboard indicator if this is the suggested tool
             if clipboardMonitor.suggestedTool == tool {
                 Image(systemName: "clipboard.fill")
                     .foregroundStyle(.blue)
                     .font(.caption)
+                    .accessibilityLabel(String(localized: "accessibility.label.clipboardSuggested"))
             }
         }
         .contextMenu {
@@ -175,6 +184,8 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(String(localized: "accessibility.action.dismissBanner"))
+            .accessibilityHint(String(localized: "accessibility.hint.dismissClipboardBanner"))
         }
         .padding()
         .background(Color.blue.opacity(0.1))

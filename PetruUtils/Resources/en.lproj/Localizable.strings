@@ -258,3 +258,31 @@
 "error.conversionFailed" = "Conversion failed";
 "error.invalidFormat" = "Invalid format";
 "error.emptyInput" = "Input is empty";
+
+// MARK: - Accessibility Labels
+
+"accessibility.label.favorite" = "Favorite";
+"accessibility.label.clipboardSuggested" = "Suggested from clipboard";
+"accessibility.label.error" = "Error";
+"accessibility.label.validOutput" = "Output is valid";
+"accessibility.label.emptyOutput" = "No output yet. Result will appear here after processing.";
+
+// MARK: - Accessibility Actions
+
+"accessibility.action.dismissBanner" = "Dismiss";
+
+// MARK: - Accessibility Hints
+
+"accessibility.hint.dismissClipboardBanner" = "Dismisses the clipboard suggestion banner";
+
+// MARK: - Command Palette
+
+"commandPalette.searchPlaceholder" = "Search tools...";
+"commandPalette.noResults" = "No tools found";
+"commandPalette.hint.navigate" = "Navigate";
+"commandPalette.hint.select" = "Select";
+"commandPalette.hint.close" = "Close";
+
+// MARK: - Menu Items
+
+"menu.goToTool" = "Go to Tool...";

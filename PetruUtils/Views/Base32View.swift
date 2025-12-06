@@ -111,7 +111,8 @@ final class Base32ViewModel: TextToolViewModel {
     }
     @Published var errorMessage: String?
     @Published var isValid: Bool = false
-    
+
+    let tool: Tool = .base32
     private let service = Base32Service()
     
     func process() {

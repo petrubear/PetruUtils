@@ -108,7 +108,8 @@ final class BackslashEscapeViewModel: TextToolViewModel {
     @Published var escapeMode: BackslashEscapeService.EscapeMode = .standard
     @Published var errorMessage: String?
     @Published var isValid: Bool = false
-    
+
+    let tool: Tool = .backslashEscape
     private let service = BackslashEscapeService()
     
     func process() {

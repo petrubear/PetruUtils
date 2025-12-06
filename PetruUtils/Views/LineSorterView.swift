@@ -109,7 +109,8 @@ final class LineSorterViewModel: TextToolViewModel {
     @Published var sortOrder: LineSorterService.SortOrder = .ascending
     @Published var caseSensitive: Bool = true
     @Published var naturalSort: Bool = false
-    
+
+    let tool: Tool = .lineSorter
     private let service = LineSorterService()
     
     var inputLineCount: Int {

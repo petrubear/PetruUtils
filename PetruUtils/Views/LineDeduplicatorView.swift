@@ -113,7 +113,8 @@ final class LineDeduplicatorViewModel: TextToolViewModel {
     @Published var sortAfter: Bool = false
     @Published var stats: (total: Int, unique: Int, duplicates: Int) = (0, 0, 0)
     @Published var showStats: Bool = false
-    
+
+    let tool: Tool = .lineDeduplicator
     private let service = LineDeduplicatorService()
     
     var inputLineCount: Int {

@@ -112,7 +112,8 @@ final class SQLFormatterViewModel: TextToolViewModel {
     @Published var validationIsValid = false
     @Published var indentStyle: SQLFormatterService.IndentStyle = .twoSpaces
     @Published var uppercaseKeywords = true
-    
+
+    let tool: Tool = .sqlFormatter
     private let service = SQLFormatterService()
     
     func process() {

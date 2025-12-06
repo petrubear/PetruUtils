@@ -8,10 +8,13 @@ protocol TextToolViewModel: ObservableObject {
     var errorMessage: String? { get }
     var isValid: Bool { get }
     var outputLanguage: CodeLanguage { get }
-    
+    var tool: Tool { get }
+
     func process()
     func clear()
     func copyOutput()
+    func loadLastInput()
+    func saveLastInput()
 }
 
 // Default implementation for copyOutput to avoid boilerplate
@@ -22,9 +25,21 @@ extension TextToolViewModel {
         pasteboard.clearContents()
         pasteboard.setString(output, forType: .string)
     }
-    
+
     var inputCharCount: Int { input.count }
     var outputCharCount: Int { output.count }
-    
+
     var outputLanguage: CodeLanguage { .plaintext }
+
+    @MainActor
+    func loadLastInput() {
+        if let lastInput = HistoryManager.shared.getLastInput(for: tool), input.isEmpty {
+            input = lastInput
+        }
+    }
+
+    @MainActor
+    func saveLastInput() {
+        HistoryManager.shared.saveLastInput(input, for: tool)
+    }
 }

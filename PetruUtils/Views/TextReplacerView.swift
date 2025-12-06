@@ -133,7 +133,8 @@ final class TextReplacerViewModel: TextToolViewModel {
     @Published var errorMessage: String?
     @Published var isValid: Bool = false
     @Published var regexError: String?
-    
+
+    let tool: Tool = .textReplacer
     private let service = TextReplacerService()
     
     func process() {

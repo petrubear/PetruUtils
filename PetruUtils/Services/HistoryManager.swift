@@ -180,6 +180,41 @@ final class HistoryManager: ObservableObject {
     private func historyKey(for tool: Tool) -> String {
         "\(HistoryKeys.conversionHistory).\(tool.rawValue)"
     }
+
+    // MARK: - Last Input Persistence
+
+    /// Save the last input for a tool (called when switching tools or closing app)
+    func saveLastInput(_ input: String, for tool: Tool) {
+        guard preferencesManager.historyEnabled, !input.isEmpty else { return }
+
+        // Limit stored input to 100KB to avoid storage bloat
+        let maxLength = 100 * 1024
+        let truncatedInput = input.count > maxLength ? String(input.prefix(maxLength)) : input
+
+        defaults.set(truncatedInput, forKey: lastInputKey(for: tool))
+    }
+
+    /// Get the last input for a tool (called when switching to a tool)
+    func getLastInput(for tool: Tool) -> String? {
+        guard preferencesManager.historyEnabled else { return nil }
+        return defaults.string(forKey: lastInputKey(for: tool))
+    }
+
+    /// Clear the last input for a specific tool
+    func clearLastInput(for tool: Tool) {
+        defaults.removeObject(forKey: lastInputKey(for: tool))
+    }
+
+    /// Clear all saved last inputs
+    func clearAllLastInputs() {
+        for tool in Tool.allCases {
+            defaults.removeObject(forKey: lastInputKey(for: tool))
+        }
+    }
+
+    private func lastInputKey(for tool: Tool) -> String {
+        "\(HistoryKeys.lastInput).\(tool.rawValue)"
+    }
 }
 
 // MARK: - Supporting Types
@@ -230,4 +265,5 @@ private struct HistoryKeys {
     static let recentTools = "history.recentTools"
     static let favoriteTools = "history.favoriteTools"
     static let conversionHistory = "history.conversions"
+    static let lastInput = "history.lastInput"
 }

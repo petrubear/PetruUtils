@@ -83,7 +83,8 @@ class URLViewModel: TextToolViewModel {
     @Published var componentType: URLComponentType = .queryParameter
     @Published var errorMessage: String?
     @Published var isValid: Bool = false
-    
+
+    let tool: Tool = .urlEncoder
     private let service = URLService()
     
     enum ProcessMode: String, CaseIterable {
