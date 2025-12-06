@@ -10,37 +10,37 @@ struct PreferencesView: View {
         TabView(selection: $selectedTab) {
             AppearancePreferencesView()
                 .tabItem {
-                    Label("Appearance", systemImage: "paintbrush")
+                    Label(String(localized: "preferences.tab.appearance"), systemImage: "paintbrush")
                 }
                 .tag(0)
-            
+
             BehaviorPreferencesView()
                 .tabItem {
-                    Label("Behavior", systemImage: "gearshape")
+                    Label(String(localized: "preferences.tab.behavior"), systemImage: "gearshape")
                 }
                 .tag(1)
-            
+
             ClipboardPreferencesView()
                 .tabItem {
-                    Label("Clipboard", systemImage: "doc.on.clipboard")
+                    Label(String(localized: "preferences.tab.clipboard"), systemImage: "doc.on.clipboard")
                 }
                 .tag(2)
-            
+
             FormatsPreferencesView()
                 .tabItem {
-                    Label("Formats", systemImage: "doc.text")
+                    Label(String(localized: "preferences.tab.formats"), systemImage: "doc.text")
                 }
                 .tag(3)
-            
+
             HistoryPreferencesView()
                 .tabItem {
-                    Label("History", systemImage: "clock")
+                    Label(String(localized: "preferences.tab.history"), systemImage: "clock")
                 }
                 .tag(4)
-            
+
             AdvancedPreferencesView()
                 .tabItem {
-                    Label("Advanced", systemImage: "wrench.and.screwdriver")
+                    Label(String(localized: "preferences.tab.advanced"), systemImage: "wrench.and.screwdriver")
                 }
                 .tag(5)
         }
@@ -52,56 +52,56 @@ struct PreferencesView: View {
 
 struct AppearancePreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
-    
+
     var body: some View {
         Form {
             Section {
-                Picker("Theme", selection: $preferences.theme) {
+                Picker(String(localized: "preferences.appearance.theme"), selection: $preferences.theme) {
                     ForEach(AppTheme.allCases, id: \.self) { theme in
                         Text(theme.displayName).tag(theme)
                     }
                 }
                 .pickerStyle(.segmented)
             } header: {
-                Text("Appearance")
+                Text(String(localized: "preferences.appearance.title"))
             }
-            
+
             Section {
-                Picker("Font Family", selection: $preferences.codeFontFamily) {
-                    Text("SF Mono").tag("SF Mono")
-                    Text("Menlo").tag("Menlo")
-                    Text("Monaco").tag("Monaco")
-                    Text("Courier New").tag("Courier New")
+                Picker(String(localized: "preferences.appearance.fontFamily"), selection: $preferences.codeFontFamily) {
+                    Text(String(localized: "font.sfMono")).tag("SF Mono")
+                    Text(String(localized: "font.menlo")).tag("Menlo")
+                    Text(String(localized: "font.monaco")).tag("Monaco")
+                    Text(String(localized: "font.courierNew")).tag("Courier New")
                 }
-                
+
                 HStack {
-                    Text("Font Size")
+                    Text(String(localized: "preferences.appearance.fontSize"))
                     Slider(value: $preferences.codeFontSize, in: 10...24, step: 1)
                     Text("\(Int(preferences.codeFontSize))pt")
                         .frame(width: 40, alignment: .trailing)
                         .foregroundColor(.secondary)
                 }
-                
+
                 // Preview
-                Text("The quick brown fox jumps over the lazy dog")
+                Text(String(localized: "preferences.appearance.preview"))
                     .font(.custom(preferences.codeFontFamily, size: preferences.codeFontSize))
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(nsColor: .textBackgroundColor))
                     .cornerRadius(6)
             } header: {
-                Text("Code Block")
+                Text(String(localized: "preferences.appearance.codeBlock"))
             }
-            
+
             Section {
-                Picker("Sidebar Icon Size", selection: $preferences.sidebarIconSize) {
+                Picker(String(localized: "preferences.appearance.sidebarIconSize"), selection: $preferences.sidebarIconSize) {
                     ForEach(IconSize.allCases, id: \.self) { size in
                         Text(size.displayName).tag(size)
                     }
                 }
                 .pickerStyle(.segmented)
             } header: {
-                Text("Sidebar")
+                Text(String(localized: "preferences.appearance.sidebar"))
             }
         }
         .formStyle(.grouped)
@@ -113,35 +113,35 @@ struct AppearancePreferencesView: View {
 
 struct BehaviorPreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
-    
+
     var body: some View {
         Form {
             Section {
-                Picker("Default Tool on Launch", selection: $preferences.defaultTool) {
-                    Text("Last Used").tag(nil as String?)
+                Picker(String(localized: "preferences.behavior.defaultTool"), selection: $preferences.defaultTool) {
+                    Text(String(localized: "preferences.behavior.lastUsed")).tag(nil as String?)
                     Divider()
                     ForEach(Tool.allCases) { tool in
                         Text(tool.title).tag(tool.rawValue as String?)
                     }
                 }
             } header: {
-                Text("Startup")
+                Text(String(localized: "preferences.behavior.startup"))
             } footer: {
-                Text("Choose which tool to show when the app launches")
+                Text(String(localized: "preferences.behavior.chooseWhichTool"))
             }
-            
+
             Section {
-                Toggle("Auto-clear Input on Tool Switch", isOn: $preferences.autoClearInput)
-                
-                Toggle("Confirm Before Clearing Large Inputs", isOn: $preferences.confirmClearLarge)
-                
-                Toggle("Remember Window Size and Position", isOn: $preferences.rememberWindow)
-                
-                Toggle("Remember Split Pane Ratios", isOn: $preferences.rememberPanes)
+                Toggle(String(localized: "preferences.behavior.autoClear"), isOn: $preferences.autoClearInput)
+
+                Toggle(String(localized: "preferences.behavior.confirmClearLarge"), isOn: $preferences.confirmClearLarge)
+
+                Toggle(String(localized: "preferences.behavior.rememberWindow"), isOn: $preferences.rememberWindow)
+
+                Toggle(String(localized: "preferences.behavior.rememberPanes"), isOn: $preferences.rememberPanes)
             } header: {
-                Text("Workflow")
+                Text(String(localized: "preferences.behavior.workflow"))
             } footer: {
-                Text("Customize how the app behaves during your workflow")
+                Text(String(localized: "preferences.behavior.customizeWorkflow"))
             }
         }
         .formStyle(.grouped)
@@ -153,27 +153,27 @@ struct BehaviorPreferencesView: View {
 
 struct ClipboardPreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
-    
+
     var body: some View {
         Form {
             Section {
-                Toggle("Enable Clipboard Monitoring", isOn: $preferences.clipboardMonitoringEnabled)
+                Toggle(String(localized: "preferences.clipboard.enableMonitoring"), isOn: $preferences.clipboardMonitoringEnabled)
                     .fontWeight(.medium)
             } header: {
-                Text("Monitoring")
+                Text(String(localized: "preferences.clipboard.monitoring"))
             } footer: {
-                Text("When enabled, the app will monitor your clipboard and suggest appropriate tools")
+                Text(String(localized: "preferences.clipboard.monitoringFooter"))
             }
-            
+
             Section {
-                Toggle("Show Banner Notifications", isOn: $preferences.clipboardShowBanner)
+                Toggle(String(localized: "preferences.clipboard.showBanner"), isOn: $preferences.clipboardShowBanner)
                     .disabled(!preferences.clipboardMonitoringEnabled)
-                
-                Toggle("Auto-switch to Suggested Tool", isOn: $preferences.clipboardAutoSwitch)
+
+                Toggle(String(localized: "preferences.clipboard.autoSwitch"), isOn: $preferences.clipboardAutoSwitch)
                     .disabled(!preferences.clipboardMonitoringEnabled)
-                
+
                 HStack {
-                    Text("Check Interval")
+                    Text(String(localized: "preferences.clipboard.checkInterval"))
                     Slider(value: $preferences.clipboardCheckInterval, in: 0.5...5.0, step: 0.5)
                         .disabled(!preferences.clipboardMonitoringEnabled)
                     Text("\(preferences.clipboardCheckInterval, specifier: "%.1f")s")
@@ -181,9 +181,9 @@ struct ClipboardPreferencesView: View {
                         .foregroundColor(.secondary)
                 }
             } header: {
-                Text("Behavior")
+                Text(String(localized: "preferences.clipboard.behavior"))
             } footer: {
-                Text("Configure how clipboard detection behaves")
+                Text(String(localized: "preferences.clipboard.configureDetection"))
             }
         }
         .formStyle(.grouped)
@@ -195,47 +195,47 @@ struct ClipboardPreferencesView: View {
 
 struct FormatsPreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
-    
+
     var body: some View {
         Form {
             Section {
-                Picker("Base64 Variant", selection: $preferences.base64Variant) {
+                Picker(String(localized: "preferences.formats.base64Variant"), selection: $preferences.base64Variant) {
                     ForEach(Base64Variant.allCases, id: \.self) { variant in
                         Text(variant.displayName).tag(variant)
                     }
                 }
-                
-                Picker("Hash Algorithm", selection: $preferences.defaultHashAlgorithm) {
-                    Text("MD5").tag("MD5")
-                    Text("SHA-1").tag("SHA-1")
-                    Text("SHA-256").tag("SHA-256")
-                    Text("SHA-384").tag("SHA-384")
-                    Text("SHA-512").tag("SHA-512")
+
+                Picker(String(localized: "preferences.formats.hashAlgorithm"), selection: $preferences.defaultHashAlgorithm) {
+                    Text(String(localized: "hash.md5")).tag("MD5")
+                    Text(String(localized: "hash.sha1")).tag("SHA-1")
+                    Text(String(localized: "hash.sha256")).tag("SHA-256")
+                    Text(String(localized: "hash.sha384")).tag("SHA-384")
+                    Text(String(localized: "hash.sha512")).tag("SHA-512")
                 }
-                
-                Picker("UUID Version", selection: $preferences.defaultUUIDVersion) {
-                    Text("UUID v1 (Time-based)").tag("v1")
-                    Text("UUID v4 (Random)").tag("v4")
-                    Text("UUID v5 (Name-based)").tag("v5")
-                    Text("ULID").tag("ULID")
+
+                Picker(String(localized: "preferences.formats.uuidVersion"), selection: $preferences.defaultUUIDVersion) {
+                    Text(String(localized: "preferences.formats.uuidV1")).tag("v1")
+                    Text(String(localized: "preferences.formats.uuidV4")).tag("v4")
+                    Text(String(localized: "preferences.formats.uuidV5")).tag("v5")
+                    Text(String(localized: "preferences.formats.ulid")).tag("ULID")
                 }
-                
-                Picker("QR Error Correction", selection: $preferences.defaultQRErrorCorrection) {
-                    Text("Low (7%)").tag("L")
-                    Text("Medium (15%)").tag("M")
-                    Text("Quartile (25%)").tag("Q")
-                    Text("High (30%)").tag("H")
+
+                Picker(String(localized: "preferences.formats.qrErrorCorrection"), selection: $preferences.defaultQRErrorCorrection) {
+                    Text(String(localized: "preferences.formats.qrLow")).tag("L")
+                    Text(String(localized: "preferences.formats.qrMedium")).tag("M")
+                    Text(String(localized: "preferences.formats.qrQuartile")).tag("Q")
+                    Text(String(localized: "preferences.formats.qrHigh")).tag("H")
                 }
-                
-                Picker("Line Break Style", selection: $preferences.lineBreakStyle) {
+
+                Picker(String(localized: "preferences.formats.lineBreakStyle"), selection: $preferences.lineBreakStyle) {
                     ForEach(LineBreakStyle.allCases, id: \.self) { style in
                         Text(style.displayName).tag(style)
                     }
                 }
             } header: {
-                Text("Default Formats")
+                Text(String(localized: "preferences.formats.defaultFormats"))
             } footer: {
-                Text("These defaults will be used when tools are first opened")
+                Text(String(localized: "preferences.formats.defaultsFooter"))
             }
         }
         .formStyle(.grouped)
@@ -248,31 +248,31 @@ struct FormatsPreferencesView: View {
 struct HistoryPreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
     @State private var showClearConfirmation = false
-    
+
     var body: some View {
         Form {
             Section {
-                Toggle("Enable History", isOn: $preferences.historyEnabled)
+                Toggle(String(localized: "preferences.history.enable"), isOn: $preferences.historyEnabled)
                     .fontWeight(.medium)
             } header: {
-                Text("History Tracking")
+                Text(String(localized: "preferences.history.tracking"))
             } footer: {
-                Text("When enabled, recent conversions will be saved for quick access")
+                Text(String(localized: "preferences.history.enableFooter"))
             }
-            
+
             Section {
-                Picker("Retention Period", selection: $preferences.historyRetentionDays) {
-                    Text("1 day").tag(1)
-                    Text("1 week").tag(7)
-                    Text("1 month").tag(30)
-                    Text("6 months").tag(180)
-                    Text("1 year").tag(365)
-                    Text("Forever").tag(999999)
+                Picker(String(localized: "preferences.history.retentionPeriod"), selection: $preferences.historyRetentionDays) {
+                    Text(String(localized: "preferences.history.retention.1day")).tag(1)
+                    Text(String(localized: "preferences.history.retention.1week")).tag(7)
+                    Text(String(localized: "preferences.history.retention.1month")).tag(30)
+                    Text(String(localized: "preferences.history.retention.6months")).tag(180)
+                    Text(String(localized: "preferences.history.retention.1year")).tag(365)
+                    Text(String(localized: "preferences.history.retention.forever")).tag(999999)
                 }
                 .disabled(!preferences.historyEnabled)
-                
+
                 HStack {
-                    Text("Max Items Per Tool")
+                    Text(String(localized: "preferences.history.maxItemsPerTool"))
                     Slider(value: Binding(
                         get: { Double(preferences.historyMaxItems) },
                         set: { preferences.historyMaxItems = Int($0) }
@@ -283,30 +283,30 @@ struct HistoryPreferencesView: View {
                         .foregroundColor(.secondary)
                 }
             } header: {
-                Text("Settings")
+                Text(String(localized: "preferences.history.settings"))
             }
-            
+
             Section {
                 Button(role: .destructive, action: {
                     showClearConfirmation = true
                 }) {
-                    Label("Clear All History", systemImage: "trash")
+                    Label(String(localized: "preferences.history.clearAll"), systemImage: "trash")
                 }
                 .disabled(!preferences.historyEnabled)
                 .confirmationDialog(
-                    "Clear All History?",
+                    String(localized: "preferences.history.clearConfirmTitle"),
                     isPresented: $showClearConfirmation,
                     titleVisibility: .visible
                 ) {
-                    Button("Clear All History", role: .destructive) {
+                    Button(String(localized: "preferences.history.clearAll"), role: .destructive) {
                         preferences.clearAllHistory()
                     }
-                    Button("Cancel", role: .cancel) {}
+                    Button(String(localized: "common.action.cancel"), role: .cancel) {}
                 } message: {
-                    Text("This will permanently delete all saved conversion history. This action cannot be undone.")
+                    Text(String(localized: "preferences.history.clearConfirmMessage"))
                 }
             } header: {
-                Text("Management")
+                Text(String(localized: "preferences.history.management"))
             }
         }
         .formStyle(.grouped)
@@ -319,12 +319,12 @@ struct HistoryPreferencesView: View {
 struct AdvancedPreferencesView: View {
     @ObservedObject private var preferences = PreferencesManager.shared
     @State private var showResetConfirmation = false
-    
+
     var body: some View {
         Form {
             Section {
                 HStack {
-                    Text("Max File Size")
+                    Text(String(localized: "preferences.advanced.maxFileSize"))
                     Slider(value: Binding(
                         get: { Double(preferences.maxFileSize) },
                         set: { preferences.maxFileSize = Int($0) }
@@ -333,36 +333,36 @@ struct AdvancedPreferencesView: View {
                         .frame(width: 60, alignment: .trailing)
                         .foregroundColor(.secondary)
                 }
-                
-                Toggle("Enable Debug Logging", isOn: $preferences.debugLogging)
+
+                Toggle(String(localized: "preferences.advanced.enableDebugLogging"), isOn: $preferences.debugLogging)
             } header: {
-                Text("Performance")
+                Text(String(localized: "preferences.advanced.performance"))
             } footer: {
-                Text("Files larger than the maximum size will show a warning before processing")
+                Text(String(localized: "preferences.advanced.fileSizeWarning"))
             }
-            
+
             Section {
                 Button(role: .destructive, action: {
                     showResetConfirmation = true
                 }) {
-                    Label("Reset All Preferences", systemImage: "arrow.counterclockwise")
+                    Label(String(localized: "preferences.advanced.resetAll"), systemImage: "arrow.counterclockwise")
                 }
                 .confirmationDialog(
-                    "Reset All Preferences?",
+                    String(localized: "preferences.advanced.resetConfirmTitle"),
                     isPresented: $showResetConfirmation,
                     titleVisibility: .visible
                 ) {
-                    Button("Reset to Defaults", role: .destructive) {
+                    Button(String(localized: "preferences.advanced.resetToDefaults"), role: .destructive) {
                         preferences.resetToDefaults()
                     }
-                    Button("Cancel", role: .cancel) {}
+                    Button(String(localized: "common.action.cancel"), role: .cancel) {}
                 } message: {
-                    Text("This will reset all preferences to their default values. The app may need to be restarted.")
+                    Text(String(localized: "preferences.advanced.resetConfirmMessage"))
                 }
             } header: {
-                Text("Reset")
+                Text(String(localized: "preferences.advanced.reset"))
             } footer: {
-                Text("Reset all preferences to their default values")
+                Text(String(localized: "preferences.advanced.resetFooter"))
             }
         }
         .formStyle(.grouped)

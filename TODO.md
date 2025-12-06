@@ -28,9 +28,9 @@ The `Tool` enum and `ContentView` are tightly coupled. Adding a new tool require
 ## 2. Localization & Internationalization
 
 The app currently uses hardcoded strings throughout the UI.
-- [ ] **Create `Localizable.strings`:** Initialize the localization file.
-- [ ] **Extract Strings:** Replace all hardcoded string literals in Views (e.g., "Base64 Converter", "Input Text", "Process") with `NSLocalizedString` or SwiftUI's `LocalizedStringKey`.
-- [ ] ** localized string keys:** Adopt a naming convention (e.g., `tool.base64.title`, `common.action.process`).
+- [x] **Create `Localizable.strings`:** Initialize the localization file at `Resources/en.lproj/Localizable.strings`.
+- [x] **Extract Strings:** Replace all hardcoded string literals in Views (Tool.swift, ContentView.swift, GenericTextToolView.swift, PreferencesView.swift) with `String(localized:)`.
+- [x] **Localized string keys:** Adopt a naming convention (e.g., `tool.base64.title`, `common.action.process`, `preferences.appearance.theme`).
 
 ## 3. User Experience (UX) & UI
 

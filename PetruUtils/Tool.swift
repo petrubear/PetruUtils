@@ -46,49 +46,49 @@ enum Tool: String, CaseIterable, Identifiable {
     // For use in SwiftUI List / ForEach
     var id: String { rawValue }
 
-    // Sidebar title
+    // Sidebar title (localized)
     var title: String {
         switch self {
-        case .jwt: return "JWT Debugger"
-        case .base64: return "Base64"
-        case .urlEncoder: return "URL Encoder"
-        case .hash: return "Hash Generator"
-        case .uuid: return "UUID/ULID Generator"
-        case .qr: return "QR Code"
-        case .numberBase: return "Number Base Converter"
-        case .unixTimestamp: return "Unix Timestamp"
-        case .caseConverter: return "Case Converter"
-        case .colorConverter: return "Color Converter"
-        case .jsonYAML: return "JSON ↔ YAML"
-        case .jsonCSV: return "JSON ↔ CSV"
-        case .markdownHTML: return "Markdown ↔ HTML"
-        case .jsonFormatter: return "JSON Formatter"
-        case .javascriptFormatter: return "JavaScript Formatter"
-        case .regexpTester: return "RegExp Tester"
-        case .textDiff: return "Text Diff"
-        case .xmlFormatter: return "XML Formatter"
-        case .htmlFormatter: return "HTML Formatter"
-        case .cssFormatter: return "CSS Formatter"
-        case .sqlFormatter: return "SQL Formatter"
-        case .lineSorter: return "Line Sorter"
-        case .lineDeduplicator: return "Line Deduplicator"
-        case .textReplacer: return "Text Replacer"
-        case .stringInspector: return "String Inspector"
-        case .htmlEntity: return "HTML Entity"
-        case .loremIpsum: return "Lorem Ipsum"
-        case .urlParser: return "URL Parser"
-        case .randomString: return "Random String"
-        case .backslashEscape: return "Backslash Escape"
-        case .base32: return "Base32 Encoder/Decoder"
-        case .cronParser: return "Cron Expression Parser"
-        case .jsonPath: return "JSON Path Tester"
-        case .curlConverter: return "cURL → Code"
-        case .svgToCSS: return "SVG → CSS"
-        case .certificateInspector: return "Certificate Inspector"
-        case .ipUtilities: return "IP Utilities"
-        case .asciiArtGenerator: return "ASCII Art Generator"
-        case .bcryptGenerator: return "Bcrypt Generator"
-        case .totpGenerator: return "TOTP Generator"
+        case .jwt: return String(localized: "tool.jwt.title")
+        case .base64: return String(localized: "tool.base64.title")
+        case .urlEncoder: return String(localized: "tool.urlEncoder.title")
+        case .hash: return String(localized: "tool.hash.title")
+        case .uuid: return String(localized: "tool.uuid.title")
+        case .qr: return String(localized: "tool.qr.title")
+        case .numberBase: return String(localized: "tool.numberBase.title")
+        case .unixTimestamp: return String(localized: "tool.unixTimestamp.title")
+        case .caseConverter: return String(localized: "tool.caseConverter.title")
+        case .colorConverter: return String(localized: "tool.colorConverter.title")
+        case .jsonYAML: return String(localized: "tool.jsonYAML.title")
+        case .jsonCSV: return String(localized: "tool.jsonCSV.title")
+        case .markdownHTML: return String(localized: "tool.markdownHTML.title")
+        case .jsonFormatter: return String(localized: "tool.jsonFormatter.title")
+        case .javascriptFormatter: return String(localized: "tool.javascriptFormatter.title")
+        case .regexpTester: return String(localized: "tool.regexpTester.title")
+        case .textDiff: return String(localized: "tool.textDiff.title")
+        case .xmlFormatter: return String(localized: "tool.xmlFormatter.title")
+        case .htmlFormatter: return String(localized: "tool.htmlFormatter.title")
+        case .cssFormatter: return String(localized: "tool.cssFormatter.title")
+        case .sqlFormatter: return String(localized: "tool.sqlFormatter.title")
+        case .lineSorter: return String(localized: "tool.lineSorter.title")
+        case .lineDeduplicator: return String(localized: "tool.lineDeduplicator.title")
+        case .textReplacer: return String(localized: "tool.textReplacer.title")
+        case .stringInspector: return String(localized: "tool.stringInspector.title")
+        case .htmlEntity: return String(localized: "tool.htmlEntity.title")
+        case .loremIpsum: return String(localized: "tool.loremIpsum.title")
+        case .urlParser: return String(localized: "tool.urlParser.title")
+        case .randomString: return String(localized: "tool.randomString.title")
+        case .backslashEscape: return String(localized: "tool.backslashEscape.title")
+        case .base32: return String(localized: "tool.base32.title")
+        case .cronParser: return String(localized: "tool.cronParser.title")
+        case .jsonPath: return String(localized: "tool.jsonPath.title")
+        case .curlConverter: return String(localized: "tool.curlConverter.title")
+        case .svgToCSS: return String(localized: "tool.svgToCSS.title")
+        case .certificateInspector: return String(localized: "tool.certificateInspector.title")
+        case .ipUtilities: return String(localized: "tool.ipUtilities.title")
+        case .asciiArtGenerator: return String(localized: "tool.asciiArtGenerator.title")
+        case .bcryptGenerator: return String(localized: "tool.bcryptGenerator.title")
+        case .totpGenerator: return String(localized: "tool.totpGenerator.title")
         }
     }
 

@@ -27,7 +27,7 @@ struct ContentView: View {
                 List(selection: $selection) {
                     // Favorites section
                     if !historyManager.sortedFavorites.isEmpty {
-                        Section("Favorites") {
+                        Section(String(localized: "sidebar.section.favorites")) {
                             ForEach(historyManager.sortedFavorites) { tool in
                                 toolRow(for: tool)
                                     .tag(tool)
@@ -37,7 +37,7 @@ struct ContentView: View {
                     
                     // Recent tools section (limited to 5)
                     if !historyManager.recentTools.isEmpty {
-                        Section("Recent") {
+                        Section(String(localized: "sidebar.section.recent")) {
                             ForEach(historyManager.recentTools.prefix(5)) { tool in
                                 toolRow(for: tool)
                                     .tag(tool)
@@ -46,18 +46,18 @@ struct ContentView: View {
                     }
 
                     // All tools section (sorted alphabetically)
-                    Section("All Tools") {
+                    Section(String(localized: "sidebar.section.allTools")) {
                         ForEach(Tool.allCases.sorted { $0.title.lowercased() < $1.title.lowercased() }) { tool in
                             toolRow(for: tool)
                                 .tag(tool)
                         }
                     }
                 }
-                .navigationTitle("Tools")
+                .navigationTitle(String(localized: "sidebar.title"))
                 
                 // Clipboard monitoring toggle
                 Divider()
-                Toggle("Monitor Clipboard", isOn: $clipboardMonitor.isMonitoring)
+                Toggle(String(localized: "sidebar.toggle.monitorClipboard"), isOn: $clipboardMonitor.isMonitoring)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
                     .onChange(of: clipboardMonitor.isMonitoring) { _, isOn in
@@ -90,7 +90,7 @@ struct ContentView: View {
             if let selectedTool = selection {
                 LazyToolView(tool: selectedTool)
             } else {
-                Text("Select a tool")
+                Text(String(localized: "common.label.selectTool"))
                     .foregroundStyle(.secondary)
             }
         }
@@ -138,7 +138,7 @@ struct ContentView: View {
                 historyManager.toggleFavorite(tool)
             } label: {
                 Label(
-                    historyManager.isFavorite(tool) ? "Remove from Favorites" : "Add to Favorites",
+                    historyManager.isFavorite(tool) ? String(localized: "sidebar.action.removeFromFavorites") : String(localized: "sidebar.action.addToFavorites"),
                     systemImage: historyManager.isFavorite(tool) ? "star.slash" : "star"
                 )
             }
@@ -153,16 +153,16 @@ struct ContentView: View {
                 .foregroundStyle(.blue)
             
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(detectedType.displayName) Detected")
+                Text("\(detectedType.displayName) \(String(localized: "clipboard.detected"))")
                     .font(.subheadline.weight(.semibold))
-                Text("Suggested: \(suggestedTool.title)")
+                Text("\(String(localized: "clipboard.suggested")) \(suggestedTool.title)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             
             Spacer()
             
-            Button("Open") {
+            Button(String(localized: "common.action.open")) {
                 selection = suggestedTool
                 showClipboardBanner = false
             }

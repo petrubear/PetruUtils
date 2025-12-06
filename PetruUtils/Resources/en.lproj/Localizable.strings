@@ -1,0 +1,260 @@
+/*
+  Localizable.strings
+  PetruUtils
+
+  English localization file for PetruUtils developer toolbox.
+
+  Naming convention:
+  - tool.[toolname].title - Tool titles
+  - common.action.[action] - Common action buttons
+  - common.label.[label] - Common labels
+  - preferences.[category].[key] - Preferences strings
+  - sidebar.[section] - Sidebar section names
+  - error.[type] - Error messages
+*/
+
+// MARK: - Tool Titles
+
+"tool.jwt.title" = "JWT Debugger";
+"tool.base64.title" = "Base64";
+"tool.urlEncoder.title" = "URL Encoder";
+"tool.hash.title" = "Hash Generator";
+"tool.uuid.title" = "UUID/ULID Generator";
+"tool.qr.title" = "QR Code";
+"tool.numberBase.title" = "Number Base Converter";
+"tool.unixTimestamp.title" = "Unix Timestamp";
+"tool.caseConverter.title" = "Case Converter";
+"tool.colorConverter.title" = "Color Converter";
+"tool.jsonYAML.title" = "JSON ↔ YAML";
+"tool.jsonCSV.title" = "JSON ↔ CSV";
+"tool.markdownHTML.title" = "Markdown ↔ HTML";
+"tool.jsonFormatter.title" = "JSON Formatter";
+"tool.javascriptFormatter.title" = "JavaScript Formatter";
+"tool.regexpTester.title" = "RegExp Tester";
+"tool.textDiff.title" = "Text Diff";
+"tool.xmlFormatter.title" = "XML Formatter";
+"tool.htmlFormatter.title" = "HTML Formatter";
+"tool.cssFormatter.title" = "CSS Formatter";
+"tool.sqlFormatter.title" = "SQL Formatter";
+"tool.lineSorter.title" = "Line Sorter";
+"tool.lineDeduplicator.title" = "Line Deduplicator";
+"tool.textReplacer.title" = "Text Replacer";
+"tool.stringInspector.title" = "String Inspector";
+"tool.htmlEntity.title" = "HTML Entity";
+"tool.loremIpsum.title" = "Lorem Ipsum";
+"tool.urlParser.title" = "URL Parser";
+"tool.randomString.title" = "Random String";
+"tool.backslashEscape.title" = "Backslash Escape";
+"tool.base32.title" = "Base32 Encoder/Decoder";
+"tool.cronParser.title" = "Cron Expression Parser";
+"tool.jsonPath.title" = "JSON Path Tester";
+"tool.curlConverter.title" = "cURL → Code";
+"tool.svgToCSS.title" = "SVG → CSS";
+"tool.certificateInspector.title" = "Certificate Inspector";
+"tool.ipUtilities.title" = "IP Utilities";
+"tool.asciiArtGenerator.title" = "ASCII Art Generator";
+"tool.bcryptGenerator.title" = "Bcrypt Generator";
+"tool.totpGenerator.title" = "TOTP Generator";
+
+// MARK: - Common Actions
+
+"common.action.process" = "Process";
+"common.action.clear" = "Clear";
+"common.action.copy" = "Copy";
+"common.action.paste" = "Paste";
+"common.action.encode" = "Encode";
+"common.action.decode" = "Decode";
+"common.action.generate" = "Generate";
+"common.action.format" = "Format";
+"common.action.minify" = "Minify";
+"common.action.validate" = "Validate";
+"common.action.convert" = "Convert";
+"common.action.cancel" = "Cancel";
+"common.action.open" = "Open";
+"common.action.save" = "Save";
+"common.action.reset" = "Reset";
+
+// MARK: - Common Labels
+
+"common.label.input" = "Input";
+"common.label.output" = "Output";
+"common.label.result" = "Result";
+"common.label.valid" = "Valid";
+"common.label.invalid" = "Invalid";
+"common.label.characters" = "characters";
+"common.label.lines" = "lines";
+"common.label.bytes" = "bytes";
+"common.label.resultWillAppear" = "Result will appear here";
+"common.label.selectTool" = "Select a tool";
+"common.label.noResults" = "No results";
+
+// MARK: - Sidebar
+
+"sidebar.title" = "Tools";
+"sidebar.section.favorites" = "Favorites";
+"sidebar.section.recent" = "Recent";
+"sidebar.section.allTools" = "All Tools";
+"sidebar.action.addToFavorites" = "Add to Favorites";
+"sidebar.action.removeFromFavorites" = "Remove from Favorites";
+"sidebar.toggle.monitorClipboard" = "Monitor Clipboard";
+
+// MARK: - Clipboard Detection
+
+"clipboard.detected" = "Detected";
+"clipboard.suggested" = "Suggested:";
+
+// MARK: - Preferences - Tabs
+
+"preferences.tab.appearance" = "Appearance";
+"preferences.tab.behavior" = "Behavior";
+"preferences.tab.clipboard" = "Clipboard";
+"preferences.tab.formats" = "Formats";
+"preferences.tab.history" = "History";
+"preferences.tab.advanced" = "Advanced";
+
+// MARK: - Preferences - Appearance
+
+"preferences.appearance.title" = "Appearance";
+"preferences.appearance.theme" = "Theme";
+"preferences.appearance.codeBlock" = "Code Block";
+"preferences.appearance.fontFamily" = "Font Family";
+"preferences.appearance.fontSize" = "Font Size";
+"preferences.appearance.sidebar" = "Sidebar";
+"preferences.appearance.sidebarIconSize" = "Sidebar Icon Size";
+"preferences.appearance.preview" = "The quick brown fox jumps over the lazy dog";
+
+// MARK: - Preferences - Behavior
+
+"preferences.behavior.startup" = "Startup";
+"preferences.behavior.defaultTool" = "Default Tool on Launch";
+"preferences.behavior.lastUsed" = "Last Used";
+"preferences.behavior.chooseWhichTool" = "Choose which tool to show when the app launches";
+"preferences.behavior.workflow" = "Workflow";
+"preferences.behavior.autoClear" = "Auto-clear Input on Tool Switch";
+"preferences.behavior.confirmClearLarge" = "Confirm Before Clearing Large Inputs";
+"preferences.behavior.rememberWindow" = "Remember Window Size and Position";
+"preferences.behavior.rememberPanes" = "Remember Split Pane Ratios";
+"preferences.behavior.customizeWorkflow" = "Customize how the app behaves during your workflow";
+
+// MARK: - Preferences - Clipboard
+
+"preferences.clipboard.monitoring" = "Monitoring";
+"preferences.clipboard.enableMonitoring" = "Enable Clipboard Monitoring";
+"preferences.clipboard.monitoringFooter" = "When enabled, the app will monitor your clipboard and suggest appropriate tools";
+"preferences.clipboard.behavior" = "Behavior";
+"preferences.clipboard.showBanner" = "Show Banner Notifications";
+"preferences.clipboard.autoSwitch" = "Auto-switch to Suggested Tool";
+"preferences.clipboard.checkInterval" = "Check Interval";
+"preferences.clipboard.configureDetection" = "Configure how clipboard detection behaves";
+
+// MARK: - Preferences - Formats
+
+"preferences.formats.defaultFormats" = "Default Formats";
+"preferences.formats.base64Variant" = "Base64 Variant";
+"preferences.formats.hashAlgorithm" = "Hash Algorithm";
+"preferences.formats.uuidVersion" = "UUID Version";
+"preferences.formats.qrErrorCorrection" = "QR Error Correction";
+"preferences.formats.lineBreakStyle" = "Line Break Style";
+"preferences.formats.defaultsFooter" = "These defaults will be used when tools are first opened";
+
+// MARK: - Preferences - History
+
+"preferences.history.tracking" = "History Tracking";
+"preferences.history.enable" = "Enable History";
+"preferences.history.enableFooter" = "When enabled, recent conversions will be saved for quick access";
+"preferences.history.settings" = "Settings";
+"preferences.history.retentionPeriod" = "Retention Period";
+"preferences.history.maxItemsPerTool" = "Max Items Per Tool";
+"preferences.history.management" = "Management";
+"preferences.history.clearAll" = "Clear All History";
+"preferences.history.clearConfirmTitle" = "Clear All History?";
+"preferences.history.clearConfirmMessage" = "This will permanently delete all saved conversion history. This action cannot be undone.";
+
+// MARK: - Preferences - History - Retention Periods
+
+"preferences.history.retention.1day" = "1 day";
+"preferences.history.retention.1week" = "1 week";
+"preferences.history.retention.1month" = "1 month";
+"preferences.history.retention.6months" = "6 months";
+"preferences.history.retention.1year" = "1 year";
+"preferences.history.retention.forever" = "Forever";
+
+// MARK: - Preferences - Advanced
+
+"preferences.advanced.performance" = "Performance";
+"preferences.advanced.maxFileSize" = "Max File Size";
+"preferences.advanced.enableDebugLogging" = "Enable Debug Logging";
+"preferences.advanced.fileSizeWarning" = "Files larger than the maximum size will show a warning before processing";
+"preferences.advanced.reset" = "Reset";
+"preferences.advanced.resetAll" = "Reset All Preferences";
+"preferences.advanced.resetConfirmTitle" = "Reset All Preferences?";
+"preferences.advanced.resetToDefaults" = "Reset to Defaults";
+"preferences.advanced.resetConfirmMessage" = "This will reset all preferences to their default values. The app may need to be restarted.";
+"preferences.advanced.resetFooter" = "Reset all preferences to their default values";
+
+// MARK: - Preferences - Format Options
+
+"preferences.formats.uuidV1" = "UUID v1 (Time-based)";
+"preferences.formats.uuidV4" = "UUID v4 (Random)";
+"preferences.formats.uuidV5" = "UUID v5 (Name-based)";
+"preferences.formats.ulid" = "ULID";
+"preferences.formats.qrLow" = "Low (7%)";
+"preferences.formats.qrMedium" = "Medium (15%)";
+"preferences.formats.qrQuartile" = "Quartile (25%)";
+"preferences.formats.qrHigh" = "High (30%)";
+
+// MARK: - Theme
+
+"theme.system" = "System";
+"theme.light" = "Light";
+"theme.dark" = "Dark";
+
+// MARK: - Icon Size
+
+"iconSize.small" = "Small";
+"iconSize.medium" = "Medium";
+"iconSize.large" = "Large";
+
+// MARK: - Base64 Variant
+
+"base64.standard" = "Standard";
+"base64.urlSafe" = "URL Safe";
+
+// MARK: - Line Break Style
+
+"lineBreak.unix" = "Unix (LF)";
+"lineBreak.windows" = "Windows (CRLF)";
+"lineBreak.classic" = "Classic Mac (CR)";
+
+// MARK: - Hash Algorithms
+
+"hash.md5" = "MD5";
+"hash.sha1" = "SHA-1";
+"hash.sha256" = "SHA-256";
+"hash.sha384" = "SHA-384";
+"hash.sha512" = "SHA-512";
+
+// MARK: - Font Families
+
+"font.sfMono" = "SF Mono";
+"font.menlo" = "Menlo";
+"font.monaco" = "Monaco";
+"font.courierNew" = "Courier New";
+
+// MARK: - Character/Count Format Strings
+
+"format.characters" = "%d characters";
+"format.lines" = "%d lines";
+"format.bytes" = "%d bytes";
+"format.items" = "%d items";
+"format.matches" = "%d matches";
+
+// MARK: - Error Messages
+
+"error.invalidInput" = "Invalid input";
+"error.decodingFailed" = "Decoding failed";
+"error.encodingFailed" = "Encoding failed";
+"error.parsingFailed" = "Parsing failed";
+"error.conversionFailed" = "Conversion failed";
+"error.invalidFormat" = "Invalid format";
+"error.emptyInput" = "Input is empty";

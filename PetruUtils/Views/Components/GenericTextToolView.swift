@@ -59,10 +59,10 @@ struct GenericTextToolView<VM: TextToolViewModel, ToolbarContent: View, ConfigCo
             
             toolbarContent()
             
-            Button("Process") { vm.process() }
+            Button(String(localized: "common.action.process")) { vm.process() }
                 .keyboardShortcut(.return, modifiers: [.command])
-            
-            Button("Clear") { vm.clear() }
+
+            Button(String(localized: "common.action.clear")) { vm.clear() }
                 .keyboardShortcut("k", modifiers: [.command])
         }
         .padding(.horizontal)
@@ -119,7 +119,7 @@ struct GenericTextToolView<VM: TextToolViewModel, ToolbarContent: View, ConfigCo
                 Spacer()
                 outputFooter()
                 if !vm.output.isEmpty {
-                    Button("Copy") { vm.copyOutput() }
+                    Button(String(localized: "common.action.copy")) { vm.copyOutput() }
                         .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
@@ -130,15 +130,15 @@ struct GenericTextToolView<VM: TextToolViewModel, ToolbarContent: View, ConfigCo
             if !vm.output.isEmpty {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                         sectionHeader(icon: outputIcon, 
-                                      title: "Result", 
+                         sectionHeader(icon: outputIcon,
+                                      title: String(localized: "common.label.result"),
                                       color: .green)
                         Spacer()
                         if vm.isValid {
                             HStack(spacing: 4) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
-                                Text("Valid")
+                                Text(String(localized: "common.label.valid"))
                                     .foregroundStyle(.green)
                                     .font(.caption)
                             }
@@ -156,7 +156,7 @@ struct GenericTextToolView<VM: TextToolViewModel, ToolbarContent: View, ConfigCo
                     Image(systemName: outputIcon)
                         .font(.system(size: 48))
                         .foregroundStyle(.secondary)
-                    Text("Result will appear here")
+                    Text(String(localized: "common.label.resultWillAppear"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -221,7 +221,7 @@ extension GenericTextToolView where InputFooter == AnyView, OutputFooter == AnyV
 
                 if !vm.input.isEmpty {
 
-                    Text("\(vm.inputCharCount) characters")
+                    Text("\(vm.inputCharCount) \(String(localized: "common.label.characters"))")
 
                         .foregroundStyle(.secondary)
 
@@ -241,7 +241,7 @@ extension GenericTextToolView where InputFooter == AnyView, OutputFooter == AnyV
 
                 if !vm.output.isEmpty {
 
-                    Text("\(vm.outputCharCount) characters")
+                    Text("\(vm.outputCharCount) \(String(localized: "common.label.characters"))")
 
                         .foregroundStyle(.secondary)
 
