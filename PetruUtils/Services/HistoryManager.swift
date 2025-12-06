@@ -34,9 +34,9 @@ final class HistoryManager: ObservableObject {
         // Add to front
         recentTools.insert(tool, at: 0)
         
-        // Keep only the last 10 tools
-        if recentTools.count > 10 {
-            recentTools = Array(recentTools.prefix(10))
+        // Keep only the last 5 tools
+        if recentTools.count > 5 {
+            recentTools = Array(recentTools.prefix(5))
         }
         
         saveRecentTools()

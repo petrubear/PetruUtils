@@ -35,19 +35,19 @@ struct ContentView: View {
                         }
                     }
                     
-                    // Recent tools section
+                    // Recent tools section (limited to 5)
                     if !historyManager.recentTools.isEmpty {
                         Section("Recent") {
-                            ForEach(historyManager.recentTools) { tool in
+                            ForEach(historyManager.recentTools.prefix(5)) { tool in
                                 toolRow(for: tool)
                                     .tag(tool)
                             }
                         }
                     }
-                    
-                    // All tools section
+
+                    // All tools section (sorted alphabetically)
                     Section("All Tools") {
-                        ForEach(Tool.allCases) { tool in
+                        ForEach(Tool.allCases.sorted { $0.title.lowercased() < $1.title.lowercased() }) { tool in
                             toolRow(for: tool)
                                 .tag(tool)
                         }
