@@ -4,12 +4,11 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## Project Status
 
-**Current Phase**: Phase 10 – Enhancements & Hardening (planned)
+**Current Phase**: v1.0 Release Ready
 
-- **Tools Implemented**: 40 of 40 planned (100%) (see `Tool.swift`)
+- **Tools Implemented**: 40 of 40 planned (100%)
 - **Tests**: 435+ service/unit tests across implemented tools
-- **Preferences/History/Favorites**: Complete (Phase 5)
-- **Release Automation**: Complete (GitHub Actions workflow ready)
+- **All Phases Complete**: Foundation through Release Automation
 
 ## Features
 
@@ -25,9 +24,9 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ## Implemented Tools
 
-### Phase 2 - Core Tools
+### Core Tools
 
-- **JWT Debugger** - Full HS256 support with decode, verify, and generate capabilities
+- **JWT Debugger** - Full support for HS256/384/512, RS256/384/512, PS256/384/512, ES256/384/512 with public key verification and claim validation
 - **Base64 Encoder/Decoder** - Encode/decode text with Standard and URL-safe variants
 - **URL Encoder/Decoder** - Full URL encoding/decoding with multiple component types
 - **Hash Generator** - MD5, SHA-1, SHA-256, SHA-384, SHA-512 with HMAC support
@@ -35,7 +34,7 @@ A native macOS application providing an all-in-one toolbox for software develope
 - **QR Code Generator** - Generate and scan QR codes with custom colors and error correction
 - **Smart Clipboard Detection** - Automatic content type detection with tool suggestions
 
-### Phase 3 - Converters
+### Converters
 
 - **Number Base Converter** - Convert between Binary, Octal, Decimal, and Hexadecimal with bit/byte representation
 - **Unix Timestamp Converter** - Convert timestamps to/from human-readable dates with timezone support
@@ -45,43 +44,43 @@ A native macOS application providing an all-in-one toolbox for software develope
 - **JSON <-> CSV Converter** - Convert JSON arrays to CSV and back with delimiter options
 - **Markdown <-> HTML Converter** - Convert between Markdown and HTML formats
 
-### Phase 4 - Advanced Tools
+### Formatters
 
-- **JSON Formatter** - Format, minify, and validate JSON (tree view, JSONPath breadcrumbs pending)
+- **JSON Formatter** - Format, minify, validate with tree view, JSONPath breadcrumbs, and line numbers
 - **JavaScript Formatter** - Format, minify, and validate JavaScript
-- **RegExp Tester** - Test regular expressions with match highlighting and capture groups
-- **Text Diff** - Side-by-side text comparison with line-by-line diff highlighting
 - **XML Formatter** - Format, minify, and validate XML with indentation options
 - **HTML Formatter** - Format and minify HTML with intelligent tag handling
-- **CSS Formatter** - Format, minify, and validate CSS with property sorting option
+- **CSS Formatter** - Format, minify with SCSS/LESS conversion and vendor auto-prefixing
 - **SQL Formatter** - Format, minify, and validate SQL with keyword uppercasing option
 
-### Phase 6 - Text Utilities
+### Text Utilities
 
+- **RegExp Tester** - Test regular expressions with match highlighting and capture groups
+- **Text Diff** - Side-by-side text comparison with line-by-line diff highlighting
 - **Line Sorter** - Sort lines alphabetically with case-sensitive, natural sort, reverse, and shuffle options
 - **Line Deduplicator** - Remove duplicate lines with options to keep first/last occurrence and sort
 - **Text Replacer** - Find and replace with regex support, case-sensitive/insensitive, and whole word matching
 - **String Inspector** - Comprehensive text analysis: character/word/line counts, byte sizes, entropy, Unicode analysis
 
-### Phase 7 - Encoders & Generators
+### Encoders & Generators
 
 - **HTML Entity Encoder/Decoder** - Encode/decode HTML entities (named, decimal, hex formats)
 - **Lorem Ipsum Generator** - Generate placeholder text (paragraphs, sentences, words)
+- **Random String Generator** - Generate cryptographically secure random strings with customizable character sets
+- **Backslash Escape/Unescape** - Escape and unescape special characters in strings
+- **Base32 Encoder/Decoder** - Encode/decode Base32 with Standard and Hex variants (RFC 4648)
 
-### Phase 8 - Inspectors & Generators
+### Inspectors & Parsers
 
 - **URL Parser** - Parse URLs into components (scheme, host, port, path, query params, fragment)
-- **Random String Generator** - Generate cryptographically secure random strings with customizable character sets
-- **Backslash Escape/Unescape** - Escape and unescape special characters in strings (quotes, newlines, tabs, etc.)
-- **Base32 Encoder/Decoder** - Encode/decode Base32 with Standard and Hex variants (RFC 4648)
 - **Cron Expression Parser** - Parse cron expressions with human-readable descriptions and next 10 execution times
 - **JSON Path Tester** - Test JSONPath expressions with syntax like $.users[0].name, $..email
+- **Certificate Inspector (X.509)** - Decode and inspect X.509 certificates with detailed information and JSON export
 
-### Phase 9 - Remaining Utilities (Complete)
+### Developer Utilities
 
 - **cURL to Code Converter** - Convert cURL commands to code in Swift, Python, JavaScript, Go, PHP, and Ruby
 - **SVG to CSS Converter** - Convert SVG to CSS data URIs with optimization and multiple format options
-- **Certificate Inspector (X.509)** - Decode and inspect X.509 certificates with detailed information and JSON export
 - **IP Utilities** - CIDR/subnet calculator with network info, host ranges, IP classification, and binary/hex representations
 - **ASCII Art Generator** - Convert text to ASCII art with multiple fonts (Banner, Block, Small, Standard, Mini)
 - **Bcrypt Generator/Verifier** - Generate PBKDF2-SHA256 password hashes and verify passwords with configurable cost factor
@@ -100,7 +99,8 @@ A native macOS application providing an all-in-one toolbox for software develope
 
 ### Key Technologies
 
-- **CryptoKit**: Cryptographic operations (HMAC, SHA-256)
+- **CryptoKit**: Cryptographic operations (HMAC, SHA, RSA, ECDSA)
+- **Security**: RSA/ECDSA signature verification, X.509 certificate parsing
 - **Foundation**: Core data processing, encoding/decoding
 - **AppKit**: Native macOS integrations
 - **SwiftUI**: Modern UI framework
@@ -185,163 +185,34 @@ PetruUtilsTests/
 
 ---
 
-## Tool Documentation
+## Keyboard Shortcuts
 
-### JWT Debugger
-
-The JWT Debugger is a fully functional tool for decoding, verifying, and generating JSON Web Tokens (JWT) using the HS256 algorithm.
-
-**Features**:
-- Decode JWT tokens (header, payload, signature)
-- Verify HS256 signatures using HMAC-SHA256
-- Generate JWT tokens programmatically
-- Pretty JSON display with syntax highlighting
-- Claims summary showing standard JWT fields
-- Keyboard shortcuts: `Cmd+D` (Decode), `Cmd+V` (Verify), `Cmd+K` (Clear)
-
-**Algorithm Support**:
-- Current: HS256 (HMAC with SHA-256)
-- Planned: RS256, RS384, RS512, ES256, ES384, ES512, PS256, PS384, PS512
-
-### Base64 Encoder/Decoder
-
-Fast, offline encoding and decoding of text using Base64 and Base64URL formats.
-
-**Features**:
-- Encode text to Base64
-- Decode Base64 to text
-- Standard Base64 (RFC 4648)
-- URL-Safe Base64 (uses `-` and `_` instead of `+` and `/`)
-- Keyboard shortcuts: `Cmd+Return` (Process), `Cmd+K` (Clear), `Cmd+Shift+C` (Copy)
-
-**Variants**:
-- **Standard**: Characters `A-Z`, `a-z`, `0-9`, `+`, `/` with `=` padding
-- **URL-Safe**: Characters `A-Z`, `a-z`, `0-9`, `-`, `_` without padding
-
-### URL Encoder/Decoder
-
-RFC 3986 compliant URL encoding and decoding with multiple component types.
-
-**Features**:
-- Multiple component types: Full URL, Query Parameter, Path Segment, Form Data
-- Auto-detect mode
-- Extract query parameters
-- Keyboard shortcuts: `Cmd+Return` (Process), `Cmd+K` (Clear), `Cmd+D` (Auto-detect)
-
-**Component Types**:
-- **Query Parameter**: RFC 3986 query string encoding
-- **Path Segment**: URL path component encoding
-- **Form Data**: application/x-www-form-urlencoded format
-- **Full URL**: Intelligently encodes complete URLs
-
----
-
-## Testing
-
-### Test Coverage
-
-- Service suites for JWT, Base64, URL, Hash, UUID/ULID, QR Code, Clipboard Monitor, History Manager, Line utilities, etc.
-- Token generation, decoding, verification (HS256)
-- Edge cases (unicode, large payloads, special characters)
-- Security tests (timing attacks, tampering attempts)
-- Error handling and validation branches
-
-### Test Results
-
-```bash
-xcodebuild test -scheme PetruUtils -destination 'platform=macOS'
-# BUILD SUCCEEDED – all current suites green
-```
+| Action | Shortcut |
+|--------|----------|
+| Process/Execute | `Cmd+Return` |
+| Decode | `Cmd+D` |
+| Verify | `Cmd+V` |
+| Format | `Cmd+F` |
+| Minify | `Cmd+M` |
+| Clear | `Cmd+K` |
+| Copy Output | `Cmd+Shift+C` |
+| Preferences | `Cmd+,` |
 
 ---
 
 ## Roadmap
 
-### Phase 1: Foundation - Complete
-- [x] Project setup and architecture
-- [x] Main navigation and sidebar
-- [x] JWT Debugger with HS256 support
-- [x] Comprehensive unit tests
+### Phase 1-9: Complete
+All 40 tools implemented with comprehensive test coverage.
 
-### Phase 2: Core Tools - Complete
-- [x] Base64 Encoder/Decoder
-- [x] URL Encoder/Decoder
-- [x] Hash Generator
-- [x] UUID/ULID Generator
-- [x] QR Code Generator
-- [x] Smart Clipboard Detection
-
-### Phase 3: Converters - Complete
-- [x] Number Base Converter
-- [x] Unix Timestamp Converter
-- [x] Case Converter
-- [x] Color Converter
-- [x] JSON <-> YAML
-- [x] JSON <-> CSV
-- [x] Markdown <-> HTML
-
-### Phase 4: Advanced Tools - Complete
-- [x] JSON Formatter
-- [x] RegExp Tester
-- [x] Text Diff/Compare
-- [x] XML Formatter
-- [x] HTML Formatter
-- [x] CSS Formatter
-- [x] SQL Formatter
-- [x] JavaScript Formatter
-
-### Phase 5: Polish & Release - Complete
-- [x] Tool history and favorites
-- [x] Preferences panel (6 categories)
-- [x] Export/import utilities
-- [x] Lazy loading for performance
-- [x] App icon specification
-- [x] Clipboard auto-switch preference wiring
-- [x] GitHub Action workflow for releases
-
-### Phase 6: Text Utilities - Complete
-- [x] Line Sorter
-- [x] Line Deduplicator
-- [x] Text Replacer
-- [x] String Inspector
-
-### Phase 7: Encoders & Generators - Complete
-- [x] HTML Entity Encoder/Decoder
-- [x] Lorem Ipsum Generator
-
-### Phase 8: Inspectors & Generators - Complete
-- [x] URL Parser
-- [x] Random String Generator
-- [x] Backslash Escape/Unescape
-- [x] Base32 Encoder/Decoder
-- [x] Cron Expression Parser
-- [x] JSON Path Tester
-
-### Phase 9: Remaining Utilities - Complete
-- [x] JavaScript Formatter
-- [x] cURL to Code Converter
-- [x] SVG to CSS Converter
-- [x] Certificate Inspector (X.509)
-- [x] IP Utilities
-- [x] ASCII Art Generator
-- [x] Bcrypt Generator/Verifier
-- [x] TOTP Generator
-
-### Phase 10: Enhancements & Hardening - Planned
-- [ ] JSON Formatter tree view, JSONPath breadcrumbs, line numbers
-- [ ] CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
-- [ ] JWT Debugger RSA/ECDSA/PS algorithms with public-key inputs
+### Phase 10: Enhancements & Hardening - Complete
+- [x] JSON Formatter tree view, JSONPath breadcrumbs, line numbers
+- [x] CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
+- [x] JWT Debugger RSA/ECDSA/PS algorithms with public-key inputs and claim validation
 
 ### Phase 11: Release Automation - Complete
 - [x] GitHub Action workflow for builds and releases
-
----
-
-## Upcoming Work
-
-1. Enhance existing tools: JSON Formatter tree view/breadcrumbs, CSS Formatter SCSS/LESS + prefixing, JWT Debugger RSA/ECDSA/PS support.
-2. Design and implement custom app icon.
-3. Final polish and v1.0 release.
+- [x] Code signing and notarization documentation
 
 ---
 
@@ -380,7 +251,5 @@ TBD - To be determined
 Edison Martinez - Project Creator
 
 ---
-
-**Note**: This project is under active development. Features and APIs may change.
 
 *Last Updated: December 2025*

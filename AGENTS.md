@@ -4,7 +4,7 @@
 
 **PetruUtils** is a native macOS developer toolbox application built with SwiftUI. It provides 40+ utilities for developers (all 40 implemented) with a focus on privacy, offline operation, and native performance.
 
-**Current Status**: Phase 10 – Enhancements & Hardening (40/40 tools implemented = 100%)
+**Current Status**: v1.0 Release Ready (All phases complete, 40/40 tools implemented = 100%)
 
 ---
 
@@ -387,9 +387,9 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - Text Diff/Compare
 - XML Formatter
 - HTML Formatter
-- CSS Formatter (SCSS/LESS conversion + prefixing pending)
+- CSS Formatter (with SCSS/LESS conversion + vendor prefixing)
 - SQL Formatter
-- JSON Formatter (tree view + JSONPath breadcrumbs pending)
+- JSON Formatter (with tree view, JSONPath breadcrumbs, line numbers)
 - JavaScript Formatter
 
 ### ✅ Phase 5: Polish & Preferences (Complete)
@@ -433,7 +433,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - Bcrypt Generator/Verifier ✅
 - TOTP Generator ✅
 
-### 🔲 Phase 10: Enhancements & Hardening
+### ✅ Phase 10: Enhancements & Hardening (Complete)
 
 - JSON Formatter tree view, JSONPath breadcrumbs, line numbers, validation improvements
 - CSS Formatter SCSS/LESS conversion & vendor auto-prefixing
@@ -617,9 +617,9 @@ import Foundation     // Always
 
 **End Goal**: A comprehensive, privacy-focused, offline developer toolbox with 40+ utilities that developers use daily. Think "DevUtils" but open and extensible.
 
-**Current Progress**: 100% complete (40 of 40 tools)
+**Current Progress**: 100% complete (40 of 40 tools, all phases finished)
 
-**Next Milestone**: Complete Phase 10 enhancements (JSON Formatter tree view, CSS SCSS/LESS support, JWT RSA/ECDSA) and release v1.0.
+**Status**: Ready for v1.0 release.
 
 ---
 
