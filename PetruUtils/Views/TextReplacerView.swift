@@ -9,16 +9,9 @@ struct TextReplacerView: View {
             toolbar
             Divider()
             
-            VStack(spacing: 0) {
-                // Find/Replace controls
-                searchPanel
-                Divider()
-                
-                // Text areas
-                HSplitView {
-                    inputPane
-                    outputPane
-                }
+            HSplitView {
+                inputPane
+                outputPane
             }
         }
     }
@@ -30,129 +23,129 @@ struct TextReplacerView: View {
             
             Spacer()
             
-            if vm.matchCount > 0 {
-                Text("\(vm.matchCount) match\(vm.matchCount == 1 ? "" : "es")")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
-                Divider()
-            }
-            
             Button("Replace All") {
                 vm.replaceAll()
             }
             .keyboardShortcut(.return, modifiers: [.command])
-            .help("Replace all occurrences (⌘Return)")
             
             Button("Clear") {
                 vm.clear()
             }
             .keyboardShortcut("k", modifiers: [.command])
-            .help("Clear all (⌘K)")
         }
-        .padding()
-    }
-    
-    private var searchPanel: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Find")
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.secondary)
-                    TextField("Search pattern", text: $vm.findPattern)
-                        .textFieldStyle(.roundedBorder)
-                        .onChange(of: vm.findPattern) { _, _ in
-                            vm.updateMatchCount()
-                        }
-                }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Replace With")
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.secondary)
-                    TextField("Replacement text", text: $vm.replaceWith)
-                        .textFieldStyle(.roundedBorder)
-                }
-            }
-            
-            HStack(spacing: 16) {
-                Toggle("Regex", isOn: $vm.useRegex)
-                    .toggleStyle(.checkbox)
-                    .onChange(of: vm.useRegex) { _, _ in
-                        vm.updateMatchCount()
-                    }
-                
-                if !vm.useRegex {
-                    Toggle("Case Sensitive", isOn: $vm.caseSensitive)
-                        .toggleStyle(.checkbox)
-                        .onChange(of: vm.caseSensitive) { _, _ in
-                            vm.updateMatchCount()
-                        }
-                    
-                    Toggle("Whole Word", isOn: $vm.wholeWord)
-                        .toggleStyle(.checkbox)
-                        .help("Match whole words only")
-                } else {
-                    Toggle("Case Sensitive", isOn: $vm.caseSensitive)
-                        .toggleStyle(.checkbox)
-                        .onChange(of: vm.caseSensitive) { _, _ in
-                            vm.updateMatchCount()
-                        }
-                    
-                    if let error = vm.regexError {
-                        Text("Invalid regex: \(error)")
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                    }
-                }
-                
-                Spacer()
-            }
-        }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Input")
-                    .font(.subheadline.weight(.medium))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.quote", title: "Input Text", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                        .onChange(of: vm.input) { _, _ in
+                            vm.updateMatchCount()
+                        }
+                    
+                    HStack {
+                        Text("\(vm.input.count) characters")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        if vm.matchCount > 0 {
+                            Text("\(vm.matchCount) matches found")
+                                .font(.caption)
+                                .foregroundStyle(.green)
+                        }
+                    }
+                }
+                
+                Divider()
+                
+                sectionHeader(icon: "magnifyingglass", title: "Search & Replace", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Find
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Find")
+                            .font(.subheadline.weight(.medium))
+                        TextField("Search pattern", text: $vm.findPattern)
+                            .textFieldStyle(.roundedBorder)
+                            .onChange(of: vm.findPattern) { _, _ in
+                                vm.updateMatchCount()
+                            }
+                    }
+                    
+                    // Replace
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Replace With")
+                            .font(.subheadline.weight(.medium))
+                        TextField("Replacement text", text: $vm.replaceWith)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    
+                    Divider()
+                    
+                    // Options
+                    VStack(alignment: .leading, spacing: 12) {
+                        Toggle("Regular Expression", isOn: $vm.useRegex)
+                            .toggleStyle(.switch)
+                            .onChange(of: vm.useRegex) { _, _ in
+                                vm.updateMatchCount()
+                            }
+                        
+                        Toggle("Case Sensitive", isOn: $vm.caseSensitive)
+                            .toggleStyle(.switch)
+                            .onChange(of: vm.caseSensitive) { _, _ in
+                                vm.updateMatchCount()
+                            }
+                        
+                        if !vm.useRegex {
+                            Toggle("Match Whole Word", isOn: $vm.wholeWord)
+                                .toggleStyle(.switch)
+                        }
+                    }
+                    
+                    if let regexError = vm.regexError {
+                        HStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.red)
+                            Text("Invalid Regex: \(regexError)")
+                                .foregroundStyle(.red)
+                                .font(.caption)
+                        }
+                        .padding(8)
+                        .background(Color.red.opacity(0.1))
+                        .cornerRadius(6)
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
                 Spacer()
             }
-
-            FocusableTextEditor(text: $vm.input)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .onChange(of: vm.input) { _, _ in
-                    vm.updateMatchCount()
-                }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Find: \"foo\" Replace: \"bar\"")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Regex: \\d+ matches numbers")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text("Output")
-                    .font(.subheadline.weight(.medium))
+                    .font(.headline)
                 Spacer()
-                
                 if !vm.output.isEmpty {
+                    Text("\(vm.output.count) characters")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button(action: {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(vm.output, forType: .string)
@@ -165,31 +158,52 @@ struct TextReplacerView: View {
                     .help("Copy output to clipboard")
                 }
             }
+            .padding()
+            
+            Divider()
             
             if let error = vm.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(6)
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.callout)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.red.opacity(0.1))
             }
             
-            ScrollView {
-                Text(vm.output.isEmpty ? "Replaced text will appear here" : vm.output)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(vm.output.isEmpty ? .secondary : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .textSelection(.enabled)
-                    .padding(8)
+            if !vm.output.isEmpty {
+                ScrollView {
+                    Text(vm.output)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                        .padding(8)
+                }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "text.magnifyingglass")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Replaced text will appear here")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.primary.opacity(0.1), lineWidth: 1)
-            )
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -262,4 +276,3 @@ final class TextReplacerViewModel: ObservableObject {
         matchCount = 0
     }
 }
-

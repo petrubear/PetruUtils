@@ -16,17 +16,9 @@ struct JSONFormatterView: View {
     }
     
     private var toolbar: some View {
-        HStack {
+        HStack(spacing: 12) {
             Text("JSON Formatter").font(.headline)
             Spacer()
-            
-            Picker("Indent", selection: $vm.indentStyle) {
-                Text("2 Spaces").tag(JSONFormatterService.IndentStyle.twoSpaces)
-                Text("4 Spaces").tag(JSONFormatterService.IndentStyle.fourSpaces)
-                Text("Tabs").tag(JSONFormatterService.IndentStyle.tabs)
-            }.frame(width: 120)
-            
-            Toggle("Sort Keys", isOn: $vm.sortKeys)
             
             Button("Format") { vm.format() }.keyboardShortcut("f", modifiers: [.command])
             Button("Minify") { vm.minify() }.keyboardShortcut("m", modifiers: [.command])
@@ -37,88 +29,157 @@ struct JSONFormatterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Input JSON").font(.headline)
-            FocusableTextEditor(text: $vm.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-            
-            HStack {
-                if !vm.input.isEmpty {
-                    Text("\(vm.input.count) characters")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                if let validation = vm.validationResult, !validation.isValid {
-                    HStack(spacing: 4) {
-                        Image(systemName: "xmark.circle.fill").foregroundStyle(.red)
-                        if let line = validation.lineNumber, let col = validation.columnNumber {
-                            Text("Error at line \(line), column \(col)")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "doc.text", title: "Input JSON", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
                                 .font(.caption)
-                                .foregroundStyle(.red)
-                        } else {
-                            Text("Invalid JSON")
-                                .font(.caption)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.secondary)
                         }
-                    }
-                } else if let validation = vm.validationResult, validation.isValid {
-                    HStack(spacing: 4) {
-                        Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        Text("Valid JSON").font(.caption).foregroundStyle(.green)
+                        Spacer()
                     }
                 }
-            }
-            
-            if let error = vm.errorMessage {
-                Text(error)
-                    .foregroundStyle(.red)
-                    .font(.callout)
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Indentation")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.indentStyle) {
+                            Text("2 Spaces").tag(JSONFormatterService.IndentStyle.twoSpaces)
+                            Text("4 Spaces").tag(JSONFormatterService.IndentStyle.fourSpaces)
+                            Text("Tabs").tag(JSONFormatterService.IndentStyle.tabs)
+                        }
+                        .frame(width: 120)
+                        .labelsHidden()
+                    }
+                    
+                    Divider()
+                    
+                    Toggle("Sort Keys", isOn: $vm.sortKeys)
+                        .toggleStyle(.switch)
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.red.opacity(0.1))
                     .cornerRadius(6)
-            }
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Example:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text(#"{"name":"John","age":30,"city":"NYC"}"#)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(#"{"name":"John","age":30,"city":"NYC"}"#)
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Output").font(.headline)
-            ScrollView {
-                SyntaxHighlightedText(text: vm.output, language: .json)
-                    .padding(8)
-            }
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-            
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
+                Text("Output")
+                    .font(.headline)
+                Spacer()
                 if !vm.output.isEmpty {
                     Text("\(vm.output.count) characters")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                }
-                Spacer()
-                if !vm.output.isEmpty {
+                        .padding(.trailing, 8)
+                        
                     Button("Copy") { vm.copyOutput() }
                         .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
+            .padding()
+            
+            Divider()
+            
+            if let validation = vm.validationResult {
+                HStack(spacing: 8) {
+                    Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(validation.isValid ? .green : .red)
+                    
+                    if validation.isValid {
+                        Text("Valid JSON")
+                            .foregroundStyle(.green)
+                    } else {
+                        Text(validation.error ?? "Invalid JSON")
+                            .foregroundStyle(.red)
+                            .font(.system(.body, design: .monospaced))
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(validation.isValid ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            }
+            
+            if !vm.output.isEmpty {
+                ScrollView {
+                    SyntaxHighlightedText(text: vm.output, language: .json)
+                        .padding(8)
+                }
+            } else if vm.validationResult == nil {
+                VStack(spacing: 12) {
+                    Image(systemName: "curlybraces")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Format, minify, or validate JSON")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -166,7 +227,7 @@ final class JSONFormatterViewModel: ObservableObject {
         
         validationResult = service.validate(input)
         if let result = validationResult, !result.isValid {
-            errorMessage = result.error
+            // We display the error in the output pane, so we don't strictly need errorMessage here unless for other errors
         }
     }
     
@@ -184,4 +245,3 @@ final class JSONFormatterViewModel: ObservableObject {
         pasteboard.setString(output, forType: .string)
     }
 }
-

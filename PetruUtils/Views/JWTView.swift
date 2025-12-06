@@ -10,40 +10,19 @@ struct JWTView: View {
         VStack(spacing: 0) {
             toolbar
             Divider()
-            GeometryReader { geo in
-                HStack(spacing: 0) {
-                    leftPane
-                        .frame(width: max(320, min(leftWidth, geo.size.width - 320)))
-
-                    // Draggable divider
-                    Divider()
-                        .frame(width: 1)
-                        .background(.quaternary)
-                        .gesture(DragGesture(minimumDistance: 0).onChanged { value in
-                            leftWidth = max(320, min(value.location.x, geo.size.width - 320))
-                        })
-
-                    rightPane
-                }
+            
+            HSplitView {
+                leftPane
+                rightPane
             }
         }
     }
 
     private var toolbar: some View {
         HStack {
-            Picker("Alg", selection: $vm.algorithm) {
-                ForEach(JWTAlgorithm.allCases) { alg in
-                    Text(alg.rawValue).tag(alg)
-                }
-            }
-            .pickerStyle(.menu)
-
-            if vm.algorithm == .hs256 {
-                FocusableTextField(text: $vm.hsSecret, placeholder: "Enter shared secret")
-                    .textFieldStyle(.roundedBorder)
-                    .frame(minWidth: 260, idealHeight: 22)
-            }
-
+            Text("JWT Debugger")
+                .font(.headline)
+            
             Spacer()
 
             Button("Decode") { vm.decode() }
@@ -60,75 +39,174 @@ struct JWTView: View {
     }
 
     private var leftPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("JWT").font(.headline)
-            FocusableTextEditor(text: $vm.inputToken)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                .background(.background)
-            HStack {
-                Text("Segments: \(vm.segmentCount)").foregroundStyle(.secondary)
-                Spacer()
-                if let err = vm.lastError {
-                    Text(err).foregroundStyle(.red).font(.callout).textSelection(.enabled)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "lock.doc", title: "Encoded Token", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.inputToken)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                        .background(.background)
+                    
+                    HStack {
+                        Text("Segments: \(vm.segmentCount)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
                 }
-            }
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Verification", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Algorithm
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Algorithm")
+                            .font(.subheadline.weight(.medium))
+                        Picker("", selection: $vm.algorithm) {
+                            ForEach(JWTAlgorithm.allCases) { alg in
+                                Text(alg.rawValue).tag(alg)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.segmented)
+                    }
+                    
+                    // Secret
+                    if vm.algorithm == .hs256 {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Shared Secret (HMAC)")
+                                .font(.subheadline.weight(.medium))
+                            SecureField("Enter secret to verify signature", text: $vm.hsSecret)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.system(.body, design: .monospaced))
+                        }
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
+                if let err = vm.lastError {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(err)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Example:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-                    .lineLimit(2)
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.top, 8)
+            .padding()
         }
-        .padding()
     }
 
     private var rightPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "doc.plaintext", title: "Decoded", color: .green)
+                
                 statusView
 
-                groupBox(title: "Header") {
+                // Header
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Header")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    
                     SyntaxHighlightedCodeBlock(text: vm.headerPretty, language: .json)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
                 }
-                groupBox(title: "Payload") {
+                
+                // Payload
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Payload")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    
                     SyntaxHighlightedCodeBlock(text: vm.payloadPretty, language: .json)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
                 }
-                groupBox(title: "Signature (raw, base64url)") {
-                    CodeBlock(text: vm.signatureRaw)
+                
+                // Signature
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Signature")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    
+                    Text(vm.signatureRaw)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.blue.opacity(0.05))
+                        .cornerRadius(8)
                 }
             }
             .padding()
         }
-        .frame(minWidth: 360)
     }
 
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 12) {
-            Circle().fill(vm.signatureStatus.color).frame(width: 10, height: 10)
-            Text(vm.signatureStatus.message).font(.headline)
-            Spacer()
-            if let claims = vm.quickClaimsSummary {
-                Text(claims).foregroundStyle(.secondary).font(.callout)
+            Image(systemName: vm.signatureStatus.icon)
+                .foregroundStyle(vm.signatureStatus.color)
+                .font(.title3)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(vm.signatureStatus.title)
+                    .font(.headline)
+                    .foregroundStyle(vm.signatureStatus.color)
+                
+                Text(vm.signatureStatus.message)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
+            
+            Spacer()
         }
-        .padding(12)
-        .background(.thinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding()
+        .background(vm.signatureStatus.color.opacity(0.1))
+        .cornerRadius(8)
     }
-
-    @ViewBuilder
-    private func groupBox(title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.headline)
-            content()
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
         }
     }
 }
@@ -223,15 +301,23 @@ enum JWTAlgorithm: String, CaseIterable, Identifiable {
 }
 
 enum SignatureStatus {
-    case unknown(message: String = "Signature not checked yet.")
+    case unknown(message: String = "Signature not verified")
     case valid
     case invalid(message: String)
+
+    var title: String {
+        switch self {
+        case .unknown: return "Unverified"
+        case .valid: return "Signature Valid"
+        case .invalid: return "Invalid Signature"
+        }
+    }
 
     var message: String {
         switch self {
         case .unknown(let m): return m
-        case .valid: return "Signature valid ✔︎"
-        case .invalid(let m): return "Signature invalid ✖︎ — \(m)"
+        case .valid: return "The token signature matches the secret."
+        case .invalid(let m): return m
         }
     }
     
@@ -242,5 +328,12 @@ enum SignatureStatus {
         case .invalid: return .red
         }
     }
+    
+    var icon: String {
+        switch self {
+        case .unknown: return "questionmark.circle.fill"
+        case .valid: return "checkmark.circle.fill"
+        case .invalid: return "xmark.circle.fill"
+        }
+    }
 }
-

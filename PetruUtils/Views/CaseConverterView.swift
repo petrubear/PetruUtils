@@ -34,70 +34,100 @@ struct CaseConverterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Input")
-                .font(.headline)
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Text to Convert")
-                    .font(.subheadline.weight(.semibold))
-                TextField("e.g., hello_world or HelloWorld", text: $vm.input, onCommit: { vm.convert() })
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
-                Text("Press Return to convert")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            if let error = vm.errorMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.callout)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.cursor", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Text to Convert")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    
+                    TextField("e.g., hello_world or HelloWorld", text: $vm.input, onCommit: { vm.convert() })
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(.body, design: .monospaced))
+                    
+                    Text("Press Return to convert")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.secondary.opacity(0.05))
                 .cornerRadius(8)
-            }
+                
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("hello_world → helloWorld, HelloWorld, hello-world")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("myVariableName → my_variable_name, MY_VARIABLE_NAME")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 8)
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Examples")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("hello_world → helloWorld, HelloWorld, hello-world")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("myVariableName → my_variable_name, MY_VARIABLE_NAME")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(4)
+                }
+                .padding(.top, 4)
 
-            Spacer()
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Output")
-                    .font(.headline)
-                
                 if let result = vm.result {
-                    VStack(alignment: .leading, spacing: 12) {
-                        caseRow(title: "camelCase", value: result.camelCase, icon: "c.square")
-                        caseRow(title: "PascalCase", value: result.pascalCase, icon: "p.square")
-                        caseRow(title: "snake_case", value: result.snakeCase, icon: "s.square")
-                        caseRow(title: "kebab-case", value: result.kebabCase, icon: "k.square")
-                        caseRow(title: "UPPER CASE", value: result.upperCase, icon: "u.square")
-                        caseRow(title: "lower case", value: result.lowerCase, icon: "l.square")
-                        caseRow(title: "Title Case", value: result.titleCase, icon: "t.square")
-                        caseRow(title: "Sentence case", value: result.sentenceCase, icon: "s.square.fill")
-                        caseRow(title: "CONSTANT_CASE", value: result.constantCase, icon: "exclamationmark.square")
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "textformat", title: "Conversions", color: .purple)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            caseRow(title: "camelCase", value: result.camelCase, icon: "c.square")
+                            Divider()
+                            caseRow(title: "PascalCase", value: result.pascalCase, icon: "p.square")
+                            Divider()
+                            caseRow(title: "snake_case", value: result.snakeCase, icon: "s.square")
+                            Divider()
+                            caseRow(title: "kebab-case", value: result.kebabCase, icon: "k.square")
+                            Divider()
+                            caseRow(title: "UPPER CASE", value: result.upperCase, icon: "u.square")
+                            Divider()
+                            caseRow(title: "lower case", value: result.lowerCase, icon: "l.square")
+                            Divider()
+                            caseRow(title: "Title Case", value: result.titleCase, icon: "t.square")
+                            Divider()
+                            caseRow(title: "Sentence case", value: result.sentenceCase, icon: "s.square.fill")
+                            Divider()
+                            caseRow(title: "CONSTANT_CASE", value: result.constantCase, icon: "exclamationmark.square")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
                     }
                 } else {
                     VStack(spacing: 12) {
@@ -112,37 +142,48 @@ struct CaseConverterView: View {
                             .foregroundStyle(.tertiary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, 40)
                 }
             }
             .padding()
         }
     }
     
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
+    }
+    
     @ViewBuilder
     private func caseRow(title: String, value: String, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        HStack {
             HStack {
                 Image(systemName: icon)
                     .foregroundStyle(.blue)
+                    .font(.title3)
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Button(action: { vm.copyValue(value) }) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.caption)
-                }
-                .buttonStyle(.plain)
-                .help("Copy \(title)")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
             }
+            .frame(width: 140, alignment: .leading)
             
             Text(value)
                 .font(.system(.body, design: .monospaced))
                 .textSelection(.enabled)
-                .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.blue.opacity(0.05))
-                .cornerRadius(6)
+            
+            Button(action: { vm.copyValue(value) }) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .help("Copy \(title)")
         }
+        .padding(.vertical, 2)
     }
 }
 
@@ -204,6 +245,3 @@ final class CaseConverterViewModel: ObservableObject {
         pasteboard.setString(output, forType: .string)
     }
 }
-
-// MARK: - Preview
-

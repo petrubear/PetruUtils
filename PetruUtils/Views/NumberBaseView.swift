@@ -34,140 +34,183 @@ struct NumberBaseView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Input")
-                .font(.headline)
-            
-            // Binary Input
-            inputField(
-                title: "Binary (Base 2)",
-                placeholder: "e.g., 101010",
-                text: $vm.binaryInput,
-                iconName: "01.square",
-                onCommit: { vm.convertFromBinary() }
-            )
-            
-            // Octal Input
-            inputField(
-                title: "Octal (Base 8)",
-                placeholder: "e.g., 52",
-                text: $vm.octalInput,
-                iconName: "8.square",
-                onCommit: { vm.convertFromOctal() }
-            )
-            
-            // Decimal Input
-            inputField(
-                title: "Decimal (Base 10)",
-                placeholder: "e.g., 42",
-                text: $vm.decimalInput,
-                iconName: "number.square",
-                onCommit: { vm.convertFromDecimal() }
-            )
-            
-            // Hexadecimal Input
-            inputField(
-                title: "Hexadecimal (Base 16)",
-                placeholder: "e.g., 2A",
-                text: $vm.hexInput,
-                iconName: "x.square",
-                onCommit: { vm.convertFromHex() }
-            )
-            
-            // Error display
-            if let error = vm.errorMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.callout)
-                        .textSelection(.enabled)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.cursor", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Binary Input
+                    inputField(
+                        title: "Binary (Base 2)",
+                        placeholder: "e.g., 101010",
+                        text: $vm.binaryInput,
+                        iconName: "01.square",
+                        onCommit: { vm.convertFromBinary() }
+                    )
+                    
+                    // Octal Input
+                    inputField(
+                        title: "Octal (Base 8)",
+                        placeholder: "e.g., 52",
+                        text: $vm.octalInput,
+                        iconName: "8.square",
+                        onCommit: { vm.convertFromOctal() }
+                    )
+                    
+                    // Decimal Input
+                    inputField(
+                        title: "Decimal (Base 10)",
+                        placeholder: "e.g., 42",
+                        text: $vm.decimalInput,
+                        iconName: "number.square",
+                        onCommit: { vm.convertFromDecimal() }
+                    )
+                    
+                    // Hexadecimal Input
+                    inputField(
+                        title: "Hexadecimal (Base 16)",
+                        placeholder: "e.g., 2A",
+                        text: $vm.hexInput,
+                        iconName: "x.square",
+                        onCommit: { vm.convertFromHex() }
+                    )
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.secondary.opacity(0.05))
                 .cornerRadius(8)
-            }
+                
+                // Error display
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                            .textSelection(.enabled)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Decimal 42 = Binary 101010 = Hex 2A = Octal 52")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Decimal 255 = Binary 11111111 = Hex FF")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 8)
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Examples")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Decimal 42 = Binary 101010 = Hex 2A = Octal 52")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("Decimal 255 = Binary 11111111 = Hex FF")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(4)
+                }
+                .padding(.top, 4)
 
-            Spacer()
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Output")
-                    .font(.headline)
-                
                 if vm.hasResult {
                     // Conversion Results
-                    resultSection(title: "Binary", value: vm.result?.binary ?? "", icon: "01.square")
-                    resultSection(title: "Octal", value: vm.result?.octal ?? "", icon: "8.square")
-                    resultSection(title: "Decimal", value: vm.result?.decimalString ?? "", icon: "number.square")
-                    resultSection(title: "Hexadecimal", value: vm.result?.hex ?? "", icon: "x.square")
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "function", title: "Conversions", color: .purple)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            resultSection(title: "Binary", value: vm.result?.binary ?? "", icon: "01.square")
+                            Divider()
+                            resultSection(title: "Octal", value: vm.result?.octal ?? "", icon: "8.square")
+                            Divider()
+                            resultSection(title: "Decimal", value: vm.result?.decimalString ?? "", icon: "number.square")
+                            Divider()
+                            resultSection(title: "Hexadecimal", value: vm.result?.hex ?? "", icon: "x.square")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
+                    }
                     
                     Divider()
                     
-                    // Bit Representation
+                    // Representations
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Image(systemName: "square.grid.3x3")
-                                .foregroundStyle(.blue)
-                            Text("64-Bit Representation")
-                                .font(.subheadline.weight(.semibold))
-                        }
+                        sectionHeader(icon: "memorychip", title: "Representations", color: .orange)
                         
-                        Text(vm.result?.bitRepresentation ?? "")
-                            .font(.system(.caption, design: .monospaced))
-                            .textSelection(.enabled)
-                            .padding(8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.secondary.opacity(0.1))
-                            .cornerRadius(6)
-                    }
-                    
-                    // Byte Representation
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Image(systemName: "cube")
-                                .foregroundStyle(.purple)
-                            Text("Byte Representation")
-                                .font(.subheadline.weight(.semibold))
+                        VStack(alignment: .leading, spacing: 12) {
+                            // Bit Representation
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Image(systemName: "square.grid.3x3")
+                                        .foregroundStyle(.blue)
+                                        .font(.caption)
+                                    Text("64-Bit Representation")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Text(vm.result?.bitRepresentation ?? "")
+                                    .font(.system(.caption, design: .monospaced))
+                                    .textSelection(.enabled)
+                                    .padding(8)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color.secondary.opacity(0.1))
+                                    .cornerRadius(6)
+                            }
+                            
+                            // Byte Representation
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Image(systemName: "cube")
+                                        .foregroundStyle(.purple)
+                                        .font(.caption)
+                                    Text("Byte Representation")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Text(vm.result?.byteRepresentation ?? "")
+                                    .font(.system(.caption, design: .monospaced))
+                                    .textSelection(.enabled)
+                                    .padding(8)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color.secondary.opacity(0.1))
+                                    .cornerRadius(6)
+                            }
                         }
-                        
-                        Text(vm.result?.byteRepresentation ?? "")
-                            .font(.system(.caption, design: .monospaced))
-                            .textSelection(.enabled)
-                            .padding(8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.secondary.opacity(0.1))
-                            .cornerRadius(6)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
                     }
                     
                     // Sign indicator
                     if vm.result?.isSigned == true {
                         HStack(spacing: 8) {
-                            Image(systemName: "info.circle")
+                            Image(systemName: "info.circle.fill")
                                 .foregroundStyle(.orange)
                             Text("Negative number (two's complement)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                        .padding(8)
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(8)
                     }
                     
                 } else {
@@ -183,9 +226,19 @@ struct NumberBaseView: View {
                             .foregroundStyle(.tertiary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, 40)
                 }
             }
             .padding()
+        }
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
         }
     }
     
@@ -197,12 +250,14 @@ struct NumberBaseView: View {
         iconName: String,
         onCommit: @escaping () -> Void
     ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Image(systemName: iconName)
                     .foregroundStyle(.blue)
+                    .font(.caption)
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
             }
             
             TextField(placeholder, text: text, onCommit: onCommit)
@@ -213,31 +268,30 @@ struct NumberBaseView: View {
     
     @ViewBuilder
     private func resultSection(title: String, value: String, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        HStack {
             HStack {
                 Image(systemName: icon)
                     .foregroundStyle(.green)
+                    .frame(width: 16)
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
-                
-                Spacer()
-                
-                Button(action: { vm.copyValue(value) }) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.caption)
-                }
-                .buttonStyle(.plain)
-                .help("Copy \(title)")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
             }
+            .frame(width: 120, alignment: .leading)
             
             Text(value)
                 .font(.system(.body, design: .monospaced))
                 .textSelection(.enabled)
-                .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.green.opacity(0.05))
-                .cornerRadius(6)
+            
+            Button(action: { vm.copyValue(value) }) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .help("Copy \(title)")
         }
+        .padding(.vertical, 2)
     }
 }
 
@@ -382,6 +436,3 @@ final class NumberBaseViewModel: ObservableObject {
         pasteboard.setString(output, forType: .string)
     }
 }
-
-// MARK: - Preview
-

@@ -8,12 +8,13 @@ struct JSONPathView: View {
         VStack(spacing: 0) {
             toolbar
             Divider()
+            
             VStack(spacing: 0) {
-                pathInput
+                pathInputPane
                 Divider()
                 HSplitView {
-                    jsonInput
-                    resultOutput
+                    jsonInputPane
+                    resultPane
                 }
             }
         }
@@ -21,12 +22,15 @@ struct JSONPathView: View {
     
     private var toolbar: some View {
         HStack(spacing: 12) {
+            Text("JSON Path Tester")
+                .font(.headline)
+            
+            Spacer()
+            
             Button("Test") {
                 vm.test()
             }
             .keyboardShortcut(.return, modifiers: [.command])
-            
-            Spacer()
             
             Button("Clear") {
                 vm.clear()
@@ -37,94 +41,98 @@ struct JSONPathView: View {
         .padding(.vertical, 8)
     }
     
-    private var pathInput: some View {
-        VStack(alignment: .leading, spacing: 4) {
+    private var pathInputPane: some View {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("JSONPath Expression")
-                    .font(.headline)
-                
+                sectionHeader(icon: "arrow.triangle.branch", title: "JSONPath Expression", color: .blue)
                 Spacer()
-                
                 if vm.matchCount > 0 {
                     Text("\(vm.matchCount) match\(vm.matchCount == 1 ? "" : "es")")
                         .font(.caption)
                         .foregroundColor(.green)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(4)
                 }
             }
-            .padding([.horizontal, .top], 8)
             
             TextField("e.g., $.store.book[0].title", text: $vm.path)
-                .font(.custom("JetBrains Mono", size: 12))
+                .font(.system(.body, design: .monospaced))
                 .textFieldStyle(.roundedBorder)
-                .padding(.horizontal, 8)
-            
-            Text("Examples: $.users[0], $.users[*].name, $..email")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 8)
-                .padding(.bottom, 8)
             
             if let error = vm.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.caption)
+                }
+            } else {
+                Text("Examples: $.users[0], $.users[*].name, $..email")
                     .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.bottom, 8)
+                    .foregroundColor(.secondary)
             }
         }
+        .padding()
+        .background(Color.secondary.opacity(0.02))
     }
     
-    private var jsonInput: some View {
-        VStack(alignment: .leading, spacing: 4) {
+    private var jsonInputPane: some View {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("JSON Input")
-                    .font(.headline)
+                sectionHeader(icon: "curlybraces", title: "Input JSON", color: .purple)
                 Spacer()
                 Text("\(vm.jsonInput.count) chars")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            .padding([.horizontal, .top], 8)
 
             FocusableTextEditor(text: $vm.jsonInput)
-                .font(.custom("JetBrains Mono", size: 12))
+                .font(.system(.body, design: .monospaced))
+                .padding(4)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
 
             // Help text
             VStack(alignment: .leading, spacing: 4) {
-                Text("Path syntax:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.secondary)
+                    Text("Syntax")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
                 Text("$ (root), .key (child), [0] (index), [*] (all), ..key (recursive)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 4)
+            .padding(.top, 4)
         }
+        .padding()
     }
     
-    private var resultOutput: some View {
-        VStack(alignment: .leading, spacing: 4) {
+    private var resultPane: some View {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Result")
-                    .font(.headline)
+                sectionHeader(icon: "list.bullet.indent", title: "Result", color: .green)
                 Spacer()
                 if !vm.output.isEmpty {
                     Text("\(vm.output.count) chars")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                }
-                if !vm.output.isEmpty {
+                    
                     Button(action: {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(vm.output, forType: .string)
                     }) {
                         Label("Copy", systemImage: "doc.on.doc")
+                            .font(.caption)
                     }
+                    .buttonStyle(.plain)
                     .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
-            .padding([.horizontal, .top], 8)
             
             ScrollView {
                 SyntaxHighlightedText(text: vm.output, language: .json)
@@ -134,7 +142,16 @@ struct JSONPathView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.2), lineWidth: 1)
             )
-            .padding([.horizontal, .bottom], 8)
+        }
+        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
         }
     }
 }
@@ -181,4 +198,3 @@ final class JSONPathViewModel: ObservableObject {
         errorMessage = nil
     }
 }
-

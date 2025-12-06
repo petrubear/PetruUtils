@@ -16,15 +16,10 @@ struct XMLFormatterView: View {
     }
     
     private var toolbar: some View {
-        HStack {
+        HStack(spacing: 12) {
             Text("XML Formatter").font(.headline)
             Spacer()
-            Picker("Indent", selection: $vm.indentStyle) {
-                ForEach(XMLFormatterService.IndentStyle.allCases, id: \.self) { style in
-                    Text(style.rawValue).tag(style)
-                }
-            }
-            .frame(width: 120)
+            
             Button("Format") { vm.format() }.keyboardShortcut("f", modifiers: [.command])
             Button("Minify") { vm.minify() }.keyboardShortcut("m", modifiers: [.command])
             Button("Validate") { vm.validate() }.keyboardShortcut("v", modifiers: [.command])
@@ -34,86 +29,147 @@ struct XMLFormatterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Input").font(.headline)
-                Spacer()
-                Text("\(vm.input.count) characters")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            FocusableTextEditor(text: $vm.input)
-                .font(.system(.body, design: .monospaced))
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "doc.text", title: "Input XML", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
+                }
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Indentation")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.indentStyle) {
+                            ForEach(XMLFormatterService.IndentStyle.allCases, id: \.self) { indentStyle in
+                                Text(indentStyle.rawValue).tag(indentStyle)
+                            }
+                        }
+                        .frame(width: 120)
+                        .labelsHidden()
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Example:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("<root><item id=\"1\">Value</item></root>")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("<root><item id=\"1\">Value</item></root>")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Output").font(.headline)
+                Text("Output")
+                    .font(.headline)
                 Spacer()
                 if !vm.output.isEmpty {
                     Text("\(vm.output.count) characters")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button("Copy") { vm.copyOutput() }
                         .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
+            .padding()
             
-            if let errorMessage = vm.errorMessage {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
-                        Text("Error")
-                            .font(.headline)
-                    }
-                    Text(errorMessage)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-                }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.orange.opacity(0.1))
-                .cornerRadius(8)
-            } else if let validationMessage = vm.validationMessage {
-                HStack {
+            Divider()
+            
+            if let validationMessage = vm.validationMessage {
+                HStack(spacing: 8) {
                     Image(systemName: vm.validationIsValid ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundStyle(vm.validationIsValid ? .green : .red)
+                    
                     Text(validationMessage)
+                        .foregroundStyle(vm.validationIsValid ? .green : .red)
                         .font(.system(.body, design: .monospaced))
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background((vm.validationIsValid ? Color.green : Color.red).opacity(0.1))
-                .cornerRadius(8)
-            } else {
+                .background(vm.validationIsValid ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            }
+            
+            if !vm.output.isEmpty {
                 ScrollView {
                     SyntaxHighlightedText(text: vm.output, language: .xml)
                         .padding(8)
                 }
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+            } else if vm.validationMessage == nil {
+                VStack(spacing: 12) {
+                    Image(systemName: "chevron.left.forwardslash.chevron.right")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Format, minify, or validate XML")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -173,4 +229,3 @@ final class XMLFormatterViewModel: ObservableObject {
         NSPasteboard.general.setString(output, forType: .string)
     }
 }
-

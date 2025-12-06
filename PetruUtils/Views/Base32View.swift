@@ -17,21 +17,8 @@ struct Base32View: View {
     
     private var toolbar: some View {
         HStack(spacing: 12) {
-            Picker("", selection: $vm.mode) {
-                Text("Encode").tag(Base32ViewModel.Mode.encode)
-                Text("Decode").tag(Base32ViewModel.Mode.decode)
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 160)
-            .labelsHidden()
-            
-            Picker("", selection: $vm.variant) {
-                Text("Standard").tag(Base32Service.Variant.standard)
-                Text("Hex").tag(Base32Service.Variant.hex)
-            }
-            .pickerStyle(.menu)
-            .frame(width: 120)
-            .labelsHidden()
+            Text("Base32 Converter")
+                .font(.headline)
             
             Spacer()
             
@@ -45,83 +32,171 @@ struct Base32View: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(vm.mode == .encode ? "Text" : "Base32")
-                    .font(.headline)
-                Spacer()
-                Text("\(vm.input.count) chars")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding([.horizontal, .top], 8)
-
-            FocusableTextEditor(text: $vm.input)
-                .font(.custom("JetBrains Mono", size: 12))
-                .onChange(of: vm.input) {
-                    vm.process()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: vm.mode == .encode ? "text.quote" : "textformat.123", 
+                              title: vm.mode == .encode ? "Input Text" : "Input Base32", 
+                              color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                        .onChange(of: vm.input) { _, _ in
+                            vm.process()
+                        }
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
                 }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Encode: Hello → JBSWY3DP")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Decode: JBSWY3DP → Hello")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Mode")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.mode) {
+                            Text("Encode").tag(Base32ViewModel.Mode.encode)
+                            Text("Decode").tag(Base32ViewModel.Mode.decode)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 160)
+                        .labelsHidden()
+                    }
+                    
+                    Divider()
+                    
+                    HStack {
+                        Text("Variant")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.variant) {
+                            Text("Standard (RFC 4648)").tag(Base32Service.Variant.standard)
+                            Text("Hex (RFC 4648)").tag(Base32Service.Variant.hex)
+                        }
+                        .pickerStyle(.menu)
+                        .frame(width: 180)
+                        .labelsHidden()
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    if vm.mode == .encode {
+                        Text("Hello → JBSWY3DP")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(4)
+                    } else {
+                        Text("JBSWY3DP → Hello")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(4)
+                    }
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 4)
+            .padding()
         }
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text(vm.mode == .encode ? "Base32" : "Text")
+                Text(vm.mode == .encode ? "Output Base32" : "Output Text")
                     .font(.headline)
                 Spacer()
                 if !vm.output.isEmpty {
-                    Text("\(vm.output.count) chars")
+                    Text("\(vm.output.count) characters")
                         .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                if !vm.output.isEmpty {
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button(action: {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(vm.output, forType: .string)
                     }) {
                         Label("Copy", systemImage: "doc.on.doc")
+                            .font(.caption)
                     }
-                    .keyboardShortcut("c", modifiers: [.command, .shift])
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.blue)
+                    .help("Copy output to clipboard")
                 }
             }
-            .padding([.horizontal, .top], 8)
+            .padding()
+            
+            Divider()
             
             if let error = vm.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.top, 4)
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.callout)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.red.opacity(0.1))
             }
             
-            ScrollView {
-                Text(vm.output)
-                    .font(.custom("JetBrains Mono", size: 12))
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(8)
+            if !vm.output.isEmpty {
+                ScrollView {
+                    Text(vm.output)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                        .padding(8)
+                }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: vm.mode == .encode ? "textformat.123" : "text.quote")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Result will appear here")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-            )
-            .padding([.horizontal, .bottom], 8)
+        }
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
         }
     }
 }
@@ -172,4 +247,3 @@ final class Base32ViewModel: ObservableObject {
         errorMessage = nil
     }
 }
-

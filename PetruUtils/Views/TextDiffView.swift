@@ -20,8 +20,9 @@ struct TextDiffView: View {
     }
     
     private var toolbar: some View {
-        HStack {
-            Text("Text Diff").font(.headline)
+        HStack(spacing: 12) {
+            Text("Text Diff")
+                .font(.headline)
             Spacer()
             Toggle("Ignore Whitespace", isOn: $vm.ignoreWhitespace)
             Button("Compare") { vm.compare() }.keyboardShortcut(.return, modifiers: [.command])
@@ -32,7 +33,8 @@ struct TextDiffView: View {
     
     private var leftPane: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Original").font(.headline)
+            sectionHeader(icon: "doc.text", title: "Original Text", color: .blue)
+            
             if let result = vm.result {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
@@ -41,20 +43,23 @@ struct TextDiffView: View {
                         }
                     }
                 }
+                .background(Color.white)
             } else {
                 FocusableTextEditor(text: $vm.leftText)
                     .padding(4)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    .font(.system(.body, design: .monospaced))
 
                 // Help text
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Usage:")
-                        .font(.caption.bold())
-                        .foregroundStyle(.secondary)
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Usage")
+                            .font(.caption.bold())
+                            .foregroundStyle(.secondary)
+                    }
                     Text("Enter original text here, modified text on the right")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("Green = added, Red = removed")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -66,7 +71,8 @@ struct TextDiffView: View {
     
     private var rightPane: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Modified").font(.headline)
+            sectionHeader(icon: "doc.text.fill", title: "Modified Text", color: .purple)
+            
             if let result = vm.result {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
@@ -75,13 +81,24 @@ struct TextDiffView: View {
                         }
                     }
                 }
+                .background(Color.white)
             } else {
                 FocusableTextEditor(text: $vm.rightText)
                     .padding(4)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                    .font(.system(.body, design: .monospaced))
             }
         }
         .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
     
     @ViewBuilder
@@ -91,7 +108,7 @@ struct TextDiffView: View {
                 Text("\(diff.lineNumber)")
                     .font(.system(.caption, design: .monospaced))
                     .foregroundStyle(.secondary)
-                    .frame(width: 40, alignment: .trailing)
+                    .frame(width: 30, alignment: .trailing)
             }
             Text(diff.content.isEmpty ? " " : diff.content)
                 .font(.system(.body, design: .monospaced))
@@ -112,21 +129,24 @@ struct TextDiffView: View {
     
     @ViewBuilder
     private func statsBar(result: TextDiffService.DiffResult) -> some View {
-        HStack(spacing: 20) {
-            HStack(spacing: 4) {
+        HStack(spacing: 24) {
+            Spacer()
+            HStack(spacing: 6) {
                 Image(systemName: "plus.circle.fill").foregroundStyle(.green)
-                Text("\(result.addedCount) added").font(.caption)
+                Text("\(result.addedCount) added").font(.subheadline)
             }
-            HStack(spacing: 4) {
+            HStack(spacing: 6) {
                 Image(systemName: "minus.circle.fill").foregroundStyle(.red)
-                Text("\(result.removedCount) removed").font(.caption)
+                Text("\(result.removedCount) removed").font(.subheadline)
             }
-            HStack(spacing: 4) {
+            HStack(spacing: 6) {
                 Image(systemName: "equal.circle.fill").foregroundStyle(.secondary)
-                Text("\(result.unchangedCount) unchanged").font(.caption)
+                Text("\(result.unchangedCount) unchanged").font(.subheadline)
             }
+            Spacer()
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 12)
+        .background(Color.secondary.opacity(0.05))
     }
 }
 
@@ -149,4 +169,3 @@ final class TextDiffViewModel: ObservableObject {
         result = nil
     }
 }
-

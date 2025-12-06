@@ -28,84 +28,134 @@ struct ColorConverterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Input")
-                .font(.headline)
-            
-            ColorPicker("Pick a Color", selection: $vm.pickedColor)
-                .onChange(of: vm.pickedColor) { _, _ in vm.convertFromPicker() }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text("HEX")
-                    .font(.subheadline.weight(.semibold))
-                TextField("#FF5733", text: $vm.hexInput, onCommit: { vm.convertFromHex() })
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text("RGB")
-                    .font(.subheadline.weight(.semibold))
-                TextField("255, 87, 51", text: $vm.rgbInput, onCommit: { vm.convertFromRGB() })
-                    .textFieldStyle(.roundedBorder)
-                    .font(.system(.body, design: .monospaced))
-            }
-            
-            if let error = vm.errorMessage {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.callout)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "paintpalette", title: "Input", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Color Picker
+                    HStack {
+                        ColorPicker("Pick a Color", selection: $vm.pickedColor)
+                            .onChange(of: vm.pickedColor) { _, _ in vm.convertFromPicker() }
+                            .labelsHidden()
+                        Text("Pick a color from picker")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(8)
+                    
+                    Divider()
+                    
+                    // HEX Input
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("HEX")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        TextField("#FF5733", text: $vm.hexInput, onCommit: { vm.convertFromHex() })
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.body, design: .monospaced))
+                    }
+                    
+                    // RGB Input
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("RGB")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        TextField("255, 87, 51", text: $vm.rgbInput, onCommit: { vm.convertFromRGB() })
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.body, design: .monospaced))
+                    }
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.secondary.opacity(0.05))
                 .cornerRadius(8)
-            }
+                
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("HEX: #FF5733, #F00, FF5733")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("RGB: 255, 87, 51 or rgb(255, 87, 51)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 8)
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Examples")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("HEX: #FF5733, #F00, FF5733")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("RGB: 255, 87, 51 or rgb(255, 87, 51)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.05))
+                    .cornerRadius(4)
+                }
+                .padding(.top, 4)
 
-            Spacer()
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Output")
-                    .font(.headline)
-                
                 if let result = vm.result {
                     // Color Preview
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(result.color)
-                        .frame(height: 100)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                        )
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "eye", title: "Preview", color: .orange)
+                        
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(result.color)
+                            .frame(height: 100)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                            )
+                            .shadow(radius: 2)
+                    }
                     
                     Divider()
                     
-                    colorRow(title: "HEX", value: result.hex, icon: "number")
-                    colorRow(title: "RGB", value: result.rgb.toString(), icon: "circle.hexagongrid")
-                    colorRow(title: "HSL", value: result.hsl.toString(), icon: "paintpalette")
-                    colorRow(title: "HSV", value: result.hsv.toString(), icon: "eye")
-                    colorRow(title: "CMYK", value: result.cmyk.toString(), icon: "printer")
+                    // Color Formats
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionHeader(icon: "list.bullet", title: "Formats", color: .purple)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            colorRow(title: "HEX", value: result.hex, icon: "number")
+                            Divider()
+                            colorRow(title: "RGB", value: result.rgb.toString(), icon: "circle.hexagongrid")
+                            Divider()
+                            colorRow(title: "HSL", value: result.hsl.toString(), icon: "paintpalette")
+                            Divider()
+                            colorRow(title: "HSV", value: result.hsv.toString(), icon: "dial.min")
+                            Divider()
+                            colorRow(title: "CMYK", value: result.cmyk.toString(), icon: "printer")
+                        }
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(8)
+                    }
                 } else {
                     VStack(spacing: 12) {
                         Image(systemName: "paintpalette")
@@ -116,35 +166,47 @@ struct ColorConverterView: View {
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, 40)
                 }
             }
             .padding()
         }
     }
     
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
+    }
+    
     @ViewBuilder
     private func colorRow(title: String, value: String, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        HStack {
             HStack {
                 Image(systemName: icon)
                     .foregroundStyle(.purple)
+                    .frame(width: 16)
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Button(action: { vm.copyValue(value) }) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.caption)
-                }
-                .buttonStyle(.plain)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
             }
+            .frame(width: 80, alignment: .leading)
+            
             Text(value)
                 .font(.system(.body, design: .monospaced))
                 .textSelection(.enabled)
-                .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.secondary.opacity(0.1))
-                .cornerRadius(6)
+            
+            Button(action: { vm.copyValue(value) }) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
         }
+        .padding(.vertical, 2)
     }
 }
 
@@ -201,4 +263,3 @@ final class ColorConverterViewModel: ObservableObject {
         pasteboard.setString(value, forType: .string)
     }
 }
-

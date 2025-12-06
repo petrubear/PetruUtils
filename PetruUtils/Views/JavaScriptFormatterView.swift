@@ -3,7 +3,7 @@ import Combine
 import AppKit
 
 struct JavaScriptFormatterView: View {
-    @StateObject private var viewModel = JavaScriptFormatterViewModel()
+    @StateObject private var vm = JavaScriptFormatterViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -17,24 +17,17 @@ struct JavaScriptFormatterView: View {
     }
     
     private var toolbar: some View {
-        HStack {
+        HStack(spacing: 12) {
             Text("JavaScript Formatter").font(.headline)
             Spacer()
             
-            Picker("Indent", selection: $viewModel.indentStyle) {
-                ForEach(JavaScriptFormatterService.IndentStyle.allCases) { style in
-                    Text(style.rawValue).tag(style)
-                }
-            }
-            .frame(width: 140)
-            
-            Button("Format") { viewModel.format() }
+            Button("Format") { vm.format() }
                 .keyboardShortcut("f", modifiers: [.command])
-            Button("Minify") { viewModel.minify() }
+            Button("Minify") { vm.minify() }
                 .keyboardShortcut("m", modifiers: [.command])
-            Button("Validate") { viewModel.validate() }
+            Button("Validate") { vm.validate() }
                 .keyboardShortcut("v", modifiers: [.command])
-            Button("Clear") { viewModel.clear() }
+            Button("Clear") { vm.clear() }
                 .keyboardShortcut("k", modifiers: [.command])
         }
         .padding(.horizontal)
@@ -42,78 +35,148 @@ struct JavaScriptFormatterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Input JavaScript").font(.headline)
-            FocusableTextEditor(text: $viewModel.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-            
-            HStack {
-                if !viewModel.input.isEmpty {
-                    Text("\(viewModel.input.count) characters")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "curlybraces", title: "Input JavaScript", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
                 }
-                Spacer()
-                if let validation = viewModel.validationResult, !validation.isValid {
-                    Label(validation.message ?? "Invalid", systemImage: "xmark.circle.fill")
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                } else if let validation = viewModel.validationResult, validation.isValid {
-                    Label("Valid JavaScript", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                        .font(.caption)
+                
+                Divider() 
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Indentation")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.indentStyle) {
+                            ForEach(JavaScriptFormatterService.IndentStyle.allCases) {
+                                style in
+                                Text(style.rawValue).tag(style)
+                            }
+                        }
+                        .frame(width: 140)
+                        .labelsHidden()
+                    }
                 }
-            }
-            
-            if let error = viewModel.errorMessage {
-                Text(error)
-                    .font(.callout)
-                    .foregroundStyle(.red)
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.red.opacity(0.1))
                     .cornerRadius(6)
+                }
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("function hello(){return\"world\"}")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Example:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("function hello(){return\"world\"}")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-            }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Output").font(.headline)
+                Text("Output")
+                    .font(.headline)
                 Spacer()
-                if !viewModel.output.isEmpty {
-                    Button("Copy") { viewModel.copyOutput() }
+                if !vm.output.isEmpty {
+                    Text("\(vm.output.count) characters")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                        
+                    Button("Copy") { vm.copyOutput() }
                         .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
-            ScrollView {
-                SyntaxHighlightedText(text: viewModel.output, language: .javascript)
-                    .padding(8)
-            }
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+            .padding()
             
-            if !viewModel.output.isEmpty {
-                Text("\(viewModel.output.count) characters")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            Divider()
+            
+            if let validation = vm.validationResult {
+                HStack(spacing: 8) {
+                    Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(validation.isValid ? .green : .red)
+                    
+                    Text(validation.isValid ? "Valid JavaScript" : (validation.message ?? "Invalid"))
+                        .foregroundStyle(validation.isValid ? .green : .red)
+                        .font(.system(.body, design: .monospaced))
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(validation.isValid ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            }
+            
+            if !vm.output.isEmpty {
+                ScrollView {
+                    SyntaxHighlightedText(text: vm.output, language: .javascript)
+                        .padding(8)
+                }
+            } else if vm.validationResult == nil {
+                VStack(spacing: 12) {
+                    Image(systemName: "curlybraces.square")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Format, minify, or validate JavaScript")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -157,7 +220,7 @@ final class JavaScriptFormatterViewModel: ObservableObject {
         let result = service.validate(input)
         validationResult = result
         if !result.isValid {
-            errorMessage = result.message
+            // Error is shown in validation block
         }
     }
     
@@ -175,4 +238,3 @@ final class JavaScriptFormatterViewModel: ObservableObject {
         pasteboard.setString(output, forType: .string)
     }
 }
-

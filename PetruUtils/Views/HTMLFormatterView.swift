@@ -16,15 +16,10 @@ struct HTMLFormatterView: View {
     }
     
     private var toolbar: some View {
-        HStack {
+        HStack(spacing: 12) {
             Text("HTML Formatter").font(.headline)
             Spacer()
-            Picker("Indent", selection: $vm.indentStyle) {
-                ForEach(HTMLFormatterService.IndentStyle.allCases, id: \.self) { style in
-                    Text(style.rawValue).tag(style)
-                }
-            }
-            .frame(width: 120)
+            
             Button("Format") { vm.format() }.keyboardShortcut("f", modifiers: [.command])
             Button("Minify") { vm.minify() }.keyboardShortcut("m", modifiers: [.command])
             Button("Clear") { vm.clear() }.keyboardShortcut("k", modifiers: [.command])
@@ -33,75 +28,134 @@ struct HTMLFormatterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Input").font(.headline)
-                Spacer()
-                Text("\(vm.input.count) characters")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            FocusableTextEditor(text: $vm.input)
-                .font(.system(.body, design: .monospaced))
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "doc.text", title: "Input HTML", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            Text("\(vm.input.count) characters")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
+                }
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Indentation")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.indentStyle) {
+                            ForEach(HTMLFormatterService.IndentStyle.allCases, id: \.self) {
+                                style in
+                                Text(style.rawValue).tag(style)
+                            }
+                        }
+                        .frame(width: 120)
+                        .labelsHidden()
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
 
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Example:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("<div class=\"container\"><p>Hello</p></div>")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
+                if let error = vm.errorMessage {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
+                }
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Example")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("<div class=\"container\"><p>Hello</p></div>")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Output").font(.headline)
+                Text("Output")
+                    .font(.headline)
                 Spacer()
                 if !vm.output.isEmpty {
                     Text("\(vm.output.count) characters")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button("Copy") { vm.copyOutput() }
                         .keyboardShortcut("c", modifiers: [.command, .shift])
                 }
             }
+            .padding()
             
-            if let errorMessage = vm.errorMessage {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
-                        Text("Error")
-                            .font(.headline)
-                    }
-                    Text(errorMessage)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .textSelection(.enabled)
-                }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.orange.opacity(0.1))
-                .cornerRadius(8)
-            } else {
+            Divider()
+            
+            if !vm.output.isEmpty {
                 ScrollView {
                     SyntaxHighlightedText(text: vm.output, language: .html)
                         .padding(8)
                 }
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "doc.richtext")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Format or minify HTML")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -147,4 +201,3 @@ final class HTMLFormatterViewModel: ObservableObject {
         NSPasteboard.general.setString(output, forType: .string)
     }
 }
-

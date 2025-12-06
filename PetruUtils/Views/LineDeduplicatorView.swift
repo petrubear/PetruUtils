@@ -22,22 +22,6 @@ struct LineDeduplicatorView: View {
             
             Spacer()
             
-            Picker("Keep", selection: $vm.keepOption) {
-                Text("First").tag(LineDeduplicatorService.KeepOption.first)
-                Text("Last").tag(LineDeduplicatorService.KeepOption.last)
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 140)
-            
-            Toggle("Case Sensitive", isOn: $vm.caseSensitive)
-            Toggle("Sort After", isOn: $vm.sortAfter)
-            
-            if vm.showStats {
-                Text("\(vm.stats.duplicates) dupes, \(vm.stats.unique) unique")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
             Button("Remove Duplicates") { vm.deduplicate() }
                 .keyboardShortcut(.return, modifiers: [.command])
             Button("Clear") { vm.clear() }
@@ -48,47 +32,101 @@ struct LineDeduplicatorView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Input")
-                    .font(.subheadline.weight(.medium))
-                Spacer()
-                Text("\(vm.inputLineCount) lines")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            FocusableTextEditor(text: $vm.input)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .onChange(of: vm.input) { _, _ in
-                    vm.updateStats()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.alignleft", title: "Input Lines", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                        .onChange(of: vm.input) { _, _ in
+                            vm.updateStats()
+                        }
+                    
+                    HStack {
+                        Text("\(vm.inputLineCount) lines")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        if vm.showStats {
+                            Text("\(vm.stats.duplicates) duplicates found")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
+                    }
                 }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Usage:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Enter lines with duplicates. Keep first or last occurrence of each unique line.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Keep Option")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.keepOption) {
+                            Text("Keep First").tag(LineDeduplicatorService.KeepOption.first)
+                            Text("Keep Last").tag(LineDeduplicatorService.KeepOption.last)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 180)
+                        .labelsHidden()
+                    }
+                    
+                    Divider()
+                    
+                    Toggle("Case Sensitive", isOn: $vm.caseSensitive)
+                        .toggleStyle(.switch)
+                    
+                    Divider()
+                    
+                    Toggle("Sort After Deduplication", isOn: $vm.sortAfter)
+                        .toggleStyle(.switch)
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Usage")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("Enter lines with duplicates. Choose to keep first or last occurrence of each unique line.")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text("Output")
-                    .font(.subheadline.weight(.medium))
+                    .font(.headline)
                 Spacer()
-                Text("\(vm.outputLineCount) lines")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
                 if !vm.output.isEmpty {
+                    Text("\(vm.outputLineCount) lines")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button(action: {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(vm.output, forType: .string)
@@ -101,31 +139,52 @@ struct LineDeduplicatorView: View {
                     .help("Copy output to clipboard")
                 }
             }
+            .padding()
+            
+            Divider()
             
             if let error = vm.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(6)
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.callout)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.red.opacity(0.1))
             }
             
-            ScrollView {
-                Text(vm.output.isEmpty ? "Deduplicated lines will appear here" : vm.output)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(vm.output.isEmpty ? .secondary : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .textSelection(.enabled)
-                    .padding(8)
+            if !vm.output.isEmpty {
+                ScrollView {
+                    Text(vm.output)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                        .padding(8)
+                }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "list.bullet.rectangle")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Deduplicated lines will appear here")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.primary.opacity(0.1), lineWidth: 1)
-            )
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -180,4 +239,3 @@ final class LineDeduplicatorViewModel: ObservableObject {
         stats = (0, 0, 0)
     }
 }
-

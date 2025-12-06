@@ -22,17 +22,6 @@ struct LineSorterView: View {
             
             Spacer()
             
-            Picker("", selection: $vm.sortOrder) {
-                Text("Asc").tag(LineSorterService.SortOrder.ascending)
-                Text("Desc").tag(LineSorterService.SortOrder.descending)
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 120)
-            .labelsHidden()
-            
-            Toggle("Case Sensitive", isOn: $vm.caseSensitive)
-            Toggle("Natural", isOn: $vm.naturalSort)
-            
             Button("Sort") { vm.sort() }
                 .keyboardShortcut(.return, modifiers: [.command])
             Button("Reverse") { vm.reverse() }
@@ -45,44 +34,93 @@ struct LineSorterView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Input")
-                    .font(.subheadline.weight(.medium))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.alignleft", title: "Input Lines", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 200)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                    
+                    HStack {
+                        Text("\(vm.inputLineCount) lines")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                }
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Sort Order")
+                            .font(.subheadline)
+                        Spacer()
+                        Picker("", selection: $vm.sortOrder) {
+                            Text("Ascending").tag(LineSorterService.SortOrder.ascending)
+                            Text("Descending").tag(LineSorterService.SortOrder.descending)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 180)
+                        .labelsHidden()
+                    }
+                    
+                    Divider()
+                    
+                    Toggle("Case Sensitive", isOn: $vm.caseSensitive)
+                        .toggleStyle(.switch)
+                    
+                    Divider()
+                    
+                    Toggle("Natural Sort", isOn: $vm.naturalSort)
+                        .toggleStyle(.switch)
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Usage")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("Enter one item per line. Sort alphabetically, reverse, or shuffle.")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(4)
+                }
+                .padding(.top, 4)
+                
                 Spacer()
-                Text("\(vm.inputLineCount) lines")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
-
-            FocusableTextEditor(text: $vm.input)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Usage:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("Enter one item per line. Sort alphabetically, reverse, or shuffle.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 4)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text("Output")
-                    .font(.subheadline.weight(.medium))
+                    .font(.headline)
                 Spacer()
-                Text("\(vm.outputLineCount) lines")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
                 if !vm.output.isEmpty {
+                    Text("\(vm.outputLineCount) lines")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing, 8)
+                    
                     Button(action: {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(vm.output, forType: .string)
@@ -95,31 +133,52 @@ struct LineSorterView: View {
                     .help("Copy output to clipboard")
                 }
             }
+            .padding()
+            
+            Divider()
             
             if let error = vm.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(6)
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.callout)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.red.opacity(0.1))
             }
             
-            ScrollView {
-                Text(vm.output.isEmpty ? "Sorted lines will appear here" : vm.output)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(vm.output.isEmpty ? .secondary : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .textSelection(.enabled)
-                    .padding(8)
+            if !vm.output.isEmpty {
+                ScrollView {
+                    Text(vm.output)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                        .padding(8)
+                }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "line.3.horizontal.decrease")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.secondary)
+                    Text("Sorted lines will appear here")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.primary.opacity(0.1), lineWidth: 1)
-            )
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -178,4 +237,3 @@ final class LineSorterViewModel: ObservableObject {
         errorMessage = nil
     }
 }
-

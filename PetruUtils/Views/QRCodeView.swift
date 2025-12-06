@@ -19,17 +19,8 @@ struct QRCodeView: View {
     
     private var toolbar: some View {
         HStack(spacing: 16) {
-            Picker("Error Correction", selection: $vm.errorCorrection) {
-                ForEach(QRCodeService.ErrorCorrectionLevel.allCases) { level in
-                    Text(level.displayName).tag(level)
-                }
-            }
-            .pickerStyle(.menu)
-            .frame(width: 180)
-            .help(vm.errorCorrection.description)
-            
-            Stepper("Size: \(Int(vm.size))px", value: $vm.size, in: 128...2048, step: 128)
-                .frame(width: 180)
+            Text("QR Code Generator")
+                .font(.headline)
             
             Spacer()
             
@@ -55,140 +46,213 @@ struct QRCodeView: View {
     }
     
     private var inputPane: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Content to Encode")
-                .font(.headline)
-            
-            FocusableTextEditor(text: $vm.input)
-                .padding(4)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
-                .background(.background)
-            
-            HStack {
-                if !vm.input.isEmpty {
-                    let charCount = vm.input.count
-                    let capacity = vm.service.estimatedCapacity(for: vm.errorCorrection)
-                    let percentage = Double(charCount) / Double(capacity) * 100
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader(icon: "text.quote", title: "Content", color: .blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FocusableTextEditor(text: $vm.input)
+                        .frame(minHeight: 150)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
+                        .font(.system(.body, design: .monospaced))
+                        .background(.background)
+                    
+                    HStack {
+                        if !vm.input.isEmpty {
+                            let charCount = vm.input.count
+                            let capacity = vm.service.estimatedCapacity(for: vm.errorCorrection)
+                            let percentage = Double(charCount) / Double(capacity) * 100
 
-                    HStack(spacing: 8) {
-                        Text("\(charCount) / \(capacity) characters")
-                            .foregroundStyle(charCount > capacity ? .red : .secondary)
-                            .font(.caption)
+                            HStack(spacing: 8) {
+                                Text("\(charCount) / \(capacity) characters")
+                                    .foregroundStyle(charCount > capacity ? .red : .secondary)
+                                    .font(.caption)
 
-                        ProgressView(value: min(Double(charCount), Double(capacity)), total: Double(capacity))
-                            .frame(width: 100)
-                            .tint(percentage > 80 ? .orange : .blue)
+                                ProgressView(value: min(Double(charCount), Double(capacity)), total: Double(capacity))
+                                    .frame(width: 100)
+                                    .tint(percentage > 80 ? .orange : .blue)
+                            }
+                        }
+                        Spacer()
                     }
                 }
-
-                Spacer()
+                
+                Divider()
+                
+                sectionHeader(icon: "gearshape", title: "Configuration", color: .purple)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Error Correction
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Error Correction")
+                            .font(.subheadline.weight(.medium))
+                        Picker("", selection: $vm.errorCorrection) {
+                            ForEach(QRCodeService.ErrorCorrectionLevel.allCases) { level in
+                                Text(level.displayName).tag(level)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.segmented)
+                        
+                        Text(vm.errorCorrection.description)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    Divider()
+                    
+                    // Size
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text("Size: \(Int(vm.size))px")
+                                .font(.subheadline.weight(.medium))
+                            Spacer()
+                        }
+                        Slider(value: $vm.size, in: 128...2048, step: 128)
+                    }
+                    
+                    Divider()
+                    
+                    // Colors
+                    HStack(spacing: 20) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Foreground")
+                                .font(.subheadline.weight(.medium))
+                            ColorPicker("", selection: $vm.foregroundColor)
+                                .labelsHidden()
+                                .onChange(of: vm.foregroundColor) { _, _ in
+                                    if vm.qrImage != nil { vm.generate() }
+                                }
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Background")
+                                .font(.subheadline.weight(.medium))
+                            ColorPicker("", selection: $vm.backgroundColor)
+                                .labelsHidden()
+                                .onChange(of: vm.backgroundColor) { _, _ in
+                                    if vm.qrImage != nil { vm.generate() }
+                                }
+                        }
+                        
+                        Spacer()
+                        
+                        Button("Reset Colors") {
+                            vm.foregroundColor = .black
+                            vm.backgroundColor = .white
+                            if vm.qrImage != nil { vm.generate() }
+                        }
+                        .font(.caption)
+                    }
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.05))
+                .cornerRadius(8)
 
                 if let error = vm.errorMessage {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(.red)
                         Text(error)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(.red)
                             .font(.callout)
                     }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(6)
                 }
+                
+                // Help text
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Examples")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("URL: https://example.com")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("WiFi: WIFI:T:WPA;S:NetworkName;P:password;;")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.top, 4)
+                
+                Spacer()
             }
-
-            // Help text
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Examples:")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                Text("URL: https://example.com")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Text: Hello, World!")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("WiFi: WIFI:T:WPA;S:NetworkName;P:password;;")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 8)
+            .padding()
         }
-        .padding()
     }
     
     private var outputPane: some View {
-        VStack(spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("QR Code")
+                Text("Preview")
                     .font(.headline)
-                
                 Spacer()
-                
-                // Color pickers
-                ColorPicker("Foreground", selection: $vm.foregroundColor)
-                    .labelsHidden()
-                    .help("Foreground color")
-                    .onChange(of: vm.foregroundColor) { _, _ in
-                        if vm.qrImage != nil {
-                            vm.generate()
-                        }
-                    }
-                
-                ColorPicker("Background", selection: $vm.backgroundColor)
-                    .labelsHidden()
-                    .help("Background color")
-                    .onChange(of: vm.backgroundColor) { _, _ in
-                        if vm.qrImage != nil {
-                            vm.generate()
-                        }
-                    }
-                
-                Button(action: {
-                    vm.foregroundColor = .black
-                    vm.backgroundColor = .white
-                    if vm.qrImage != nil {
-                        vm.generate()
-                    }
-                }) {
-                    Text("Reset Colors")
-                        .font(.caption)
-                }
-                .buttonStyle(.plain)
-            }
-            
-            if let image = vm.qrImage {
-                Image(nsImage: image)
-                    .interpolation(.none)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 512, maxHeight: 512)
-                    .background(vm.backgroundColor)
-                    .cornerRadius(8)
-                    .shadow(radius: 2)
-                
-                HStack(spacing: 16) {
+                if vm.qrImage != nil {
                     Button(action: vm.copyImage) {
-                        Label("Copy Image", systemImage: "doc.on.doc")
+                        Label("Copy", systemImage: "doc.on.doc")
+                            .font(.caption)
                     }
                     .keyboardShortcut("c", modifiers: [.command, .shift])
                     
                     Button(action: vm.export) {
-                        Label("Export PNG...", systemImage: "square.and.arrow.up")
+                        Label("Export", systemImage: "square.and.arrow.up")
+                            .font(.caption)
                     }
                 }
-                .padding(.top, 8)
-            } else {
-                VStack(spacing: 16) {
-                    Image(systemName: "qrcode")
-                        .font(.system(size: 64))
-                        .foregroundStyle(.secondary)
-                    
-                    Text("Enter content and click Generate")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-                .frame(maxHeight: .infinity)
             }
+            .padding()
+            
+            Divider()
+            
+            ZStack {
+                Color(nsColor: .controlBackgroundColor)
+                
+                if let image = vm.qrImage {
+                    VStack {
+                        Image(nsImage: image)
+                            .interpolation(.none)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 400, maxHeight: 400)
+                            .background(vm.backgroundColor)
+                            .cornerRadius(8)
+                            .shadow(radius: 4)
+                            .padding()
+                        
+                        Text("\(Int(vm.size)) x \(Int(vm.size)) px")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    VStack(spacing: 16) {
+                        Image(systemName: "qrcode")
+                            .font(.system(size: 64))
+                            .foregroundStyle(.secondary)
+                        
+                        Text("Enter content and click Generate")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .padding()
+    }
+    
+    private func sectionHeader(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+        }
     }
 }
 
@@ -295,6 +359,3 @@ extension QRCodeViewModel {
         return .black
     }
 }
-
-// MARK: - Preview
-
