@@ -40,6 +40,7 @@ PetruUtils/
 │   ├── Tool.swift                 # Tool enum (add new tools here)
 │   ├── ContentView.swift          # Main navigation with sidebar
 │   ├── Services/                  # Business logic (testable)
+│   │   ├── ToolRegistry.swift     # Dynamic tool view registration
 │   │   ├── JWTService.swift
 │   │   ├── Base64Service.swift
 │   │   ├── URLService.swift
@@ -58,10 +59,12 @@ PetruUtils/
 │   │   ├── QRCodeView.swift
 │   │   ├── PreferencesView.swift
 │   │   └── Components/            # Reusable components
+│   │       ├── GenericTextToolView.swift  # Reusable tool view layout
 │   │       ├── CodeBlockView.swift
 │   │       ├── FocusableTextEditor.swift
 │   │       └── SyntaxHighlightedText.swift
 │   └── Utilities/
+│       ├── TextToolProtocols.swift  # Protocols for generic tool ViewModels
 │       ├── FileExportImport.swift
 │       └── Extensions/
 │           └── Font+Extensions.swift
@@ -158,6 +161,60 @@ struct NewToolServiceTests {
 
 #### 4. **Create View** (`Views/NewToolView.swift`)
 
+**Use GenericTextToolView if applicable** (standard text input -> output flow):
+
+```swift
+import SwiftUI
+import Combine
+
+struct NewToolView: View {
+    @StateObject private var vm = NewToolViewModel()
+    
+    var body: some View {
+        GenericTextToolView(
+            vm: vm,
+            title: "New Tool",
+            inputTitle: "Input",
+            outputTitle: "Output",
+            inputIcon: "icon.name",
+            outputIcon: "icon.name",
+            toolbarContent: {
+                Button("Action") { vm.process() }
+            },
+            configContent: {
+                // Optional configuration UI
+            },
+            helpContent: {
+                // Optional help text
+            }
+        )
+    }
+}
+
+@MainActor
+final class NewToolViewModel: TextToolViewModel {
+    @Published var input: String = ""
+    @Published var output: String = ""
+    @Published var errorMessage: String?
+    @Published var isValid: Bool = false
+    
+    private let service = NewToolService()
+    
+    func process() {
+        // Logic
+    }
+    
+    func clear() {
+        input = ""
+        output = ""
+        errorMessage = nil
+        isValid = false
+    }
+}
+```
+
+**Or standard custom view**:
+
 ```swift
 import SwiftUI
 import Combine
@@ -178,25 +235,12 @@ struct NewToolView: View {
 
     // Standard layout patterns...
 }
-
-@MainActor
-final class NewToolViewModel: ObservableObject {
-    @Published var input: String = ""
-    @Published var output: String = ""
-    @Published var errorMessage: String?
-
-    private let service = NewToolService()
-
-    func process() {
-        // Call service, handle errors
-    }
-}
 ```
 
 **View Guidelines**:
 
-- Follow existing split-pane pattern
-- Use `HSplitView` for input/output
+- **Prefer `GenericTextToolView`** for standard text processing tools to reduce code duplication.
+- Use `HSplitView` for custom layouts requiring resizeable panes.
 - Include keyboard shortcuts (⌘Return, ⌘K, ⌘⇧C)
 - Show character counts
 - Display errors prominently
@@ -210,15 +254,14 @@ final class NewToolViewModel: ObservableObject {
   - Plain text → `.plain`
   - NEVER use plain `Text()` or `CodeBlock()` for code output
 
-#### 5. **Add to ContentView** (`ContentView.swift`)
+#### 5. **Register Tool** (`Services/ToolRegistry.swift`)
 
 ```swift
-switch selection {
-    // ... existing cases
-    case .newTool:
-        NewToolView()
-}
+// In ToolRegistry.swift registerAllTools()
+register(.newTool) { AnyView(NewToolView()) }
 ```
+
+The `ContentView.swift` uses `ToolRegistry` to dynamically load views, so you no longer need to edit `ContentView.swift`.
 
 #### 6. **Update Documentation**
 
@@ -314,8 +357,8 @@ ScrollView {
 
 1. Create service with business logic
 2. Write only the most important test to validate functionality, dont test simple stuff and dont create unnecesary tests
-3. Create view following existing patterns
-4. Integrate into `Tool.swift` and `ContentView.swift`
+3. Create view following existing patterns (or reuse GenericTextToolView)
+4. Integrate into `Tool.swift` and `Services/ToolRegistry.swift`
 5. Run all tests: ensure 100% pass rate
 6. Build and manually test the UI
 7. Update documentation
@@ -348,7 +391,7 @@ xcodebuild build -scheme PetruUtils 2>&1 | grep error:
 - [ ] Copy functionality works
 - [ ] **Code output uses SyntaxHighlightedText with correct language**
 - [ ] **All monospace text elements should use 'Jetbrains Mono' font included in the App**
-- [ ] Tool added to enum and ContentView
+- [ ] Tool added to enum and ToolRegistry
 - [ ] Documentation updated
 - [ ] No compiler warnings
 
@@ -572,8 +615,8 @@ import Foundation     // Always
 1. Add to `Tool.swift` enum
 2. Create `Services/[Tool]Service.swift`
 3. Create `Tests/[Tool]ServiceTests.swift` (strictly necessary unit tests)
-4. Create `Views/[Tool]View.swift`
-5. Add case to `ContentView.swift` switch
+4. Create `Views/[Tool]View.swift` (Prefer GenericTextToolView)
+5. Register in `Services/ToolRegistry.swift`
 6. Update README.md
 7. Run tests and verify build
 
