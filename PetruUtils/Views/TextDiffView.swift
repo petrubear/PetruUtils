@@ -43,7 +43,7 @@ struct TextDiffView: View {
                         }
                     }
                 }
-                .background(Color.white)
+                .background(Color(nsColor: .textBackgroundColor))
             } else {
                 FocusableTextEditor(text: $vm.leftText)
                     .padding(4)
@@ -81,7 +81,7 @@ struct TextDiffView: View {
                         }
                     }
                 }
-                .background(Color.white)
+                .background(Color(nsColor: .textBackgroundColor))
             } else {
                 FocusableTextEditor(text: $vm.rightText)
                     .padding(4)
