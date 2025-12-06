@@ -15,7 +15,7 @@ struct CodeBlock: View {
         ZStack(alignment: .topLeading) {
             CodeTextView(text: text, language: language)
         }
-        .frame(minHeight: 100)
+        .frame(minHeight: 100, maxHeight: .infinity)
         .background(.background)
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(.quaternary))
         .cornerRadius(8)
