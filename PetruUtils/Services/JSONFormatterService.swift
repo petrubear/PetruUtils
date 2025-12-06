@@ -1,7 +1,79 @@
 import Foundation
+import Combine
 
 /// Service for formatting, minifying, and validating JSON
 struct JSONFormatterService {
+
+    // MARK: - JSON Tree Node
+
+    /// Represents a node in a JSON tree structure
+    final class JSONTreeNode: Identifiable, ObservableObject {
+        let id = UUID()
+        let key: String?
+        let value: JSONValue
+        let path: String
+        @Published var isExpanded: Bool = true
+        var children: [JSONTreeNode]
+
+        init(key: String?, value: JSONValue, path: String, children: [JSONTreeNode] = []) {
+            self.key = key
+            self.value = value
+            self.path = path
+            self.children = children
+        }
+
+        var displayKey: String {
+            key ?? ""
+        }
+
+        var isExpandable: Bool {
+            switch value {
+            case .object, .array:
+                return !children.isEmpty
+            default:
+                return false
+            }
+        }
+
+        var typeLabel: String {
+            switch value {
+            case .object(let dict): return "{\(dict.count)}"
+            case .array(let arr): return "[\(arr.count)]"
+            case .string: return "string"
+            case .number: return "number"
+            case .bool: return "bool"
+            case .null: return "null"
+            }
+        }
+    }
+
+    /// Represents a JSON value type
+    enum JSONValue {
+        case object([String: Any])
+        case array([Any])
+        case string(String)
+        case number(NSNumber)
+        case bool(Bool)
+        case null
+
+        var displayValue: String {
+            switch self {
+            case .object: return "{...}"
+            case .array: return "[...]"
+            case .string(let s): return "\"\(s)\""
+            case .number(let n): return n.stringValue
+            case .bool(let b): return b ? "true" : "false"
+            case .null: return "null"
+            }
+        }
+
+        var isContainer: Bool {
+            switch self {
+            case .object, .array: return true
+            default: return false
+            }
+        }
+    }
     
     enum JSONError: LocalizedError {
         case invalidJSON(String)
@@ -180,10 +252,150 @@ struct JSONFormatterService {
     }
     
     // MARK: - Compact JSON (single line, but readable)
-    
+
     func compact(_ json: String) throws -> String {
         let formatted = try format(json)
         return formatted.replacingOccurrences(of: "\n", with: " ")
             .replacingOccurrences(of: "  ", with: " ")
+    }
+
+    // MARK: - Parse JSON to Tree
+
+    func parseToTree(_ json: String) throws -> JSONTreeNode {
+        let cleaned = json.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleaned.isEmpty else { throw JSONError.emptyInput }
+
+        guard let data = cleaned.data(using: .utf8) else {
+            throw JSONError.invalidJSON("Unable to convert to data")
+        }
+
+        do {
+            let object = try JSONSerialization.jsonObject(with: data)
+            return buildNode(key: nil, value: object, path: "$")
+        } catch let error as NSError {
+            throw JSONError.invalidJSON(extractErrorDetails(from: error))
+        }
+    }
+
+    private func buildNode(key: String?, value: Any, path: String) -> JSONTreeNode {
+        if let dict = value as? [String: Any] {
+            let children = dict.sorted { $0.key < $1.key }.map { k, v in
+                let childPath = path + "." + escapePathKey(k)
+                return buildNode(key: k, value: v, path: childPath)
+            }
+            return JSONTreeNode(key: key, value: .object(dict), path: path, children: children)
+        } else if let array = value as? [Any] {
+            let children = array.enumerated().map { index, v in
+                let childPath = path + "[\(index)]"
+                return buildNode(key: "[\(index)]", value: v, path: childPath)
+            }
+            return JSONTreeNode(key: key, value: .array(array), path: path, children: children)
+        } else if let str = value as? String {
+            return JSONTreeNode(key: key, value: .string(str), path: path)
+        } else if let num = value as? NSNumber {
+            // Check if it's a boolean
+            if CFGetTypeID(num) == CFBooleanGetTypeID() {
+                return JSONTreeNode(key: key, value: .bool(num.boolValue), path: path)
+            }
+            return JSONTreeNode(key: key, value: .number(num), path: path)
+        } else if value is NSNull {
+            return JSONTreeNode(key: key, value: .null, path: path)
+        } else {
+            return JSONTreeNode(key: key, value: .string(String(describing: value)), path: path)
+        }
+    }
+
+    private func escapePathKey(_ key: String) -> String {
+        // If key contains special characters, wrap in brackets
+        if key.contains(".") || key.contains("[") || key.contains("]") || key.contains(" ") {
+            return "['\(key)']"
+        }
+        return key
+    }
+
+    // MARK: - Get Value at JSONPath
+
+    func getValueAtPath(_ json: String, path: String) throws -> String {
+        let cleaned = json.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleaned.isEmpty else { throw JSONError.emptyInput }
+
+        guard let data = cleaned.data(using: .utf8) else {
+            throw JSONError.invalidJSON("Unable to convert to data")
+        }
+
+        let object = try JSONSerialization.jsonObject(with: data)
+        guard let value = navigateToPath(object, path: path) else {
+            return "Path not found"
+        }
+
+        if let dict = value as? [String: Any] {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted, .sortedKeys])
+            return String(data: data, encoding: .utf8) ?? "{}"
+        } else if let arr = value as? [Any] {
+            let data = try JSONSerialization.data(withJSONObject: arr, options: [.prettyPrinted])
+            return String(data: data, encoding: .utf8) ?? "[]"
+        } else if let str = value as? String {
+            return "\"\(str)\""
+        } else if let num = value as? NSNumber {
+            return num.stringValue
+        } else if value is NSNull {
+            return "null"
+        }
+        return String(describing: value)
+    }
+
+    private func navigateToPath(_ root: Any, path: String) -> Any? {
+        guard path.hasPrefix("$") else { return nil }
+
+        var current: Any = root
+        var remaining = path.dropFirst() // Remove $
+
+        while !remaining.isEmpty {
+            if remaining.hasPrefix(".") {
+                remaining = remaining.dropFirst()
+                // Get key until next . or [
+                var key = ""
+                while let char = remaining.first, char != "." && char != "[" {
+                    key.append(char)
+                    remaining = remaining.dropFirst()
+                }
+                guard !key.isEmpty, let dict = current as? [String: Any], let value = dict[key] else {
+                    return nil
+                }
+                current = value
+            } else if remaining.hasPrefix("[") {
+                remaining = remaining.dropFirst()
+                if remaining.hasPrefix("'") {
+                    // Bracket notation with string key: ['key']
+                    remaining = remaining.dropFirst()
+                    var key = ""
+                    while let char = remaining.first, char != "'" {
+                        key.append(char)
+                        remaining = remaining.dropFirst()
+                    }
+                    remaining = remaining.dropFirst() // Remove closing '
+                    remaining = remaining.dropFirst() // Remove ]
+                    guard let dict = current as? [String: Any], let value = dict[key] else {
+                        return nil
+                    }
+                    current = value
+                } else {
+                    // Array index: [0]
+                    var indexStr = ""
+                    while let char = remaining.first, char != "]" {
+                        indexStr.append(char)
+                        remaining = remaining.dropFirst()
+                    }
+                    remaining = remaining.dropFirst() // Remove ]
+                    guard let index = Int(indexStr), let array = current as? [Any], index >= 0, index < array.count else {
+                        return nil
+                    }
+                    current = array[index]
+                }
+            } else {
+                break
+            }
+        }
+        return current
     }
 }
